@@ -1,0 +1,13 @@
+# Exclude editor files
+.*.sw[op]
+*~
+/.idea/
+
+# Except those related to git
+!.git*
+
+# Artifacts from vendor parts in testing
+/*.phar
+/Icinga
+/Zend
+/vendor
