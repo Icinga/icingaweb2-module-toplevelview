@@ -1,0 +1,17 @@
+<?php if (! $this->compact): ?>
+<div class="controls">
+    <?= $this->tabs ?>
+</div>
+<?php endif ?>
+<div class="content">
+    <div class="tlv-overview-tiles">
+    <?php foreach ($views as $name => $view): /** @var \Icinga\Module\Toplevelview\ViewConfig $view */?>
+    <?= $this->qlink(
+            $view->getMeta('title'),
+            'toplevelview/show',
+            array('name' => $name),
+            array('class' => 'tlv-overview-tile')
+    ) ?>
+    <?php endforeach; ?>
+    </div>
+</div>
