@@ -1,0 +1,321 @@
+/* Copyright (C) 2017 NETWAYS GmbH <support@netways.de> */
+
+.tlv-overview-tiles {
+  padding: 1em;
+
+  .tlv-overview-tile {
+    display: inline-block;
+    padding: 1em;
+    margin: 1em;
+
+    width: 16em;
+    height: 5em;
+
+    border: 1px solid @gray;
+
+    text-decoration: none;
+
+    font-weight: bold;
+    font-size: 1.3em;
+
+    :hover {
+      background: @tr-hover-color;
+    }
+  }
+}
+
+@tlv-color-critical-bg: @colorCritical;
+@tlv-color-critical-fg: white;
+@tlv-color-critical-handled-bg: @colorCriticalHandled;
+@tlv-color-critical-handled-fg: #6d4148;
+@tlv-color-warning-bg: @colorWarning;
+@tlv-color-warning-fg: #6d572b;
+@tlv-color-warning-handled-bg: @colorWarningHandled;
+@tlv-color-warning-handled-fg: #6d572b;
+@tlv-color-unknown-bg: @colorUnknown;
+@tlv-color-unknown-fg: white;
+@tlv-color-unknown-handled-bg: @colorUnknownHandled;
+@tlv-color-unknown-handled-fg: #57326d;
+@tlv-color-ok-bg: @colorOk;
+@tlv-color-ok-fg: white;
+@tlv-color-pending-bg: @colorPending;
+@tlv-color-pending-fg: #32486d;
+@tlv-color-missing-bg: #ccc;
+@tlv-color-missing-fg: #333;
+
+.tlv-status {
+  &.critical, &.down {
+    border-color: @tlv-color-critical-bg;
+    background-color: @tlv-color-critical-bg;
+    color: @tlv-color-critical-fg;
+  }
+  &.critical.handled, &.down.handled {
+    border-color: @tlv-color-critical-handled-bg;
+    background-color: @tlv-color-critical-handled-bg;
+    color: @tlv-color-critical-handled-fg;
+  }
+  &.unknown, &.unreachable {
+    border-color: @tlv-color-unknown-bg;
+    background-color: @tlv-color-unknown-bg;
+    color: @tlv-color-unknown-fg;
+  }
+  &.unknown.handled, &.unreachable.handled {
+    border-color: @tlv-color-unknown-handled-bg;
+    background-color: @tlv-color-unknown-handled-bg;
+    color: @tlv-color-unknown-handled-fg;
+  }
+  &.warning {
+    border-color: @tlv-color-warning-bg;
+    background-color: @tlv-color-warning-bg;
+    color: @tlv-color-warning-fg;
+  }
+  &.warning.handled {
+    border-color: @tlv-color-warning-handled-bg;
+    background-color: @tlv-color-warning-handled-bg;
+    color: @tlv-color-warning-handled-fg;
+  }
+  &.ok, &.up {
+    border-color: @tlv-color-ok-bg;
+    background-color: @tlv-color-ok-bg;
+    color: @tlv-color-ok-fg;
+  }
+  &.pending {
+    border-color: @tlv-color-pending-bg;
+    background-color: @tlv-color-pending-bg;
+    color: @tlv-color-pending-fg;
+  }
+  &.missing {
+    border-color: @tlv-color-missing-bg;
+    background-color: @tlv-color-missing-bg;
+    color: @tlv-color-missing-fg;
+  }
+}
+
+.content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.tlv-view-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: stretch;
+
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+
+  h1 {
+    border: none;
+    width: 100%;
+    margin: 0 12px;
+  }
+
+  .tlv-tile {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: stretch;
+    flex-grow: 5;
+
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .tlv-tile-title {
+    display: inline-block;
+    width: 100%;
+
+    padding: 0.1em 0;
+    font-size: 1.2em;
+  }
+
+  > .tlv-tile { // first level
+    background: none;
+
+    margin: 0 12px;
+
+    > .tlv-tile-title {
+      font-weight: bold;
+    }
+
+    > .tlv-tile { // second level
+      min-width: 10%;
+      margin: 0.1em;
+
+      > .tlv-tile-title {
+        height: 100%;
+        text-align: center;
+      }
+    }
+  }
+}
+
+#layout.wide-layout .tlv-view-tiles .tlv-tile-title {
+  font-size: 1.3em;
+}
+#layout.wide-layout.twocols .tlv-view-tiles .tlv-tile-title {
+  font-size: 1.2em;
+}
+
+.tlv-view-tree {
+  h1 {
+    border-bottom: 1px solid @gray;
+  }
+
+  .tlv-tree-node {
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 1;
+
+    background: none;
+    border-style: solid;
+
+    border-width: 2px 0 0 5px;
+
+    padding-left: 1em;
+  }
+
+  > .tlv-tree-node {
+    border-right-width: 2px;
+
+    &:last-of-type {
+      border-bottom-width: 2px;
+    }
+  }
+
+  .tlv-tree-title {
+    display: block;
+    white-space: nowrap;
+    margin-left: -1em;
+    padding: 0.3em 1em 0.3em 0.3em;
+  }
+
+  /*
+  .tlv-tree-children {
+    display: flex;
+    flex-wrap: wrap;
+
+    > .tlv-node-icinga {
+      flex-grow: 1;
+    }
+  }
+  */
+
+  .tlv-node-icinga {
+    flex-grow: 1;
+
+    margin: 0.2em;
+    padding: 0.2em 1em;
+    white-space: nowrap;
+
+    border-radius: 0.5em;
+  }
+
+  /*
+  .tlv-tree-container > .tlv-tree.tlv-tree-node {
+    border-right-width: 1px;
+  }
+
+  .tlv-tree-title {
+    padding: 0.3em 0.3em;
+    //font-size: 1.3em;
+  }
+  */
+}
+
+/** BEGIN of breadcrumb **/
+.breadcrumb {
+  list-style: none;
+  overflow: hidden;
+  padding: 0;
+
+  .badges {
+    display: inline-block;
+    padding: 0 0 0 0.5em;
+    .badge {
+      line-height: 1.25em;
+      font-size: 0.8em;
+      border: 1px solid white;
+      margin: -0.25em 1px 0 0;
+    }
+  }
+}
+
+.breadcrumb:after {
+  content:'';
+  display:block;
+  clear: both;
+}
+.breadcrumb li {
+  float: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+
+}
+.breadcrumb li a {
+  color: white;
+  margin: 0;
+  font-size: 1.2em;
+  text-decoration: none;
+  padding-left: 2em;
+  line-height: 2.5em;
+  background: @icinga-blue;
+  position: relative;
+  display: block;
+  float: left;
+  &:focus {
+    outline: none;
+  }
+}
+
+.breadcrumb li a:before, .breadcrumb li a:after {
+  content: " ";
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 1.3em solid transparent;
+  border-bottom: 1.2em solid transparent;
+  position: absolute;
+  margin-top: -1.2em;
+  top: 50%;
+  left: 100%;
+}
+
+.breadcrumb li a:before {
+  border-left: 1.2em solid white;
+  margin-left: 1px;
+  z-index: 1;
+}
+
+.breadcrumb li a:after {
+  border-left: 1.2em solid @icinga-blue;
+  z-index: 2;
+}
+
+.breadcrumb li:first-child a {
+  padding-left: 1em;
+  padding-right: 0.5em;
+}
+.breadcrumb li:last-child a {
+  cursor: default;
+}
+.breadcrumb li:last-child a:hover {
+
+}
+
+.breadcrumb li:not(:last-child) a:hover { background: @text-color; color: white; }
+.breadcrumb li:not(:last-child) a:hover:after { border-left-color: @text-color; }
+
+.breadcrumb li a:focus {
+  text-decoration: underline;
+}
+
+#layout.twocols, #layout.layout-minimal, div.compact {
+  .breadcrumb {
+    font-size: 0.833em;
+  }
+}
+/** END of breadcrumb **/

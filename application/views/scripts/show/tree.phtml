@@ -1,0 +1,15 @@
+<?php
+/** @var \Icinga\Module\Toplevelview\ViewConfig $view */
+/** @var \Icinga\Module\Toplevelview\Tree\TLVTreeNode $node */
+
+if (! $this->compact):
+?>
+<div class="controls">
+    <?= $this->tabs ?>
+</div>
+<?php endif ?>
+<div class="content tlv-view-tree">
+    <h1><?= $view->getMeta('title') ?></h1>
+    <?= $this->breadcrumb($node->getBreadCrumb(), $view->getName()) ?>
+    <?= $this->tree($node) ?>
+</div>

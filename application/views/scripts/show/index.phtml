@@ -1,0 +1,16 @@
+<?php
+/** @var \Icinga\Module\Toplevelview\ViewConfig $view */
+if (! $this->compact):
+?>
+<div class="controls">
+    <?= $this->tabs ?>
+</div>
+<?php endif ?>
+<div class="content tlv-view-tiles">
+    <h1><?= $view->getMeta('title') ?></h1>
+    <?php
+    $tree = $view->getTree();
+    foreach($tree->getChildren() as $topTile): ?>
+    <?= $this->tiles($topTile) ?>
+    <?php endforeach; ?>
+</div>
