@@ -106,6 +106,7 @@
   padding-left: 0 !important;
 
   h1 {
+    align-self: flex-start;
     border: none;
     width: 100%;
     margin: 0 12px;
@@ -158,10 +159,6 @@
 }
 
 .tlv-view-tree {
-  h1 {
-    border-bottom: 1px solid @gray;
-  }
-
   .tlv-tree-node {
     display: flex;
     flex-wrap: wrap;
@@ -172,7 +169,7 @@
 
     border-width: 2px 0 0 5px;
 
-    padding-left: 1em;
+    padding: 0.2em 0 0 1em;
   }
 
   > .tlv-tree-node {
@@ -186,20 +183,9 @@
   .tlv-tree-title {
     display: block;
     white-space: nowrap;
-    margin-left: -1em;
+    margin: -0.2em 0 0 -1em;
     padding: 0.3em 1em 0.3em 0.3em;
   }
-
-  /*
-  .tlv-tree-children {
-    display: flex;
-    flex-wrap: wrap;
-
-    > .tlv-node-icinga {
-      flex-grow: 1;
-    }
-  }
-  */
 
   .tlv-node-icinga {
     flex-grow: 1;
@@ -209,18 +195,9 @@
     white-space: nowrap;
 
     border-radius: 0.5em;
-  }
 
-  /*
-  .tlv-tree-container > .tlv-tree.tlv-tree-node {
-    border-right-width: 1px;
+    font-size: 0.9em;
   }
-
-  .tlv-tree-title {
-    padding: 0.3em 0.3em;
-    //font-size: 1.3em;
-  }
-  */
 }
 
 /** BEGIN of breadcrumb **/
