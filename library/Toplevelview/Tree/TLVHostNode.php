@@ -3,19 +3,74 @@
 
 namespace Icinga\Module\Toplevelview\Tree;
 
-class TLVHostNode extends TLVTreeNode
+use Icinga\Application\Benchmark;
+use Icinga\Exception\NotFoundError;
+
+class TLVHostNode extends TLVIcingaNode
 {
+    protected $type = 'host';
+
+    protected $key = 'host';
+
     protected static $titleKey = 'host';
 
-    protected static $canHaveChildren = false;
-
-    protected static $registeredHosts = array();
-
-    protected function register()
+    public static function fetch(TLVTree $root)
     {
-        if ($host = $this->get('host')) {
-            self::$registeredHosts[$host] = null;
+        Benchmark::measure('Begin fetching hosts');
+
+        if (! array_key_exists('host', $root->registeredObjects) or empty($root->registeredObjects['host'])) {
+            throw new NotFoundError('No hosts registered to fetch!');
         }
-        return $this;
+
+        $names = array_keys($root->registeredObjects['host']);
+
+        $hosts = $root->getBackend()->select()
+            ->from('hoststatus', array(
+                'host_name',
+                'host_hard_state',
+                'host_handled',
+            ))
+            ->where('host_name', $names);
+
+        foreach ($hosts as $host) {
+            $root->registeredObjects['host'][$host->host_name] = $host;
+        }
+
+        Benchmark::measure('Finished fetching hosts');
+    }
+
+    public function getStatus()
+    {
+        if ($this->status === null) {
+            $this->status = $status = new TLVStatus();
+            $key = $this->getKey();
+
+            if (($date = $this->root->getFetched($this->type, $key)) !== null) {
+                $status->zero();
+                $status->add('total');
+
+                $data = $this->root->registeredObjects[$this->type][$key];
+
+                $state = $data->host_hard_state;
+
+                // TODO: host is never unhandled in old TLV...
+                $handled = '_handled';
+                /* $handled = $data->host_hard_state;
+                if ($handled === '1') {
+                    $handled = '_handled';
+                } else {
+                    $handled = '_unhandled';
+                } */
+
+                if ($state === '0') {
+                    $status->add('ok');
+                } elseif ($state === '1' || $state === '2') {
+                    $status->add('critical' . $handled);
+                } else {
+                    $status->add('unknown');
+                }
+            }
+        }
+        return $this->status;
     }
 }

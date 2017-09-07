@@ -15,6 +15,8 @@ class TLVTreeNode extends TreeNode
      */
     protected $type = 'node';
 
+    protected $key = null;
+
     /**
      * @var TLVTree
      */
@@ -29,6 +31,11 @@ class TLVTreeNode extends TreeNode
      * @var string
      */
     protected $fullId;
+
+    /**
+     * @var TLVStatus
+     */
+    protected $status;
 
     /**
      * @var array
@@ -180,6 +187,40 @@ class TLVTreeNode extends TreeNode
         }
     }
 
+    public function getKey()
+    {
+        if ($this->key === null) {
+            throw new ProgrammingError('Can not get key for %s', get_class($this));
+        }
+
+        if (array_key_exists($this->key, $this->properties)) {
+            return $this->properties[$this->key];
+        } elseif (preg_match_all('~\{(\w+)\}~', $this->key, $matches)) {
+            $key = $this->key;
+
+            for ($i = 0; $i < count($matches[1]); $i++) {
+                $k = $matches[1][$i];
+                if (array_key_exists($k, $this->properties)) {
+                    $key = str_replace(sprintf('{%s}', $k), $this->properties[$k], $key);
+                } else {
+                    throw new ProgrammingError(
+                        'Do not have a value for key %s in %s',
+                        $k,
+                        get_class($this)
+                    );
+                }
+            }
+
+            return $key;
+        } else {
+            throw new ProgrammingError(
+                'Can not retrieve key for %s in %s',
+                $this->key,
+                get_class($this)
+            );
+        }
+    }
+
     /**
      * @return TLVTree
      */
@@ -225,11 +266,34 @@ class TLVTreeNode extends TreeNode
 
     protected function register()
     {
+        if ($this->type !== 'node') {
+            $this->root->registerObject($this->type, $this->getKey(), get_class($this));
+        }
         return $this;
     }
 
+    /**
+     * @return TLVStatus
+     * @throws ProgrammingError
+     */
     public function getStatus()
     {
+        if (static::$canHaveChildren === true) {
+            if ($this->status === null) {
+                $this->status = new TLVStatus;
 
+                if ($this->hasChildren()) {
+                    foreach ($this->getChildren() as $child) {
+                        $this->status->merge($child->getStatus());
+                    }
+                } else {
+                    $this->status->add('missing', 1);
+                }
+            }
+
+            return $this->status;
+        } else {
+            throw new ProgrammingError('getStatus() needs to be implemented for %s', get_class($this));
+        }
     }
 }

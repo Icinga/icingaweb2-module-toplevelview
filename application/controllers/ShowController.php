@@ -6,6 +6,7 @@ namespace Icinga\Module\Toplevelview\Controllers;
 use Icinga\Module\Toplevelview\ViewConfig;
 use Icinga\Module\Toplevelview\Web\Controller;
 use Icinga\Web\Url;
+use Icinga\Web\Widget\Tab;
 
 class ShowController extends Controller
 {
@@ -13,13 +14,15 @@ class ShowController extends Controller
     {
         $tabs = $this->getTabs();
 
+        $tiles = Url::fromPath('toplevelview/show', array(
+            'name' => $this->params->getRequired('name')
+        ));
+
         $tabs->add(
             'index',
             array(
                 'title' => $this->translate('Tiles'),
-                'url'   => Url::fromPath('toplevelview/show', array(
-                    'name' => $this->params->getRequired('name')
-                ))
+                'url'   => $tiles
             )
         );
 
@@ -36,6 +39,14 @@ class ShowController extends Controller
             );
         }
 
+        $fullscreen = new Tab(array(
+            'title' => $this->translate('Go Fullscreen'),
+            'icon'  => 'dashboard',
+            'url'   => ((string) $tiles) . '&view=compact&showFullscreen'
+        ));
+        $fullscreen->setTargetBlank();
+        $tabs->addAsDropdown('fullscreen', $fullscreen);
+
         $action = $this->getRequest()->getActionName();
         if ($tab = $tabs->get($action)) {
             $tab->setActive();
@@ -45,14 +56,17 @@ class ShowController extends Controller
     public function indexAction()
     {
         $this->view->name = $name = $this->params->getRequired('name');
-        $this->view->view = ViewConfig::loadByName($name);
+        $this->view->view = $view = ViewConfig::loadByName($name);
+        $view->getTree()->setBackend($this->monitoringBackend());
     }
 
     public function treeAction()
     {
         $this->view->name = $name = $this->params->getRequired('name');
         $this->view->view = $view = ViewConfig::loadByName($name);
-        $this->view->node = $view->getTree()->getById($this->params->getRequired('id'));
+        $tree = $view->getTree();
+        $this->view->node = $tree->getById($this->params->getRequired('id'));
+        $tree->setBackend($this->monitoringBackend());
     }
 
     public function sourceAction()

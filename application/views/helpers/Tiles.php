@@ -2,7 +2,6 @@
 /* Icinga Web 2 | (c) 2016 Icinga Development Team | GPLv2+ */
 
 use Icinga\Module\Toplevelview\Tree\TLVTreeNode;
-use Icinga\Web\Url;
 
 class Zend_View_Helper_Tiles extends Zend_View_Helper_Abstract
 {
@@ -12,13 +11,21 @@ class Zend_View_Helper_Tiles extends Zend_View_Helper_Abstract
     public function tiles(TLVTreeNode $node, $levels = 2, $classes = array())
     {
         $htm = '';
-        $classes[] = 'tlv-status'; // TODO
-        $classes[] = 'missing'; // TODO
-
         $title = $this->view->escape($node->getTitle());
 
-        $cssClasses = join(' ', $classes);
-        $htm .= "<div class=\"tlv-tile $cssClasses\" title=\"$title\" data-base-target=\"_next\">\n";
+        $status = $node->getStatus();
+        if ($levels > 1) {
+            $statusClass = 'tlv-status-section';
+        } else {
+            $statusClass = 'tlv-status-tile';
+        }
+        $statusClasses = array($statusClass, $status->getOverall());
+
+        $htm .= sprintf(
+            '<div class="tlv-tile %s" title="%s" data-base-target="_next">' . "\n",
+            join(' ', $classes + $statusClasses),
+            $title
+        );
         $htm .= $this->view->qlink(
             $title,
             'toplevelview/show/tree',

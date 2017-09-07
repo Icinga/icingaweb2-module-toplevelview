@@ -43,51 +43,72 @@
 @tlv-color-missing-bg: #ccc;
 @tlv-color-missing-fg: #333;
 
-.tlv-status {
+.tlv-status-tile {
   &.critical, &.down {
-    border-color: @tlv-color-critical-bg;
     background-color: @tlv-color-critical-bg;
     color: @tlv-color-critical-fg;
   }
   &.critical.handled, &.down.handled {
-    border-color: @tlv-color-critical-handled-bg;
     background-color: @tlv-color-critical-handled-bg;
     color: @tlv-color-critical-handled-fg;
   }
   &.unknown, &.unreachable {
-    border-color: @tlv-color-unknown-bg;
     background-color: @tlv-color-unknown-bg;
     color: @tlv-color-unknown-fg;
   }
   &.unknown.handled, &.unreachable.handled {
-    border-color: @tlv-color-unknown-handled-bg;
     background-color: @tlv-color-unknown-handled-bg;
     color: @tlv-color-unknown-handled-fg;
   }
   &.warning {
-    border-color: @tlv-color-warning-bg;
     background-color: @tlv-color-warning-bg;
     color: @tlv-color-warning-fg;
   }
   &.warning.handled {
-    border-color: @tlv-color-warning-handled-bg;
     background-color: @tlv-color-warning-handled-bg;
     color: @tlv-color-warning-handled-fg;
   }
   &.ok, &.up {
-    border-color: @tlv-color-ok-bg;
     background-color: @tlv-color-ok-bg;
     color: @tlv-color-ok-fg;
   }
   &.pending {
-    border-color: @tlv-color-pending-bg;
     background-color: @tlv-color-pending-bg;
     color: @tlv-color-pending-fg;
   }
   &.missing {
-    border-color: @tlv-color-missing-bg;
     background-color: @tlv-color-missing-bg;
     color: @tlv-color-missing-fg;
+  }
+}
+
+.tlv-status-section {
+  &.critical, &.down {
+    border-color: @tlv-color-critical-bg;
+  }
+  &.critical.handled, &.down.handled {
+    border-color: @tlv-color-critical-handled-bg;
+  }
+  &.unknown, &.unreachable {
+    border-color: @tlv-color-unknown-bg;
+  }
+  &.unknown.handled, &.unreachable.handled {
+    border-color: @tlv-color-unknown-handled-bg;
+  }
+  &.warning {
+    border-color: @tlv-color-warning-bg;
+  }
+  &.warning.handled {
+    border-color: @tlv-color-warning-handled-bg;
+  }
+  &.ok, &.up {
+    border-color: @tlv-color-ok-bg;
+  }
+  &.pending {
+    border-color: @tlv-color-pending-bg;
+  }
+  &.missing {
+    border-color: @tlv-color-missing-bg;
   }
 }
 
@@ -116,7 +137,9 @@
     display: flex;
     flex-wrap: wrap;
     align-content: stretch;
-    flex-grow: 5;
+    flex-grow: 1;
+
+    margin: 0.1em;
 
     white-space: nowrap;
     overflow: hidden;
@@ -126,14 +149,16 @@
     display: inline-block;
     width: 100%;
 
-    padding: 0.1em 0;
+    padding: 0.1em;
     font-size: 1.2em;
   }
 
   > .tlv-tile { // first level
-    background: none;
+    border-style: solid;
+    border-width: 1px 1px 1px 4px;
 
-    margin: 0 12px;
+    padding: 0.1em;
+    margin: 0.3em 12px;
 
     > .tlv-tile-title {
       font-weight: bold;
@@ -141,7 +166,6 @@
 
     > .tlv-tile { // second level
       min-width: 10%;
-      margin: 0.1em;
 
       > .tlv-tile-title {
         height: 100%;

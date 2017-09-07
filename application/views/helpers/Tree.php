@@ -12,9 +12,6 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
     public function tree(TLVTreeNode $node, $classes = array())
     {
         $htm = '';
-        $classes[] = 'tlv-status'; // TODO
-        $classes[] = 'missing'; // TODO
-
         $title = $this->view->escape($node->getTitle());
         $type = $node->getType();
 
@@ -56,7 +53,10 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
             );
         }
 
-        $cssClasses = join(' ', $classes);
+        $status = $node->getStatus();
+        $statusClasses = array($status->getOverall());
+
+        $cssClasses = join(' ', $classes + $statusClasses);
         if ($type !== 'node') {
             $htm .= $this->view->qlink(
                 $title,
@@ -65,11 +65,11 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
                 array(
                     'icon'             => $icon,
                     'data-base-target' => '_next',
-                    'class'            => "tlv-node-icinga tlv-node-$type $cssClasses" . $cssClasses,
+                    'class'            => "tlv-node-icinga tlv-node-$type tlv-status-tile $cssClasses",
                 )
             );
         } else {
-            $htm .= "<div class=\"tlv-tree-node $cssClasses\" title=\"$title\">";
+            $htm .= "<div class=\"tlv-tree-node tlv-status-section $cssClasses\" title=\"$title\">";
             $htm .= $this->view->qlink(
                 $title,
                 $url,
