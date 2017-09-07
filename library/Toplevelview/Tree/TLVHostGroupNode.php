@@ -60,38 +60,25 @@ class TLVHostGroupNode extends TLVIcingaNode
             $this->status = $status = new TLVStatus();
             $key = $this->getKey();
 
-            if (($date = $this->root->getFetched($this->type, $key)) !== null) {
-                $status->zero();
+            if (($data = $this->root->getFetched($this->type, $key)) !== null) {
+                $status->set('total', $data->hosts_total + $data->services_total);
+                $status->set('ok', $data->hosts_up + $data->services_ok);
 
-                $data = $this->root->registeredObjects[$this->type][$key];
+                // TODO: host is never unhandled in old TLV...
+                $status->set(
+                    'critical_handled',
+                    $data->hosts_down_handled + $data->hosts_down_unhandled
+                    + $data->hosts_unreachable_handled + $data->hosts_unreachable_unhandled
+                    + $data->services_critical_handled
+                );
+                $status->set('critical_unhandled', $data->services_critical_unhandled);
 
-                foreach ($data as $k => $v) {
-                    $n = preg_split('~_~', $k, 3);
+                $status->set('warning_handled', $data->services_warning_handled);
+                $status->set('warning_unhandled', $data->services_warning_unhandled);
+                $status->set('unknown_handled', $data->services_unknown_handled);
+                $status->set('unknown_unhandled', $data->services_unknown_unhandled);
 
-                    if ($n[0] === 'hosts') {
-                        // TODO: host is never unhandled in old TLV...
-                        $handled = '_handled';
-                    } else {
-                        if (count($n) > 2 && $n[2] === 'handled') {
-                            $handled = '_handled';
-                        } else {
-                            $handled = '_unhandled';
-                        }
-                    }
-
-                    $state = $n[1];
-                    if ($state === 'total') {
-                        $status->add('total', $v);
-                    } elseif ($state === 'up' || $state === 'ok') {
-                        $status->add('ok', $v);
-                    } elseif ($state === 'down' || $state === 'unreachable' || $state === 'critical') {
-                        $status->add('critical' . $handled, $v);
-                    } elseif ($state === 'warning') {
-                        $status->add('warning' . $handled, $v);
-                    } elseif ($state === 'unknown') {
-                        $status->add('unknown' . $handled, $v);
-                    }
-                }
+                $status->set('missing', 0);
             } else {
                 $status->add('missing', 1);
             }

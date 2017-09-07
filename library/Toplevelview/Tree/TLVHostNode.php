@@ -45,11 +45,9 @@ class TLVHostNode extends TLVIcingaNode
             $this->status = $status = new TLVStatus();
             $key = $this->getKey();
 
-            if (($date = $this->root->getFetched($this->type, $key)) !== null) {
+            if (($data = $this->root->getFetched($this->type, $key)) !== null) {
                 $status->zero();
                 $status->add('total');
-
-                $data = $this->root->registeredObjects[$this->type][$key];
 
                 $state = $data->host_hard_state;
 

@@ -31,6 +31,11 @@ class TLVServiceNode extends TLVIcingaNode
         return parent::register();
     }
 
+    public function getKey()
+    {
+        return sprintf('%s!%s', $this->properties['host'], $this->properties['service']);
+    }
+
     public static function fetch(TLVTree $root)
     {
         Benchmark::measure('Begin fetching services');
@@ -69,10 +74,8 @@ class TLVServiceNode extends TLVIcingaNode
             $this->status = $status = new TLVStatus();
             $key = $this->getKey();
 
-            if (($date = $this->root->getFetched($this->type, $key)) !== null) {
+            if (($data = $this->root->getFetched($this->type, $key)) !== null) {
                 $status->zero();
-
-                $data = $this->root->registeredObjects[$this->type][$key];
 
                 $state = $data->service_hard_state;
                 $handled = $data->service_handled;

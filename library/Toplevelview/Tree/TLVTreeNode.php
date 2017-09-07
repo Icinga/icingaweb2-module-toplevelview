@@ -3,6 +3,7 @@
 
 namespace Icinga\Module\Toplevelview\Tree;
 
+use Icinga\Application\Benchmark;
 use Icinga\Data\Tree\TreeNode;
 use Icinga\Exception\ConfigurationError;
 use Icinga\Exception\NotImplementedError;
@@ -69,6 +70,9 @@ class TLVTreeNode extends TreeNode
      */
     public static function fromArray($array, TLVTreeNode $parent = null, TLVTree $root = null)
     {
+        if ($root === null) {
+            Benchmark::measure('Begin loading TLVTree from array');
+        }
         if (array_key_exists('type', $array)) {
             $type = $array['type'];
             if (array_key_exists($type, self::$typeMap)) {
@@ -107,6 +111,10 @@ class TLVTreeNode extends TreeNode
         }
 
         $node->register();
+
+        if ($root === $node) {
+            Benchmark::measure('Finished loading TLVTree from array');
+        }
 
         return $node;
     }
@@ -195,23 +203,6 @@ class TLVTreeNode extends TreeNode
 
         if (array_key_exists($this->key, $this->properties)) {
             return $this->properties[$this->key];
-        } elseif (preg_match_all('~\{(\w+)\}~', $this->key, $matches)) {
-            $key = $this->key;
-
-            for ($i = 0; $i < count($matches[1]); $i++) {
-                $k = $matches[1][$i];
-                if (array_key_exists($k, $this->properties)) {
-                    $key = str_replace(sprintf('{%s}', $k), $this->properties[$k], $key);
-                } else {
-                    throw new ProgrammingError(
-                        'Do not have a value for key %s in %s',
-                        $k,
-                        get_class($this)
-                    );
-                }
-            }
-
-            return $key;
         } else {
             throw new ProgrammingError(
                 'Can not retrieve key for %s in %s',
@@ -282,13 +273,17 @@ class TLVTreeNode extends TreeNode
             if ($this->status === null) {
                 $this->status = new TLVStatus;
 
-                if ($this->hasChildren()) {
-                    foreach ($this->getChildren() as $child) {
-                        $this->status->merge($child->getStatus());
-                    }
-                } else {
+                $missed = true;
+                foreach ($this->getChildren() as $child) {
+                    $this->status->merge($child->getStatus());
+                    $missed = false;
+                }
+
+                /* TODO: old TLV does not count an empty branch as missing...
+                if ($missed) {
                     $this->status->add('missing', 1);
                 }
+                */
             }
 
             return $this->status;

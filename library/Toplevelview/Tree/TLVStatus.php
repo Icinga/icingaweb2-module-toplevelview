@@ -7,26 +7,16 @@ use Icinga\Exception\ProgrammingError;
 
 class TLVStatus
 {
-    protected $total;
-    protected $critical_unhandled;
-    protected $critical_handled;
-    protected $warning_unhandled;
-    protected $warning_handled;
-    protected $unknown_unhandled;
-    protected $unknown_handled;
-    protected $ok;
-    protected $missing;
-
-    protected static $accessable = array(
-        'critical_unhandled',
-        'critical_handled',
-        'warning_unhandled',
-        'warning_handled',
-        'unknown_unhandled',
-        'unknown_handled',
-        'ok',
-        'missing',
-        'total',
+    protected $properties = array(
+        'critical_unhandled' => null,
+        'critical_handled' => null,
+        'warning_unhandled' => null,
+        'warning_handled' => null,
+        'unknown_unhandled' => null,
+        'unknown_handled' => null,
+        'ok' => null,
+        'missing' => null,
+        'total' => null,
     );
 
     protected static $statusPriority = array(
@@ -42,47 +32,47 @@ class TLVStatus
 
     public function merge(TLVStatus $status)
     {
-        foreach (static::$accessable as $key) {
-            $this->add($key, $status->get($key));
+        $properties = $status->getProperties();
+        foreach (array_keys($this->properties) as $key) {
+            if ($this->properties[$key] === null) {
+                $this->properties[$key] = $properties[$key];
+            } else {
+                $this->properties[$key] += $properties[$key];
+            }
         }
         // TODO: missing?
         return $this;
     }
 
-    protected function assertAccess($key)
-    {
-        if (! in_array($key, static::$accessable)) {
-            throw new ProgrammingError('You can not access %s', $key);
-        }
-    }
-
     public function get($key)
     {
-        $this->assertAccess($key);
-        return $this->$key;
+        return $this->properties[$key];
     }
 
     public function set($key, $value)
     {
-        $this->assertAccess($key);
-        $this->$key = (int) $value;
+        $this->properties[$key] = (int) $value;
         return $this;
+    }
+
+    public function getProperties()
+    {
+        return $this->properties;
     }
 
     public function add($key, $value = 1)
     {
-        $this->assertAccess($key);
-        if ($this->$key === null) {
-            $this->$key = 0;
+        if ($this->properties[$key] === null) {
+            $this->properties[$key] = 0;
         }
-        $this->$key += (int) $value;
+        $this->properties[$key] += (int) $value;
         return $this;
     }
 
     public function zero()
     {
-        foreach (static::$accessable as $key) {
-            $this->$key = 0;
+        foreach (array_keys($this->properties) as $key) {
+            $this->properties[$key] = 0;
         }
         return $this;
     }
@@ -90,7 +80,7 @@ class TLVStatus
     public function getOverall()
     {
         foreach (static::$statusPriority as $key) {
-            if ($this->$key !== null && $this->$key > 0) {
+            if ($this->properties[$key] !== null && $this->properties[$key] > 0) {
                 return $this->cssFriendly($key);
             }
         }
