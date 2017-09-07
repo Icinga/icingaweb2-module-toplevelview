@@ -12,10 +12,9 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
     public function tree(TLVTreeNode $node, $classes = array())
     {
         $htm = '';
-        $title = $this->view->escape($node->getTitle());
+        $title = $node->getTitle();
         $type = $node->getType();
 
-        $icon = 'right-dir';
         if ($type === 'host') {
             $icon = 'host';
             $url = Url::fromPath(
@@ -44,6 +43,7 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
                 )
             );
         } else {
+            $icon = null;
             $url = Url::fromPath(
                 'toplevelview/show/tree',
                 array(
@@ -54,9 +54,9 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
         }
 
         $status = $node->getStatus();
-        $statusClasses = array($status->getOverall());
+        $statusClass = $status->getOverall();
 
-        $cssClasses = join(' ', $classes + $statusClasses);
+        $cssClasses = join(' ', $classes);
         if ($type !== 'node') {
             $htm .= $this->view->qlink(
                 $title,
@@ -65,20 +65,15 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
                 array(
                     'icon'             => $icon,
                     'data-base-target' => '_next',
-                    'class'            => "tlv-node-icinga tlv-node-$type tlv-status-tile $cssClasses",
+                    'class'            => "tlv-node-icinga tlv-node-$type tlv-status-tile $statusClass $cssClasses",
                 )
             );
         } else {
-            $htm .= "<div class=\"tlv-tree-node tlv-status-section $cssClasses\" title=\"$title\">";
-            $htm .= $this->view->qlink(
-                $title,
-                $url,
-                null,
-                array(
-                    'icon'  => $icon,
-                    'class' => 'tlv-tree-title'
-                )
-            );
+            $htm .= "<div class=\"tlv-tree-node tlv-status-section collapsible $statusClass $cssClasses\" title=\"$title\">";
+            $htm .= '<div class="tlv-tree-title">';
+            $htm .= "<i class=\"icon icon-bycss collapse-handle\" />";
+            $htm .= $this->view->qlink($title, $url);
+            $htm .= '</div>';
             if ($node->hasChildren()) {
                 foreach ($node->getChildren() as $child) {
                     $htm .= $this->tree($child, $classes);

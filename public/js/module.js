@@ -32,6 +32,31 @@
                 'width: 50%',
                 0
             );
+
+            this.module.on('click', '.tlv-view-tree .tlv-tree-node', this.processTreeNodeClick);
+            this.module.on('rendered', this.collapseOnLoad);
+        },
+
+        processTreeNodeClick: function (event) {
+            event.stopPropagation();
+            var $el = $(event.currentTarget);
+            var $parent = $el.parents('.tlv-tree-node');
+            console.log($parent);
+            var $all = $el.find('.tlv-tree-node');
+            if (($parent.length === 0 && $all.hasClass('collapsed')) || $el.hasClass('collapsed')) {
+                $el.removeClass('collapsed');
+                $all.removeClass('collapsed');
+            } else {
+                $el.addClass('collapsed');
+                $all.addClass('collapsed');
+            }
+        },
+
+        collapseOnLoad: function (event) {
+            var $el = $(event.currentTarget);
+            console.log($el);
+            $el.find('.tlv-view-tree .tlv-tree-node.collapsible.ok').addClass('collapsed');
+
         }
     };
 
