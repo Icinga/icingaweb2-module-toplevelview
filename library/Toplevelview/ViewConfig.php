@@ -3,6 +3,7 @@
 
 namespace Icinga\Module\Toplevelview;
 
+use Icinga\Application\Benchmark;
 use Icinga\Application\Icinga;
 use Icinga\Exception\NotImplementedError;
 use Icinga\Exception\NotReadableError;
@@ -233,6 +234,8 @@ class ViewConfig
     protected function ensureParsed()
     {
         if ($this->raw === null) {
+            Benchmark::measure('Begin parsing YAML document');
+
             $text = $this->getText();
             if ($text === null) {
                 // new ViewConfig
@@ -243,6 +246,8 @@ class ViewConfig
             } else {
                 throw new NotImplementedError("Unknown format '%s'", $this->format);
             }
+
+            Benchmark::measure('Finished parsing YAML document');
         }
     }
 
