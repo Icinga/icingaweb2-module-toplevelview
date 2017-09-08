@@ -5,6 +5,7 @@ namespace Icinga\Module\Toplevelview\Tree;
 
 use Icinga\Application\Benchmark;
 use Icinga\Exception\NotFoundError;
+use Icinga\Module\Toplevelview\Monitoring\Hostgroupsummary;
 
 class TLVHostGroupNode extends TLVIcingaNode
 {
@@ -24,28 +25,25 @@ class TLVHostGroupNode extends TLVIcingaNode
 
         $names = array_keys($root->registeredObjects['hostgroup']);
 
-        $hostgroups = $root->getBackend()->select()
-            ->from('hostgroupsummary', array(
-                'hostgroup_name',
-                'hosts_down_handled',
-                'hosts_down_unhandled',
-                'hosts_total',
-                'hosts_unreachable_handled',
-                'hosts_unreachable_unhandled',
-                'hosts_up',
-                'services_critical_handled',
-                'services_critical_unhandled',
-                'services_ok',
-                'services_total',
-                'services_unknown_handled',
-                'services_unknown_unhandled',
-                'services_warning_handled',
-                'services_warning_unhandled'
-                // TODO: service_notifications_enabled
-                // TODO: service_notification_period
-                // TODO: flapping?
-            ))
-            ->where('hostgroup_name', $names);
+        // Note: this uses a patched version of Hostsgroupsummary / HostgroupsummaryQuery !
+        $hostgroups = new Hostgroupsummary($root->getBackend(), array(
+            'hostgroup_name',
+            'hosts_down_handled',
+            'hosts_down_unhandled',
+            'hosts_total',
+            'hosts_unreachable_handled',
+            'hosts_unreachable_unhandled',
+            'hosts_up',
+            'services_critical_handled',
+            'services_critical_unhandled',
+            'services_ok',
+            'services_total',
+            'services_unknown_handled',
+            'services_unknown_unhandled',
+            'services_warning_handled',
+            'services_warning_unhandled'
+        ));
+        $hostgroups->where('hostgroup_name', $names);
 
         foreach ($hostgroups as $hostgroup) {
             $root->registeredObjects['hostgroup'][$hostgroup->hostgroup_name] = $hostgroup;
