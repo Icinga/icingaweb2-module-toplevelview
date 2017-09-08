@@ -79,8 +79,12 @@ class TLVServiceNode extends TLVIcingaNode
 
                 $state = $data->service_hard_state;
                 $handled = $data->service_handled;
-                $notifications = $data->service_notifications_enabled;
-                if ($handled === '1' || $notifications === '1') {
+
+                if (
+                    $handled === '1'
+                    || $data->service_notifications_enabled === '1'
+                    || $data->service_is_flapping === '1'
+                ) {
                     $handled = '_handled';
                 } else {
                     $handled = '_unhandled';
