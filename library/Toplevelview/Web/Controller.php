@@ -41,4 +41,13 @@ class Controller extends IcingaController
         }
         return $this->monitoringBackend;
     }
+
+    protected function setViewScript($name, $controller = null)
+    {
+        if ($controller !== null) {
+            $name = sprintf('%s/%s', $controller, $name);
+        }
+        $this->_helper->viewRenderer->setNoController(true);
+        $this->_helper->viewRenderer->setScriptAction($name);
+    }
 }

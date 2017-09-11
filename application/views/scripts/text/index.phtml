@@ -1,0 +1,11 @@
+<?php
+/** @var \Icinga\Module\Toplevelview\ViewConfig $view */
+if (! $this->compact):
+?>
+<div class="controls">
+    <?= $this->tabs ?>
+</div>
+<?php endif ?>
+<div class="content">
+    <pre><?= $this->text ?></pre>
+</div>

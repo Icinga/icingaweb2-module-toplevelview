@@ -31,13 +31,23 @@ class ShowController extends Controller
                 'tree',
                 array(
                     'title' => $this->translate('Tree'),
-                    'url'   => Url::fromPath('toplevelview/tree', array(
+                    'url'   => Url::fromPath('toplevelview/show/tree', array(
                         'name' => $this->params->getRequired('name'),
                         'id'   => $id
                     ))
                 )
             );
         }
+
+        $tabs->add(
+            'source',
+            array(
+                'title' => $this->translate('Source'),
+                'url'   => Url::fromPath('toplevelview/show/source', array(
+                    'name' => $this->params->getRequired('name')
+                ))
+            )
+        );
 
         $fullscreen = new Tab(array(
             'title' => $this->translate('Go Fullscreen'),
@@ -74,9 +84,7 @@ class ShowController extends Controller
         $this->view->name = $name = $this->params->getRequired('name');
         $this->view->view = $view = ViewConfig::loadByName($name);
 
-        header('Content-Type: text/plain');
-        var_dump($view->getTree());
-        echo $view->getText();
-        exit;
+        $this->view->text = $view->getText();
+        $this->setViewScript('index', 'text');
     }
 }
