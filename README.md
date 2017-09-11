@@ -3,7 +3,7 @@ Top Level View for Icinga Web 2
 
 ## License
 
-    Copyright (C) 2017 NETWAYS GmbH <support@netways.de>
+    Copyright (C) 2017 Icinga Development Team <info@icinga.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

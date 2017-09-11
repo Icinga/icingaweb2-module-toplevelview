@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2017 NETWAYS GmbH <support@netways.de> */
+/* Copyright (C) 2017 Icinga Development Team <info@icinga.com> */
 
 namespace Icinga\Module\Toplevelview\Monitoring;
 
