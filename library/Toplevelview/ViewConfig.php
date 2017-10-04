@@ -5,11 +5,14 @@ namespace Icinga\Module\Toplevelview;
 
 use Icinga\Application\Benchmark;
 use Icinga\Application\Icinga;
+use Icinga\Exception\InvalidPropertyException;
 use Icinga\Exception\NotImplementedError;
 use Icinga\Exception\NotReadableError;
+use Icinga\Exception\NotWritableError;
 use Icinga\Exception\ProgrammingError;
 use Icinga\Module\Toplevelview\Tree\TLVTree;
 use Icinga\Util\DirectoryIterator;
+use Icinga\Web\Session;
 
 class ViewConfig
 {
@@ -29,6 +32,9 @@ class ViewConfig
 
     protected $tree;
 
+    protected $hasBeenLoaded = false;
+    protected $hasBeenLoadedFromSession = false;
+
     /**
      * Content of the file
      *
@@ -42,7 +48,8 @@ class ViewConfig
         $object
             ->setName($name)
             ->setConfigDir($config_dir)
-            ->setFormat($format);
+            ->setFormat($format)
+            ->load();
 
         return $object;
     }
@@ -56,6 +63,10 @@ class ViewConfig
 
         $views = array();
         foreach ($directory as $name => $path) {
+            if (is_dir($path)) {
+                // no not descend and ignore directories
+                continue;
+            }
             $name = basename($name, $suffix);
             $views[$name] = static::loadByName($name, $config_dir, $format);
         }
@@ -87,9 +98,19 @@ class ViewConfig
 
     /**
      * @return $this
-     * @throws NotReadableError
      */
     public function load()
+    {
+        if ($this->text === null) {
+            $this->loadFromSession();
+        }
+        if ($this->text === null) {
+            $this->loadFromFile();
+        }
+        return $this;
+    }
+
+    public function loadFromFile()
     {
         $file_path = $this->getFilePath();
         $this->text = file_get_contents($file_path);
@@ -97,6 +118,8 @@ class ViewConfig
             throw new NotReadableError('Could not read file %s', $file_path);
         }
         $this->view = null;
+        $this->hasBeenLoadedFromSession = false;
+        $this->hasBeenLoaded = true;
         return $this;
     }
 
@@ -105,9 +128,6 @@ class ViewConfig
      */
     public function getText()
     {
-        if ($this->text === null) {
-            $this->load();
-        }
         return $this->text;
     }
 
@@ -119,20 +139,78 @@ class ViewConfig
     public function setText($text)
     {
         $this->text = $text;
+        $this->raw = null;
+        $this->tree = null;
         return $this;
+    }
+
+    protected function storeBackup($force = false)
+    {
+        $backupDir = $this->getConfigBackupDir();
+
+        if (!file_exists($backupDir) && mkdir($backupDir) !== true) {
+            throw new NotWritableError(
+                'Config backup directory did not exit, and it could not be created: %s',
+                $backupDir
+            );
+        }
+
+        $ts = (string) time();
+        $backup = $backupDir . DIRECTORY_SEPARATOR . $ts . '.' . $this->format;
+
+        if (file_exists($backup)) {
+            throw new ProgrammingError('History file with timestamp already present: %s', $backup);
+        }
+
+        $existingFile = $this->getFilePath();
+        $oldText = file_get_contents($existingFile);
+        if ($oldText === false) {
+            throw new NotReadableError('Could not read file %s', $existingFile);
+        }
+
+        // only save backup if changed or forced
+        if ($force || $oldText !== $this->text) {
+            if (file_put_contents($backup, $oldText) === false) {
+                throw new NotWritableError('Could not save backup to %s', $backup);
+            }
+        }
     }
 
     public function store()
     {
-        // TODO: implement write to file
+        $file_path = $this->getFilePath();
+
+        // ensure to save history
+        if (file_exists($file_path)) {
+            $this->storeBackup();
+        }
+
+        $status = file_put_contents($file_path, $this->text);
+        if ($status === false) {
+            throw new NotWritableError('Could not write file %s', $file_path);
+        }
+        $this->clearSession();
+        return $this;
+    }
+
+    /**
+     * @return string
+     * @throws ProgrammingError When dir is not yet set
+     */
+    public function getConfigDir()
+    {
+        if ($this->config_dir === null) {
+            throw new ProgrammingError('config_dir not yet set!');
+        }
+        return $this->config_dir;
     }
 
     /**
      * @return string
      */
-    public function getConfigDir()
+    public function getConfigBackupDir()
     {
-        return $this->config_dir;
+        return $this->getConfigDir() . DIRECTORY_SEPARATOR . $this->name;
     }
 
     /**
@@ -222,6 +300,7 @@ class ViewConfig
 
     public function getMetaData()
     {
+        $this->ensureParsed();
         $data = array();
         foreach($this->raw as $key => $value) {
             if ($key !== 'children') {
@@ -243,6 +322,9 @@ class ViewConfig
             } elseif ($this->format == self::FORMAT_YAML) {
                 // TODO: use stdClass instead of Array?
                 $this->raw = yaml_parse($text);
+                if (! is_array($this->raw)) {
+                    throw new InvalidPropertyException('Could not parse YAML config!');
+                }
             } else {
                 throw new NotImplementedError("Unknown format '%s'", $this->format);
             }
@@ -264,5 +346,76 @@ class ViewConfig
             $tree->setConfig($this);
         }
         return $this->tree;
+    }
+
+    protected function getSessionVarName()
+    {
+        return 'toplevelview_view_' . $this->name;
+    }
+
+    public function session()
+    {
+        // TODO: is this CLI safe?
+        return Session::getSession();
+    }
+
+    public function loadFromSession()
+    {
+        if (($sessionConfig = $this->session()->get($this->getSessionVarName())) !== null) {
+            $this->text = $sessionConfig;
+            $this->hasBeenLoadedFromSession = true;
+            $this->hasBeenLoaded = true;
+        }
+        return $this;
+    }
+
+    public function clearSession()
+    {
+        $this->session()->delete($this->getSessionVarName());
+    }
+
+    public function storeToSession()
+    {
+        $this->session()->set($this->getSessionVarName(), $this->text);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasBeenLoadedFromSession()
+    {
+        return $this->hasBeenLoadedFromSession;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasBeenLoaded()
+    {
+        return $this->hasBeenLoaded;
+    }
+
+    public function __clone()
+    {
+        $this->name = null;
+        $this->raw = null;
+        $this->tree = null;
+
+        $this->hasBeenLoaded = false;
+        $this->hasBeenLoadedFromSession = false;
+    }
+
+    public function delete()
+    {
+        $file_path = $this->getFilePath();
+
+        $this->clearSession();
+
+        if (file_exists($file_path)) {
+            $this->storeBackup(true);
+            unlink($file_path);
+        }
+
+        return $this;
     }
 }
