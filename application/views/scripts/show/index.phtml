@@ -7,7 +7,7 @@ if (! $this->compact):
 </div>
 <?php endif ?>
 <div class="content tlv-view-tiles">
-    <h1><?= $view->getMeta('title') ?></h1>
+    <h1><?= $view->getMeta('name') ?></h1>
     <?php
     $tree = $view->getTree();
     foreach($tree->getChildren() as $topTile): ?>

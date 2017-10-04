@@ -10,7 +10,7 @@ use Icinga\Module\Toplevelview\ViewConfig;
 
 class TLVTree extends TLVTreeNode
 {
-    protected static $titleKey = 'title';
+    protected static $titleKey = 'name';
 
     public $registeredTypes = array();
 

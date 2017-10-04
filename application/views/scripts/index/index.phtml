@@ -5,9 +5,13 @@
 <?php endif ?>
 <div class="content">
     <div class="tlv-overview-tiles">
-    <?php foreach ($views as $name => $view): /** @var \Icinga\Module\Toplevelview\ViewConfig $view */?>
+    <?php
+    /** @var array $views **/
+    foreach ($views as $name => $view):
+    /** @var \Icinga\Module\Toplevelview\ViewConfig $view */
+    ?>
     <?= $this->qlink(
-            $view->getMeta('title'),
+            $view->getMeta('name'),
             'toplevelview/show',
             array('name' => $name),
             array('class' => 'tlv-overview-tile')
