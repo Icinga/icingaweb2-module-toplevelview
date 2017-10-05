@@ -6,8 +6,8 @@ namespace Icinga\Module\Toplevelview\Clicommands;
 use Icinga\Exception\ConfigurationError;
 use Icinga\Module\Toplevelview\Command;
 use Icinga\Module\Toplevelview\Config\ConfigEmitter;
-use Icinga\Module\Toplevelview\ConfigStore;
 use Icinga\Module\Toplevelview\Legacy\LegacyDbHelper;
+use Icinga\Module\Toplevelview\ViewConfig;
 use Zend_Db_Adapter_Pdo_Sqlite;
 
 /**
@@ -70,8 +70,12 @@ class ConvertCommand extends Command
         $emitter = ConfigEmitter::fromLegacyTree($tree);
 
         if ($name !== null and $output === null) {
-            $store = new ConfigStore();
-            $store[$name] = $emitter->emitYAML($format);
+            $viewConfig = new ViewConfig();
+            $viewConfig->setConfigDir();
+            $viewConfig->setFormat(ViewConfig::FORMAT_YAML);
+            $viewConfig->setName($name);
+            $viewConfig->setText($emitter->emitYAML($format));
+            $viewConfig->store();
             printf("Saved as config %s\n", $name);
             exit(0);
         }
