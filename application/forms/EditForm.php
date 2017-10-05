@@ -56,6 +56,7 @@ class EditForm extends Form
                 Notification::success($this->translate('Top Level View restored from disk'));
             } else if ($delete != null && $delete->getValue() !== null) {
                 $this->viewConfig->delete();
+                $this->setRedirectUrl('toplevelview');
                 Notification::success($this->translate('Top Level View successfully deleted'));
             } else {
                 Notification::success($this->translate('Top Level View successfully saved for the current session'));
