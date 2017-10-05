@@ -53,6 +53,7 @@ class EditController extends Controller
                 $this->translate('Add')
             );
             $view = new ViewConfig();
+            $view->setConfigDir();
         } else if ($action === 'clone') {
             $name = $this->params->getRequired('name');
             $this->view->title = sprintf('%s Top Level View',

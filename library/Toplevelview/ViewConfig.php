@@ -107,7 +107,7 @@ class ViewConfig
     public function getFilePath()
     {
         if ($this->file_path === null) {
-            $this->file_path = $this->config_dir . DIRECTORY_SEPARATOR . $this->name . '.' . $this->format;
+            $this->file_path = $this->getConfigDir() . DIRECTORY_SEPARATOR . $this->name . '.' . $this->format;
         }
         return $this->file_path;
     }
