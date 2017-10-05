@@ -34,14 +34,25 @@
             );
 
             this.module.on('click', '.tlv-view-tree .tlv-tree-node', this.processTreeNodeClick);
-            this.module.on('rendered', this.collapseOnLoad);
+            this.module.on('rendered', this.rendered);
+        },
+
+        rendered: function (ev) {
+            this.collapseOnLoad(ev);
+            var $container = $(ev.currentTarget);
+            $container.find('.codemirror').each(function (i, el) {
+                var mode = el.getAttribute('data-codemirror-mode');
+                CodeMirror.fromTextArea(el, {
+                    lineNumbers: true,
+                    mode: 'yaml'
+                });
+            });
         },
 
         processTreeNodeClick: function (event) {
             event.stopPropagation();
             var $el = $(event.currentTarget);
             var $parent = $el.parents('.tlv-tree-node');
-            console.log($parent);
             var $all = $el.find('.tlv-tree-node');
             if (($parent.length === 0 && $all.hasClass('collapsed')) || $el.hasClass('collapsed')) {
                 $el.removeClass('collapsed');
@@ -54,7 +65,6 @@
 
         collapseOnLoad: function (event) {
             var $el = $(event.currentTarget);
-            console.log($el);
             $el.find('.tlv-view-tree .tlv-tree-node.collapsible.ok').addClass('collapsed');
 
         }

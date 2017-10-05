@@ -19,3 +19,7 @@ $section->add('view_X', array(
     'label' => NAME,
 ));
 */
+
+$this->provideJsFile('vendor/codemirror/codemirror.js');
+$this->provideJsFile('vendor/codemirror/mode/yaml.js');
+$this->provideCssFile('vendor/codemirror/codemirror.css');

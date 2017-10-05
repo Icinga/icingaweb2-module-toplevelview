@@ -117,7 +117,7 @@ class EditForm extends Form
             array(
                 //'required'             => true,
                 'label'                => $this->translate('YAML Config'),
-                'class'                => 'code-editor',
+                'class'                => 'code-editor codemirror',
                 'decorators'           => array(
                     array('Label', array('tag'=>'div', 'separator' => '')),
                     array('HtmlTag', array('tag' => 'div')),
