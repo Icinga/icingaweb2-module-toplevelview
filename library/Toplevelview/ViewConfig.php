@@ -17,6 +17,7 @@ use Icinga\Web\Session;
 class ViewConfig
 {
     const FORMAT_YAML = 'yml';
+    const SESSION_PREFIX = 'toplevelview_view_';
 
     protected $config_dir;
 
@@ -70,6 +71,19 @@ class ViewConfig
             $name = basename($name, $suffix);
             $views[$name] = static::loadByName($name, $config_dir, $format);
         }
+
+        // try to load from session
+        $len = strlen(self::SESSION_PREFIX);
+        foreach (static::session()->getAll() as $k => $v) {
+            if (substr($k, 0, $len) === self::SESSION_PREFIX) {
+                $name = substr($k, $len);
+                if (! array_key_exists($name, $views)) {
+                    $views[$name] = static::loadByName($name, $config_dir, $format);
+                }
+            }
+        }
+
+        ksort($views);
 
         return $views;
     }
@@ -350,10 +364,10 @@ class ViewConfig
 
     protected function getSessionVarName()
     {
-        return 'toplevelview_view_' . $this->name;
+        return self::SESSION_PREFIX . $this->name;
     }
 
-    public function session()
+    public static function session()
     {
         // TODO: is this CLI safe?
         return Session::getSession();
