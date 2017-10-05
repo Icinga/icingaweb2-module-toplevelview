@@ -126,7 +126,7 @@
   padding-right: 0 !important;
   padding-left: 0 !important;
 
-  h1 {
+  h1, .action-links, .warning-note {
     align-self: flex-start;
     border: none;
     width: 100%;
@@ -346,3 +346,23 @@
   }
 }
 /** END of breadcrumb **/
+
+.action-links {
+  .action-link {
+    margin-right: 1em;
+  }
+}
+
+.warning-note {
+  width: 100%;
+
+  margin: 0.5em 0;
+  padding: 5px;
+  background: @tlv-color-warning-bg;
+  color: @tlv-color-warning-fg
+}
+
+textarea.code-editor {
+  width: 100%;
+  min-height: 45em;
+}

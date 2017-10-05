@@ -3,8 +3,7 @@
 
 /** @var \Icinga\Application\Modules\Module $this */
 
-// TODO:
-//$this->providePermission('toplevelview/XXX', $this->translate('Whatever'));
+$this->providePermission('toplevelview/edit', $this->translate('Allow the user to edit Top Level Views'));
 
 /** @var \Icinga\Web\Navigation\NavigationItem $section */
 $section = $this->menuSection('toplevelview');

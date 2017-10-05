@@ -5,6 +5,7 @@ namespace Icinga\Module\Toplevelview\Controllers;
 
 use Icinga\Module\Toplevelview\ViewConfig;
 use Icinga\Module\Toplevelview\Web\Controller;
+use Icinga\Web\Navigation\Navigation;
 use Icinga\Web\Url;
 use Icinga\Web\Widget\Tab;
 
@@ -38,16 +39,6 @@ class ShowController extends Controller
                 )
             );
         }
-
-        $tabs->add(
-            'source',
-            array(
-                'title' => $this->translate('Source'),
-                'url'   => Url::fromPath('toplevelview/show/source', array(
-                    'name' => $this->params->getRequired('name')
-                ))
-            )
-        );
 
         $fullscreen = new Tab(array(
             'title' => $this->translate('Go Fullscreen'),

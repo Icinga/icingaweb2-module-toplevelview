@@ -9,7 +9,8 @@ if (! $this->compact):
 </div>
 <?php endif ?>
 <div class="content tlv-view-tree">
-    <h1><?= $view->getMeta('title') ?></h1>
+    <h1><?= $view->getMeta('name') ?></h1>
+    <?= $this->partial('show/actions.phtml', $this) ?>
     <?= $this->breadcrumb($node->getBreadCrumb(), $view->getName()) ?>
     <?= $this->tree($node) ?>
 </div>

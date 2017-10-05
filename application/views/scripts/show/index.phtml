@@ -1,4 +1,5 @@
 <?php
+/** @var \Icinga\Web\View $this */
 /** @var \Icinga\Module\Toplevelview\ViewConfig $view */
 if (! $this->compact):
 ?>
@@ -8,9 +9,8 @@ if (! $this->compact):
 <?php endif ?>
 <div class="content tlv-view-tiles">
     <h1><?= $view->getMeta('name') ?></h1>
-    <?php
-    $tree = $view->getTree();
-    foreach($tree->getChildren() as $topTile): ?>
+    <?= $this->partial('show/actions.phtml', $this) ?>
+    <?php foreach($view->getTree()->getChildren() as $topTile): ?>
     <?= $this->tiles($topTile) ?>
     <?php endforeach; ?>
 </div>

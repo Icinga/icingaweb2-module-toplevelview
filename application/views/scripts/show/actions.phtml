@@ -1,0 +1,42 @@
+<?php
+/** @var \Icinga\Module\Toplevelview\ViewConfig $view */
+if($view->hasBeenLoadedFromSession()): ?>
+<div class="warning-note">
+    <?= $this->translate('This config is only stored in your session!'
+        . ' Make sure to save it to disk once your work is complete!') ?>
+</div>
+<?php endif; ?>
+<div class="action-links">
+    <?php
+    if (! $this->compact) {
+        if ($this->hasPermission('toplevelview/edit')) {
+            echo $this->qlink(
+                $this->translate('Edit'),
+                'toplevelview/edit',
+                array('name' => $view->getName()),
+                array(
+                    'class'            => 'action-link',
+                    'icon'             => 'edit',
+                    'data-base-target' => '_next'
+                )
+            );
+            echo $this->qlink(
+                $this->translate('Clone'),
+                'toplevelview/edit/clone',
+                array('name' => $view->getName()),
+                array(
+                    'class'            => 'action-link',
+                    'icon'             => 'rewind',
+                    'data-base-target' => '_next'
+                )
+            );
+        } else {
+            echo $this->qlink(
+                $this->translate('Source'),
+                'toplevelview/show/source',
+                array('name' => $view->getName())
+            );
+        }
+    }
+    ?>
+</div>
