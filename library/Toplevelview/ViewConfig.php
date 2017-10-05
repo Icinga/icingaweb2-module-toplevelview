@@ -43,6 +43,13 @@ class ViewConfig
      */
     protected $text;
 
+    /**
+     * @param             $name
+     * @param string|null $config_dir
+     * @param string      $format
+     *
+     * @return static
+     */
     public static function loadByName($name, $config_dir = null, $format = self::FORMAT_YAML)
     {
         $object = new static;
@@ -55,6 +62,12 @@ class ViewConfig
         return $object;
     }
 
+    /**
+     * @param string|null $config_dir
+     * @param string      $format
+     *
+     * @return static[]
+     */
     public static function loadAll($config_dir = null, $format = self::FORMAT_YAML)
     {
         $suffix = '.' . $format;
@@ -162,7 +175,7 @@ class ViewConfig
     {
         $backupDir = $this->getConfigBackupDir();
 
-        if (!file_exists($backupDir) && mkdir($backupDir) !== true) {
+        if (! file_exists($backupDir) && mkdir($backupDir) !== true) {
             throw new NotWritableError(
                 'Config backup directory did not exit, and it could not be created: %s',
                 $backupDir
@@ -316,7 +329,7 @@ class ViewConfig
     {
         $this->ensureParsed();
         $data = array();
-        foreach($this->raw as $key => $value) {
+        foreach ($this->raw as $key => $value) {
             if ($key !== 'children') {
                 $data[$key] = $value;
             }

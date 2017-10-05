@@ -3,6 +3,9 @@
 
 /** @var \Icinga\Application\Modules\Module $this */
 
+use Icinga\Module\Toplevelview\ViewConfig;
+use Icinga\Web\Url;
+
 $this->providePermission('toplevelview/edit', $this->translate('Allow the user to edit Top Level Views'));
 
 /** @var \Icinga\Web\Navigation\NavigationItem $section */
@@ -13,12 +16,20 @@ $section
     ->setIcon('sitemap')
     ->setPriority(20);
 
-/* TODO
-$section->add('view_X', array(
-    'url'   => 'toplevelview/show?name=X',
-    'label' => NAME,
-));
-*/
+try {
+    /** @var \Icinga\Application\Modules\MenuItemContainer $section */
+    $views = ViewConfig::loadAll();
+
+    foreach ($views as $name => $viewConfig) {
+        $section->add($name, array(
+            'label' => $viewConfig->getMeta('name'),
+            'url'   => Url::fromPath('toplevelview/show', array('name' => $name)),
+        ));
+
+    }
+} catch (Exception $e) {
+    // don't fail here...
+}
 
 $this->provideJsFile('vendor/codemirror/codemirror.js');
 $this->provideJsFile('vendor/codemirror/mode/yaml.js');

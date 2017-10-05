@@ -1,21 +1,51 @@
-<?php if (! $this->compact): ?>
-<div class="controls">
-    <?= $this->tabs ?>
-</div>
+<?php
+/** @var array $views */
+
+if (! $this->compact): ?>
+    <div class="controls">
+        <?= $this->tabs ?>
+    </div>
 <?php endif ?>
 <div class="content">
     <div class="tlv-overview-tiles">
-    <?php
-    /** @var array $views **/
-    foreach ($views as $name => $view):
-    /** @var \Icinga\Module\Toplevelview\ViewConfig $view */
-    ?>
-    <?= $this->qlink(
-            $view->getMeta('name'),
-            'toplevelview/show',
-            array('name' => $name),
-            array('class' => 'tlv-overview-tile')
-    ) ?>
-    <?php endforeach; ?>
+        <div class="action-links">
+            <?= $this->qlink(
+                $this->translate('Add'),
+                'toplevelview/edit/add',
+                array(),
+                array(
+                    'class' => 'action-link',
+                    'icon'  => 'plus',
+                )
+            ) ?>
+        </div>
+
+        <?php
+        foreach ($views as $name => $view):
+            /** @var \Icinga\Module\Toplevelview\ViewConfig $view */
+            $url = $this->url('toplevelview/show', array('name' => $name));
+            ?>
+            <div class="tlv-overview-tile">
+                <div class="tlv-title"><?= $this->qlink($view->getMeta('name'), $url) ?></div>
+                <div class="tlv-name"><?= $name ?></div>
+                <?php if ($view->hasBeenLoadedFromSession()): ?>
+                    <div class="unsaved"><?= $this->translate('Unsaved changes!') ?></div>
+                <?php endif; ?>
+
+                <?php if (! $this->compact && $this->hasPermission('toplevelview/edit')): ?>
+                    <div class="action-links">
+                        <?= $this->qlink(
+                            $this->translate('Edit'),
+                            'toplevelview/edit',
+                            array('name' => $view->getName()),
+                            array(
+                                'class' => 'action-link',
+                                'icon'  => 'edit',
+                            )
+                        ) ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
     </div>
 </div>

@@ -10,6 +10,13 @@ class IndexController extends Controller
 {
     public function indexAction()
     {
+        $this->getTabs()->add(
+            'index',
+            array(
+                'title' => 'Top Level View',
+                'url'   => 'toplevelview',
+            )
+        )->activate('index');
         $this->view->views = ViewConfig::loadAll();
     }
 }

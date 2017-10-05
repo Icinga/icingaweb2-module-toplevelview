@@ -1,26 +1,45 @@
 /* Copyright (C) 2017 Icinga Development Team <info@icinga.com> */
 
-.tlv-overview-tiles {
+.tlv-overview-tiles .tlv-overview-tile {
+  display: block;
+
+  float: left;
+
   padding: 1em;
+  margin: 1em;
 
-  .tlv-overview-tile {
-    display: inline-block;
-    padding: 1em;
-    margin: 1em;
+  position: relative;
 
-    width: 16em;
-    height: 5em;
+  width: 20em;
+  height: 10em;
 
-    border: 1px solid @gray;
+  border: 1px solid @gray;
 
-    text-decoration: none;
+  text-decoration: none;
 
+  .tlv-title {
     font-weight: bold;
     font-size: 1.3em;
+  }
 
-    :hover {
-      background: @tr-hover-color;
-    }
+  .tlv-name {
+    color: @gray;
+  }
+
+  .action-links {
+    position: absolute;
+    right: 0;
+    bottom: 1em;
+  }
+
+  .unsaved {
+    display: inline-block;
+    padding: 0.2em;
+
+    font-weight: bold;
+
+    background: @tlv-color-warning-bg;
+    color: @tlv-color-warning-fg;
   }
 }
 
@@ -178,6 +197,7 @@
 #layout.wide-layout .tlv-view-tiles .tlv-tile-title {
   font-size: 1.3em;
 }
+
 #layout.wide-layout.twocols .tlv-view-tiles .tlv-tile-title {
   font-size: 1.2em;
 }
@@ -269,10 +289,11 @@
 }
 
 .breadcrumb:after {
-  content:'';
-  display:block;
+  content: '';
+  display: block;
   clear: both;
 }
+
 .breadcrumb li {
   float: left;
   cursor: pointer;
@@ -282,6 +303,7 @@
   -ms-user-select: none;
 
 }
+
 .breadcrumb li a {
   color: white;
   margin: 0;
@@ -326,15 +348,23 @@
   padding-left: 1em;
   padding-right: 0.5em;
 }
+
 .breadcrumb li:last-child a {
   cursor: default;
 }
+
 .breadcrumb li:last-child a:hover {
 
 }
 
-.breadcrumb li:not(:last-child) a:hover { background: @text-color; color: white; }
-.breadcrumb li:not(:last-child) a:hover:after { border-left-color: @text-color; }
+.breadcrumb li:not(:last-child) a:hover {
+  background: @text-color;
+  color: white;
+}
+
+.breadcrumb li:not(:last-child) a:hover:after {
+  border-left-color: @text-color;
+}
 
 .breadcrumb li a:focus {
   text-decoration: underline;
@@ -345,6 +375,7 @@
     font-size: 0.833em;
   }
 }
+
 /** END of breadcrumb **/
 
 .action-links {
