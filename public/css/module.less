@@ -145,16 +145,27 @@
 }
 
 .tlv-header {
+  position: relative;
+
   height: 4em;
 
   h1 {
     border: none;
     margin: 0;
   }
+
+  .last-refresh {
+    position: absolute;
+
+    right: 0;
+    top: 0;
+
+    font-weight: bold;
+  }
 }
 
 .tlv-view-tiles {
-  clear: left;
+  clear: both;
   display: flex;
   flex-wrap: wrap;
   align-content: stretch;

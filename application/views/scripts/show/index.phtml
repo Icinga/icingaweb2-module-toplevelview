@@ -9,12 +9,16 @@ if (! $this->compact):
 <?php endif ?>
 <div class="content tlv-content">
     <div class="tlv-header">
-    <h1><?= $view->getMeta('name') ?></h1>
-    <?= $this->partial('show/actions.phtml', $this) ?>
+        <div class="last-refresh">
+            <?= $this->translate('Last update') ?>
+            <?= $this->timeAgo($view->getTree()->getFetchTime()) ?>
+        </div>
+        <h1><?= $view->getMeta('name') ?></h1>
+        <?= $this->partial('show/actions.phtml', $this) ?>
     </div>
     <div class="tlv-view-tiles">
-    <?php foreach($view->getTree()->getChildren() as $topTile): ?>
-    <?= $this->tiles($topTile) ?>
-    <?php endforeach; ?>
+        <?php foreach ($view->getTree()->getChildren() as $topTile): ?>
+            <?= $this->tiles($topTile) ?>
+        <?php endforeach; ?>
     </div>
 </div>
