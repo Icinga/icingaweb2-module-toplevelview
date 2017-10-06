@@ -5,7 +5,6 @@ namespace Icinga\Module\Toplevelview\Controllers;
 
 use Icinga\Module\Toplevelview\ViewConfig;
 use Icinga\Module\Toplevelview\Web\Controller;
-use Icinga\Web\Navigation\Navigation;
 use Icinga\Web\Url;
 use Icinga\Web\Widget\Tab;
 
@@ -59,6 +58,8 @@ class ShowController extends Controller
         $this->view->name = $name = $this->params->getRequired('name');
         $this->view->view = $view = ViewConfig::loadByName($name);
         $view->getTree()->setBackend($this->monitoringBackend());
+
+        $this->setAutorefreshInterval(30);
     }
 
     public function treeAction()
@@ -68,6 +69,8 @@ class ShowController extends Controller
         $tree = $view->getTree();
         $this->view->node = $tree->getById($this->params->getRequired('id'));
         $tree->setBackend($this->monitoringBackend());
+
+        $this->setAutorefreshInterval(30);
     }
 
     public function sourceAction()

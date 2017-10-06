@@ -18,5 +18,7 @@ class IndexController extends Controller
             )
         )->activate('index');
         $this->view->views = ViewConfig::loadAll();
+
+        $this->setAutorefreshInterval(30);
     }
 }
