@@ -43,6 +43,8 @@ class ViewConfig
      */
     protected $text;
 
+    protected $textChecksum;
+
     /**
      * @param             $name
      * @param string|null $config_dir
@@ -161,6 +163,14 @@ class ViewConfig
         return $this->text;
     }
 
+    public function getTextChecksum()
+    {
+        if ($this->textChecksum === null) {
+            $this->textChecksum = sha1($this->text);
+        }
+        return $this->textChecksum;
+    }
+
     /**
      * @param $text
      *
@@ -169,6 +179,7 @@ class ViewConfig
     public function setText($text)
     {
         $this->text = $text;
+        $this->textChecksum = null;
         $this->raw = null;
         $this->tree = null;
         return $this;
