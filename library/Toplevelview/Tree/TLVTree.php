@@ -113,7 +113,7 @@ class TLVTree extends TLVTreeNode
             $currentTime = time();
             $newerThan = $currentTime - $this->getCacheLifetime();
 
-            if ($cache->has($cacheName, $newerThan)) {
+            if ($cache->has($cacheName)) {
                 $cachedData = Json::decode($cache->get($cacheName));
 
                 if (
