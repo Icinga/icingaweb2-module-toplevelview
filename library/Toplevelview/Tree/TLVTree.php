@@ -8,8 +8,8 @@ use Icinga\Exception\IcingaException;
 use Icinga\Exception\NotFoundError;
 use Icinga\Exception\ProgrammingError;
 use Icinga\Module\Monitoring\Backend\MonitoringBackend;
+use Icinga\Module\Toplevelview\Util\Json;
 use Icinga\Module\Toplevelview\ViewConfig;
-use Icinga\Util\Json;
 use Icinga\Web\FileCache;
 use stdClass;
 
