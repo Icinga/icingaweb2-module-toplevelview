@@ -1,11 +1,6 @@
 <?php
 /** @var \Icinga\Module\Toplevelview\ViewConfig $view */
-if($view->hasBeenLoadedFromSession()): ?>
-<div class="warning-note">
-    <?= $this->translate('This config is only stored in your session!'
-        . ' Make sure to save it to disk once your work is complete!') ?>
-</div>
-<?php endif; ?>
+?>
 <div class="action-links">
     <?php
     if (! $this->compact) {
@@ -39,4 +34,10 @@ if($view->hasBeenLoadedFromSession()): ?>
         }
     }
     ?>
+    <?php if ($view->hasBeenLoadedFromSession()): ?>
+        <div class="warning-note">
+            <?= $this->translate('This config is only stored in your session!'
+                . ' Make sure to save it to disk once your work is complete!') ?>
+        </div>
+    <?php endif; ?>
 </div>

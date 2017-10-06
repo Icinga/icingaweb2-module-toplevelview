@@ -7,10 +7,14 @@ if (! $this->compact):
     <?= $this->tabs ?>
 </div>
 <?php endif ?>
-<div class="content tlv-view-tiles">
+<div class="content tlv-content">
+    <div class="tlv-header">
     <h1><?= $view->getMeta('name') ?></h1>
     <?= $this->partial('show/actions.phtml', $this) ?>
+    </div>
+    <div class="tlv-view-tiles">
     <?php foreach($view->getTree()->getChildren() as $topTile): ?>
     <?= $this->tiles($topTile) ?>
     <?php endforeach; ?>
+    </div>
 </div>
