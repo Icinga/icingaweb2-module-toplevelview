@@ -432,3 +432,15 @@ textarea.code-editor {
     font-size: 1.2em;
   }
 }
+
+div[href].action.active {
+  border-left-color: @icinga-blue;
+}
+
+div[href].action:hover {
+  cursor: pointer;
+
+  a[href]:first-of-type {
+    text-decoration: underline;
+  }
+}

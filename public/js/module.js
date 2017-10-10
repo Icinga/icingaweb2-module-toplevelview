@@ -34,6 +34,7 @@
             );
 
             this.module.on('click', '.tlv-view-tree .tlv-tree-node', this.processTreeNodeClick);
+            this.module.on('click', 'div[href].action', this.buttonClick, this);
             this.module.on('rendered', this.rendered);
         },
 
@@ -66,7 +67,15 @@
         collapseOnLoad: function (event) {
             var $el = $(event.currentTarget);
             $el.find('.tlv-view-tree .tlv-tree-node.collapsible.ok').addClass('collapsed');
+        },
 
+        buttonClick: function (event) {
+            event.stopPropagation();
+            var $el = $(event.currentTarget);
+            var $links = $el.find('a[href]');
+            if ($links.length > 0) {
+                $links[0].click();
+            }
         }
     };
 
