@@ -12,8 +12,14 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
     public function tree(TLVTreeNode $node, $classes = array())
     {
         $htm = '';
+        $htmExtra = '';
         $title = $node->getTitle();
         $type = $node->getType();
+
+        $cssClasses = join(' ', $classes);
+
+        $status = $node->getStatus();
+        $statusClass = $status->getOverall();
 
         if ($type === 'host') {
             $icon = 'host';
@@ -42,6 +48,27 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
                     'dir'       => 'desc',
                 )
             );
+
+            if (($h = $status->get('hosts_unhandled')) > 0) {
+                $hostTitle = '(<strong>'
+                    . sprintf($this->view->translatePlural('%s unhandled host', '%s unhandled hosts', $h), $h)
+                    . '</strong>)';
+            } else {
+                $h = $status->get('hosts_total');
+                $hostTitle = '(' . sprintf($this->view->translatePlural('%s host', '%s hosts', $h), $h) . ')';
+            }
+
+            $htmExtra .= ' ' . $this->view->qlink(
+                $hostTitle,
+                'monitoring/list/hosts',
+                array(
+                    'hostgroup' => $node->get('hostgroup'),
+                    'sort'      => 'host_severity',
+                    'dir'       => 'desc',
+                ),
+                null,
+                false
+            );
         } else {
             $icon = null;
             $url = Url::fromPath(
@@ -53,26 +80,19 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
             );
         }
 
-        $status = $node->getStatus();
-        $statusClass = $status->getOverall();
-
-        $cssClasses = join(' ', $classes);
         if ($type !== 'node') {
-            $htm .= $this->view->qlink(
-                $title,
-                $url,
-                null,
-                array(
-                    'icon'             => $icon,
-                    'data-base-target' => '_next',
-                    'class'            => "tlv-node-icinga tlv-node-$type tlv-status-tile $statusClass $cssClasses",
-                )
-            );
+            $htm .= "<div class=\"tlv-node-icinga tlv-node-\$type tlv-status-tile action $statusClass $cssClasses\""
+                . " data-base-target=\"_next\" href=\"$url\">";
+            $htm .= $this->view->icon($icon) . ' ';
+            $htm .= $this->view->qlink($title, $url);
+            $htm .= $htmExtra;
+            $htm .= '</div>';
         } else {
             $htm .= "<div class=\"tlv-tree-node tlv-status-section collapsible $statusClass $cssClasses\" title=\"$title\">";
             $htm .= '<div class="tlv-tree-title">';
-            $htm .= '<i class="icon icon-bycss collapse-handle"></i>';
+            $htm .= '<i class="icon icon-bycss collapse-handle"></i> ';
             $htm .= $this->view->qlink($title, $url);
+            $htm .= $htmExtra;
             $htm .= '</div>';
             if ($node->hasChildren()) {
                 foreach ($node->getChildren() as $child) {

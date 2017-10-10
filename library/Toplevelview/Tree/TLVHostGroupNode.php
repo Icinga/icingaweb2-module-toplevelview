@@ -79,6 +79,21 @@ class TLVHostGroupNode extends TLVIcingaNode
                 $status->set('unknown_handled', $data->services_unknown_handled);
                 $status->set('unknown_unhandled', $data->services_unknown_unhandled);
 
+                // extra hostgroup info
+                $status->set('hosts_total', $data->hosts_total);
+                $status->set(
+                    'hosts_unhandled',
+                    $data->hosts_down_unhandled
+                    + $data->hosts_unreachable_unhandled
+                );
+                $status->set('services_total', $data->services_total);
+                $status->set(
+                    'services_unhandled',
+                    $data->services_critical_unhandled
+                    + $data->services_warning_unhandled
+                    + $data->services_unknown_unhandled
+                );
+
                 $status->set('missing', 0);
             } else {
                 $status->add('missing', 1);
