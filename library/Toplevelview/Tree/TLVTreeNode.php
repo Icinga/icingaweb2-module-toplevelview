@@ -101,7 +101,7 @@ class TLVTreeNode extends TreeNode
         foreach ($array as $key => $value) {
             if ($key !== 'children') {
                 $node->properties[$key] = $value;
-            } else {
+            } elseif (is_array($value)) { // only array values for children
                 foreach ($value as $i => $child) {
                     $childNode = self::fromArray($child, $node, $root);
                     $childNode->id = $i;
