@@ -6,6 +6,9 @@
 # Except those related to git
 !.git*
 
+# Docker
+/docker-compose.yml
+
 # Artifacts from vendor parts in testing
 /*.phar
 /Icinga

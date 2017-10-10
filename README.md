@@ -1,6 +1,19 @@
 Top Level View for Icinga Web 2
 ===============================
 
+## Development Environment
+
+    ./test/setup_vendor.sh
+    
+    cp docker-compose.dev.yml docker-compose.yml
+    # adjust to your needs
+    
+    docker-compose up -d
+    
+Then access [http://localhost:8080](http://localhost:8080).
+
+Default admin user is `icingaadmin` with password `icinga`.
+
 ## License
 
     Copyright (C) 2017 Icinga Development Team <info@icinga.com>
