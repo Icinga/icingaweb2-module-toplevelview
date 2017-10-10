@@ -43,9 +43,16 @@
             var $container = $(ev.currentTarget);
             $container.find('.codemirror').each(function (i, el) {
                 var mode = el.getAttribute('data-codemirror-mode');
-                CodeMirror.fromTextArea(el, {
+                var editor = CodeMirror.fromTextArea(el, {
                     lineNumbers: true,
                     mode: mode
+                });
+                // avoid entering tab chars
+                editor.setOption('extraKeys', {
+                    Tab: function(cm) {
+                        var spaces = new Array(cm.getOption('indentUnit') + 1).join(' ');
+                        cm.replaceSelection(spaces);
+                    }
                 });
             });
         },
