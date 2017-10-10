@@ -71,7 +71,7 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
         } else {
             $htm .= "<div class=\"tlv-tree-node tlv-status-section collapsible $statusClass $cssClasses\" title=\"$title\">";
             $htm .= '<div class="tlv-tree-title">';
-            $htm .= "<i class=\"icon icon-bycss collapse-handle\" />";
+            $htm .= '<i class="icon icon-bycss collapse-handle"></i>';
             $htm .= $this->view->qlink($title, $url);
             $htm .= '</div>';
             if ($node->hasChildren()) {
