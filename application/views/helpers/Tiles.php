@@ -40,9 +40,11 @@ class Zend_View_Helper_Tiles extends Zend_View_Helper_Abstract
         );
 
         if ($levels > 1 && $node->hasChildren()) {
+            $htm .= '<div class="tlv-tiles">';
             foreach ($node->getChildren() as $child) {
                 $htm .= $this->tiles($child, $levels - 1, $classes);
             }
+            $htm .= '</div>';
         }
 
         $htm .= "</div>\n";
