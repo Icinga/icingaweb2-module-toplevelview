@@ -185,6 +185,17 @@ class ViewConfig
         return $this;
     }
 
+    protected function writeFile($path, $content, $mode = '0660')
+    {
+        if (file_put_contents($path, $content) === false) {
+            throw new NotWritableError('Could not save to %s', $path);
+        }
+
+        if ($mode !== null && false === @chmod($path, intval($mode, 8))) {
+            throw new NotWritableError('Failed to set file mode "%o" on file "%s"', $mode, $path);
+        }
+    }
+
     protected function storeBackup($force = false)
     {
         $backupDir = $this->getConfigBackupDir();
@@ -206,9 +217,7 @@ class ViewConfig
 
         // only save backup if changed or forced
         if ($force || $oldText !== $this->text) {
-            if (file_put_contents($backup, $oldText) === false) {
-                throw new NotWritableError('Could not save backup to %s', $backup);
-            }
+            $this->writeFile($backup, $oldText);
         }
     }
 
@@ -224,10 +233,8 @@ class ViewConfig
             $this->storeBackup();
         }
 
-        $status = file_put_contents($file_path, $this->text);
-        if ($status === false) {
-            throw new NotWritableError('Could not write file %s', $file_path);
-        }
+        $this->writeFile($file_path, $this->text);
+
         $this->clearSession();
         return $this;
     }
