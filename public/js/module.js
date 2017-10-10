@@ -45,7 +45,7 @@
                 var mode = el.getAttribute('data-codemirror-mode');
                 CodeMirror.fromTextArea(el, {
                     lineNumbers: true,
-                    mode: 'yaml'
+                    mode: mode
                 });
             });
         },
