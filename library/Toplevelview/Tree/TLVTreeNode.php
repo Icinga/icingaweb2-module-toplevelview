@@ -52,10 +52,28 @@ class TLVTreeNode extends TreeNode
      */
     protected static $titleKey = 'name';
 
+    /**
+     * Mapping types to its implementation class
+     *
+     * @var array
+     */
     protected static $typeMap = array(
         'host'      => 'Icinga\\Module\\Toplevelview\\Tree\\TLVHostNode',
         'service'   => 'Icinga\\Module\\Toplevelview\\Tree\\TLVServiceNode',
         'hostgroup' => 'Icinga\\Module\\Toplevelview\\Tree\\TLVHostGroupNode',
+    );
+
+    /**
+     * Mapping keys to a type
+     *
+     * Warning: order is important when keys overlap!
+     *
+     * @var array
+     */
+    protected static $typeKeyMap = array(
+        'service'   => array('host', 'service'),
+        'host'      => 'host',
+        'hostgroup' => 'hostgroup',
     );
 
     /**
@@ -73,6 +91,29 @@ class TLVTreeNode extends TreeNode
         if ($root === null) {
             Benchmark::measure('Begin loading TLVTree from array');
         }
+
+        // try to detect type
+        if (! array_key_exists('type', $array)) {
+            foreach (self::$typeKeyMap as $type => $keys) {
+                if (! is_array($keys)) {
+                    $keys = array($keys);
+                }
+                $matched = false;
+                foreach ($keys as $k) {
+                    if (array_key_exists($k, $array)) {
+                        $matched = true;
+                    } else {
+                        continue 2;
+                    }
+                }
+                // if all keys are present
+                if ($matched === true) {
+                    $array['type'] = $type;
+                    break;
+                }
+            }
+        }
+
         if (array_key_exists('type', $array)) {
             $type = $array['type'];
             if (array_key_exists($type, self::$typeMap)) {
