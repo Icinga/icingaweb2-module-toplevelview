@@ -51,14 +51,12 @@ class TLVHostNode extends TLVIcingaNode
 
                 $state = $data->host_hard_state;
 
-                // TODO: host is never unhandled in old TLV...
-                $handled = '_handled';
-                /* $handled = $data->host_hard_state;
+                $handled = $data->host_handled;
                 if ($handled === '1') {
                     $handled = '_handled';
                 } else {
                     $handled = '_unhandled';
-                } */
+                }
 
                 if ($state === '0') {
                     $status->add('ok');
