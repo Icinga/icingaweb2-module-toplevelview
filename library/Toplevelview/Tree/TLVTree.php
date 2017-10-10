@@ -107,11 +107,15 @@ class TLVTree extends TLVTreeNode
 
     protected function loadCache()
     {
+        if (($lifetime = $this->getCacheLifetime()) <= 0) {
+            return;
+        }
+
         $cacheName = $this->getCacheName();
         try {
             $cache = FileCache::instance('toplevelview');
             $currentTime = time();
-            $newerThan = $currentTime - $this->getCacheLifetime();
+            $newerThan = $currentTime - $lifetime;
 
             if ($cache->has($cacheName)) {
                 $cachedData = Json::decode($cache->get($cacheName));
@@ -139,6 +143,10 @@ class TLVTree extends TLVTreeNode
 
     protected function storeCache()
     {
+        if (($lifetime = $this->getCacheLifetime()) <= 0) {
+            return;
+        }
+
         $cacheName = $this->getCacheName();
         try {
             $cache = FileCache::instance('toplevelview');

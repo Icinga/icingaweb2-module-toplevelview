@@ -57,7 +57,12 @@ class ShowController extends Controller
     {
         $this->view->name = $name = $this->params->getRequired('name');
         $this->view->view = $view = ViewConfig::loadByName($name);
-        $view->getTree()->setBackend($this->monitoringBackend());
+        $tree = $view->getTree();
+        $tree->setBackend($this->monitoringBackend());
+
+        if (($lifetime = $this->getParam('cache')) !== null) {
+            $tree->setCacheLifetime($lifetime);
+        }
 
         $this->setAutorefreshInterval(30);
     }
@@ -69,6 +74,10 @@ class ShowController extends Controller
         $tree = $view->getTree();
         $this->view->node = $tree->getById($this->params->getRequired('id'));
         $tree->setBackend($this->monitoringBackend());
+
+        if (($lifetime = $this->getParam('cache')) !== null) {
+            $tree->setCacheLifetime($lifetime);
+        }
 
         $this->setAutorefreshInterval(30);
     }
