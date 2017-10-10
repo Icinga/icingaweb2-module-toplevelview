@@ -189,12 +189,7 @@ class ViewConfig
     {
         $backupDir = $this->getConfigBackupDir();
 
-        if (! file_exists($backupDir) && mkdir($backupDir) !== true) {
-            throw new NotWritableError(
-                'Config backup directory did not exit, and it could not be created: %s',
-                $backupDir
-            );
-        }
+        $this->ensureConfigDir($backupDir);
 
         $ts = (string) time();
         $backup = $backupDir . DIRECTORY_SEPARATOR . $ts . '.' . $this->format;
@@ -219,7 +214,10 @@ class ViewConfig
 
     public function store()
     {
+        $config_dir = $this->getConfigDir();
         $file_path = $this->getFilePath();
+
+        $this->ensureConfigDir($config_dir);
 
         // ensure to save history
         if (file_exists($file_path)) {
@@ -267,16 +265,32 @@ class ViewConfig
         return $this;
     }
 
+    protected static function ensureConfigDir($path, $mode = '2770')
+    {
+        if (! file_exists($path)) {
+            if (mkdir($path) !== true) {
+                throw new NotWritableError(
+                    'Config path did not exit, and it could not be created: %s',
+                    $path
+                );
+            }
+
+            if ($mode !== null && false === @chmod($path, intval($mode, 8))) {
+                throw new NotWritableError('Failed to set file mode "%o" on file "%s"', $mode, $path);
+            }
+        }
+    }
+
     public static function configDir($config_dir = null)
     {
+        $config_dir_module = Icinga::app()->getModuleManager()->getModule('toplevelview')->getConfigDir();
         if ($config_dir === null) {
-            $config_dir = Icinga::app()->getModuleManager()->getModule('toplevelview')->getConfigDir() .
-                DIRECTORY_SEPARATOR . 'views';
+            $config_dir = $config_dir_module . DIRECTORY_SEPARATOR . 'views';
         }
 
-        if (! is_readable($config_dir)) {
-            throw new NotReadableError('Could not open config dir %s', $config_dir);
-        }
+        static::ensureConfigDir($config_dir_module);
+        static::ensureConfigDir($config_dir);
+
         return $config_dir;
     }
 
