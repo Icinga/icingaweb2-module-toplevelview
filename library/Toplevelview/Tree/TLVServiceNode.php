@@ -55,6 +55,7 @@ class TLVServiceNode extends TLVIcingaNode
                 'service_notifications_enabled',
                 // TODO: notification_period,
                 'service_is_flapping',
+                'service_in_downtime',
             ))
             ->where('host_name', $names);
 
@@ -78,11 +79,13 @@ class TLVServiceNode extends TLVIcingaNode
                 $status->zero();
 
                 $state = $data->service_hard_state;
-                $handled = $data->service_handled;
 
-                if (
-                    $handled === '1'
-                    || $data->service_notifications_enabled === '0'
+                if ($data->service_in_downtime > 0 || $data->service_notifications_enabled === '0') {
+                    $status->add('downtime_active');
+                    $state = '10';
+                    $handled = '';
+                } elseif (
+                    $data->service_handled === '1'
                     || $data->service_is_flapping === '1'
                 ) {
                     $handled = '_handled';
@@ -96,6 +99,8 @@ class TLVServiceNode extends TLVIcingaNode
                     $status->add('warning' . $handled, 1);
                 } elseif ($state === '2') {
                     $status->add('critical' . $handled, 1);
+                } elseif ($state === '10') {
+                    $status->add('downtime_handled');
                 } else {
                     $status->add('unknown', 1);
                 }
