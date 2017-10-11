@@ -57,6 +57,10 @@
 @tlv-color-unknown-handled-fg: #57326d;
 @tlv-color-ok-bg: @colorOk;
 @tlv-color-ok-fg: white;
+@tlv-color-downtime-bg: @colorOk;
+@tlv-color-downtime-fg: #333;
+@tlv-color-downtime-handled-bg: @colorOk;
+@tlv-color-downtime-handled-fg: #ffff00;
 @tlv-color-pending-bg: @colorPending;
 @tlv-color-pending-fg: #32486d;
 @tlv-color-missing-bg: #ccc;
@@ -90,6 +94,14 @@
   &.ok, &.up {
     background-color: @tlv-color-ok-bg;
     color: @tlv-color-ok-fg;
+  }
+  &.downtime.active {
+    background-color: @tlv-color-downtime-bg;
+    color: @tlv-color-downtime-fg;
+  }
+  &.downtime.handled {
+    background-color: @tlv-color-downtime-handled-bg;
+    color: @tlv-color-downtime-handled-fg;
   }
   &.pending {
     background-color: @tlv-color-pending-bg;

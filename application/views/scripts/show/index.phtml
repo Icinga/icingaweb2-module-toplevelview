@@ -14,7 +14,7 @@ if (! $this->compact):
             <?= $this->translate('Last update') ?>
             <?= $this->timeAgo($tree->getFetchTime()) ?>
         </div>
-        <?= $this->badges($tree->getStatus(), false) ?>
+        <?= $this->badges($tree->getStatus(), false, true) ?>
         <h1><?= $view->getMeta('name') ?></h1>
         <?= $this->partial('show/actions.phtml', $this) ?>
     </div>
