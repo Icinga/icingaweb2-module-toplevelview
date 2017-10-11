@@ -66,17 +66,29 @@ class TLVHostGroupNode extends TLVIcingaNode
                 $status->set('total', $data->hosts_total + $data->services_total);
                 $status->set('ok', $data->hosts_up + $data->services_ok);
 
-                $status->set(
-                    'critical_handled',
-                    $data->hosts_down_handled
-                    + $data->hosts_unreachable_handled
-                    + $data->services_critical_handled
-                );
-                $status->set('critical_unhandled',
-                    $data->hosts_down_unhandled
-                    + $data->hosts_unreachable_unhandled
-                    + $data->services_critical_unhandled
-                );
+                $status->set('critical_handled', $data->services_critical_handled);
+                $status->set('critical_unhandled', $data->services_critical_unhandled);
+
+                if ($this->getRoot()->get('host_never_unhandled') === true) {
+                    $status->add(
+                        'critical_handled',
+                        $data->hosts_down_handled
+                        + $data->hosts_unreachable_handled
+                        + $data->hosts_down_unhandled
+                        + $data->hosts_unreachable_unhandled
+                    );
+                } else {
+                    $status->add(
+                        'critical_handled',
+                        $data->hosts_down_handled
+                        + $data->hosts_unreachable_handled
+                    );
+                    $status->add(
+                        'critical_unhandled',
+                        $data->hosts_down_unhandled
+                        + $data->hosts_unreachable_unhandled
+                    );
+                }
 
                 $status->set('warning_handled', $data->services_warning_handled);
                 $status->set('warning_unhandled', $data->services_warning_unhandled);

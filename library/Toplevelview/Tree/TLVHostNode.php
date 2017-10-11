@@ -57,7 +57,7 @@ class TLVHostNode extends TLVIcingaNode
                     $status->add('downtime_active');
                     $state = '10';
                     $handled = '';
-                } elseif ($data->host_handled === '1') {
+                } elseif ($data->host_handled === '1' || $this->getRoot()->get('host_never_unhandled') === true) {
                     $handled = '_handled';
                 } else {
                     $handled = '_unhandled';
