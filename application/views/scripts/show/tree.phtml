@@ -2,6 +2,8 @@
 /** @var \Icinga\Module\Toplevelview\ViewConfig $view */
 /** @var \Icinga\Module\Toplevelview\Tree\TLVTreeNode $node */
 
+$tree = $view->getTree();
+
 if (! $this->compact):
 ?>
 <div class="controls">
@@ -12,8 +14,9 @@ if (! $this->compact):
     <div class="tlv-header">
         <div class="last-refresh">
             <?= $this->translate('Last update') ?>
-            <?= $this->timeAgo($view->getTree()->getFetchTime()) ?>
+            <?= $this->timeAgo($tree->getFetchTime()) ?>
         </div>
+        <?= $this->badges($tree->getStatus(), false) ?>
         <h1><?= $view->getMeta('name') ?></h1>
         <?= $this->partial('show/actions.phtml', $this) ?>
     </div>

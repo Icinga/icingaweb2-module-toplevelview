@@ -18,14 +18,17 @@ class Zend_View_Helper_Badges extends Zend_View_Helper_Abstract
         return trim($s);
     }
 
-    public function badges(TLVStatus $status)
+    public function badges(TLVStatus $status, $problemsOnly = true)
     {
         $htm = '';
 
         $values = false;
         $htm .= '<div class="badges">';
         foreach ($status->getProperties() as $key => $value) {
-            if ($key !== 'total' && $key !== 'ok' && $value !== null && $value > 0) {
+            if ($problemsOnly === true && ($key === 'total' || $key === 'ok')) {
+                continue;
+            }
+            if ($value !== null && $value > 0) {
                 $values = true;
                 $title = $value . ' ' . $this->prettyTitle($key);
                 $class = 'tlv-status-tile ' . str_replace('_', ' ', $key);
