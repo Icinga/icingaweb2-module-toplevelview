@@ -7,14 +7,16 @@ class TLVStatus
 {
     protected $properties = array(
         'critical_unhandled' => null,
-        'critical_handled' => null,
-        'warning_unhandled' => null,
-        'warning_handled' => null,
-        'unknown_unhandled' => null,
-        'unknown_handled' => null,
-        'ok' => null,
-        'missing' => null,
-        'total' => null,
+        'critical_handled'   => null,
+        'warning_unhandled'  => null,
+        'warning_handled'    => null,
+        'unknown_unhandled'  => null,
+        'unknown_handled'    => null,
+        'downtime_handled'   => null,
+        'downtime_active'    => null,
+        'ok'                 => null,
+        'missing'            => null,
+        'total'              => null,
     );
 
     protected static $statusPriority = array(
