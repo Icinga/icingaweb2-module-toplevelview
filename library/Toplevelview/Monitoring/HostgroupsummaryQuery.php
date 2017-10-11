@@ -9,20 +9,13 @@ use Zend_Db_Select;
 
 /**
  * Patched version of HostgroupsummaryQuery
- *
- * Changes:
- * - join service_notifications_enabled from status tables
- * - modify handled logic to include disabled notifications and flapping
- * - use patched version of HostgroupQuery for subQueries
  */
 class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
 {
     public function init()
     {
-        // TODO: service_notification_period
-
-        $serviceOutDowntime = 'service_notifications_enabled = 1 AND service_in_downtime = 0';
-        $serviceInDowntime = '(service_notifications_enabled = 0 OR service_in_downtime = 1)';
+        $serviceOutDowntime = 'service_notifications_enabled = 1 AND service_in_downtime = 0 AND service_in_notification_period = 1';
+        $serviceInDowntime = '(service_notifications_enabled = 0 OR service_in_downtime = 1 OR service_in_notification_period = 0)';
         $hostOutDowntime = 'host_notifications_enabled = 1 AND host_in_downtime = 0';
         $hostInDowntime = '(host_notifications_enabled = 0 OR host_in_downtime = 1)';
         $patchServicesHandled = "(service_handled = 1 OR service_is_flapping = 1) AND $serviceOutDowntime";
@@ -83,11 +76,12 @@ class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
                 'host_state',
                 'host_is_flapping',
                 'host_in_downtime',
-                'service_handled'               => new Zend_Db_Expr('NULL'),
-                'service_state'                 => new Zend_Db_Expr('NULL'),
-                'service_notifications_enabled' => new Zend_Db_Expr('NULL'),
-                'service_is_flapping'           => new Zend_Db_Expr('NULL'),
-                'service_in_downtime'           => new Zend_Db_Expr('NULL'),
+                'service_handled'                => new Zend_Db_Expr('NULL'),
+                'service_state'                  => new Zend_Db_Expr('NULL'),
+                'service_notifications_enabled'  => new Zend_Db_Expr('NULL'),
+                'service_in_notification_period' => new Zend_Db_Expr('NULL'),
+                'service_is_flapping'            => new Zend_Db_Expr('NULL'),
+                'service_in_downtime'            => new Zend_Db_Expr('NULL'),
             )
         );
         $this->subQueries[] = $hosts;
@@ -104,6 +98,7 @@ class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
                 'service_handled',
                 'service_state',
                 'service_notifications_enabled',
+                'service_in_notification_period',
                 'service_is_flapping',
                 'service_in_downtime',
             )
