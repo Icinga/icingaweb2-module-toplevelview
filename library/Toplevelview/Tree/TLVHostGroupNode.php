@@ -33,6 +33,8 @@ class TLVHostGroupNode extends TLVIcingaNode
             'hosts_total',
             'hosts_unreachable_handled',
             'hosts_unreachable_unhandled',
+            'hosts_downtime_handled',
+            'hosts_downtime_active',
             'hosts_up',
             'services_critical_handled',
             'services_critical_unhandled',
@@ -41,7 +43,9 @@ class TLVHostGroupNode extends TLVIcingaNode
             'services_unknown_handled',
             'services_unknown_unhandled',
             'services_warning_handled',
-            'services_warning_unhandled'
+            'services_warning_unhandled',
+            'services_downtime_handled',
+            'services_downtime_active',
         ));
         $hostgroups->where('hostgroup_name', $names);
 
@@ -78,6 +82,17 @@ class TLVHostGroupNode extends TLVIcingaNode
                 $status->set('warning_unhandled', $data->services_warning_unhandled);
                 $status->set('unknown_handled', $data->services_unknown_handled);
                 $status->set('unknown_unhandled', $data->services_unknown_unhandled);
+
+                $status->set(
+                    'downtime_handled',
+                    $data->hosts_downtime_handled
+                    + $data->services_downtime_handled
+                );
+                $status->set(
+                    'downtime_active',
+                    $data->hosts_downtime_active
+                    + $data->services_downtime_active
+                );
 
                 // extra metadata for view
                 $status->setMeta('hosts_total', $data->hosts_total);

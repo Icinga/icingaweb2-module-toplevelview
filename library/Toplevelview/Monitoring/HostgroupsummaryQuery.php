@@ -21,17 +21,31 @@ class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
     {
         // TODO: service_notification_period
 
-        $patchHandled = '(service_handled = 1 OR service_notifications_enabled = 0 OR service_is_flapping = 1)';
-        $patchUnhandled = 'service_handled = 0 AND service_notifications_enabled = 1 AND service_is_flapping = 0';
+        $serviceOutDowntime = 'service_notifications_enabled = 1 AND service_in_downtime = 0';
+        $serviceInDowntime = '(service_notifications_enabled = 0 OR service_in_downtime = 1)';
+        $hostOutDowntime = 'host_notifications_enabled = 1 AND host_in_downtime = 0';
+        $hostInDowntime = '(host_notifications_enabled = 0 OR host_in_downtime = 1)';
+        $patchServicesHandled = "(service_handled = 1 OR service_is_flapping = 1) AND $serviceOutDowntime";
+        $patchServicesUnhandled = "service_handled = 0 AND service_is_flapping = 0 AND $serviceOutDowntime";
+        $patchHostsHandled = "(host_handled = 1 OR host_is_flapping = 1) AND $hostOutDowntime";
+        $patchHostsUnhandled = "host_handled = 0 AND host_is_flapping = 0 AND $hostOutDowntime";
 
         $patchedColumnMap = array(
             'hostgroupsummary' => array(
-                'services_critical_handled'   => "SUM(CASE WHEN service_state = 2 AND $patchHandled THEN 1 ELSE 0 END)",
-                'services_critical_unhandled' => "SUM(CASE WHEN service_state = 2 AND $patchUnhandled THEN 1 ELSE 0 END)",
-                'services_unknown_handled'    => "SUM(CASE WHEN service_state = 3 AND $patchHandled THEN 1 ELSE 0 END)",
-                'services_unknown_unhandled'  => "SUM(CASE WHEN service_state = 3 AND $patchUnhandled THEN 1 ELSE 0 END)",
-                'services_warning_handled'    => "SUM(CASE WHEN service_state = 1 AND $patchHandled THEN 1 ELSE 0 END)",
-                'services_warning_unhandled'  => "SUM(CASE WHEN service_state = 1 AND $patchUnhandled THEN 1 ELSE 0 END)",
+                'hosts_down_handled'          => "SUM(CASE WHEN host_state = 1 AND $patchHostsHandled THEN 1 ELSE 0 END)",
+                'hosts_down_unhandled'        => "SUM(CASE WHEN host_state = 1 AND $patchHostsUnhandled THEN 1 ELSE 0 END)",
+                'hosts_unreachable_handled'   => "SUM(CASE WHEN host_state = 2 AND $patchHostsHandled THEN 1 ELSE 0 END)",
+                'hosts_unreachable_unhandled' => "SUM(CASE WHEN host_state = 2 AND $patchHostsUnhandled THEN 1 ELSE 0 END)",
+                'hosts_downtime_handled'      => "SUM(CASE WHEN host_state != 0 AND $hostInDowntime THEN 1 ELSE 0 END)",
+                'hosts_downtime_active'       => "SUM(CASE WHEN $hostInDowntime THEN 1 ELSE 0 END)",
+                'services_critical_handled'   => "SUM(CASE WHEN service_state = 2 AND $patchServicesHandled THEN 1 ELSE 0 END)",
+                'services_critical_unhandled' => "SUM(CASE WHEN service_state = 2 AND $patchServicesUnhandled THEN 1 ELSE 0 END)",
+                'services_unknown_handled'    => "SUM(CASE WHEN service_state = 3 AND $patchServicesHandled THEN 1 ELSE 0 END)",
+                'services_unknown_unhandled'  => "SUM(CASE WHEN service_state = 3 AND $patchServicesUnhandled THEN 1 ELSE 0 END)",
+                'services_warning_handled'    => "SUM(CASE WHEN service_state = 1 AND $patchServicesHandled THEN 1 ELSE 0 END)",
+                'services_warning_unhandled'  => "SUM(CASE WHEN service_state = 1 AND $patchServicesUnhandled THEN 1 ELSE 0 END)",
+                'services_downtime_handled'   => "SUM(CASE WHEN service_state != 0 AND $serviceInDowntime THEN 1 ELSE 0 END)",
+                'services_downtime_active'    => "SUM(CASE WHEN $serviceInDowntime THEN 1 ELSE 0 END)",
             )
         );
 
@@ -65,11 +79,15 @@ class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
                 'hostgroup_alias',
                 'hostgroup_name',
                 'host_handled',
+                'host_notifications_enabled',
                 'host_state',
+                'host_is_flapping',
+                'host_in_downtime',
                 'service_handled'               => new Zend_Db_Expr('NULL'),
                 'service_state'                 => new Zend_Db_Expr('NULL'),
                 'service_notifications_enabled' => new Zend_Db_Expr('NULL'),
                 'service_is_flapping'           => new Zend_Db_Expr('NULL'),
+                'service_in_downtime'           => new Zend_Db_Expr('NULL'),
             )
         );
         $this->subQueries[] = $hosts;
@@ -78,12 +96,16 @@ class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
             array(
                 'hostgroup_alias',
                 'hostgroup_name',
-                'host_handled' => new Zend_Db_Expr('NULL'),
-                'host_state'   => new Zend_Db_Expr('NULL'),
+                'host_handled'               => new Zend_Db_Expr('NULL'),
+                'host_state'                 => new Zend_Db_Expr('NULL'),
+                'host_notifications_enabled' => new Zend_Db_Expr('NULL'),
+                'host_is_flapping'           => new Zend_Db_Expr('NULL'),
+                'host_in_downtime'           => new Zend_Db_Expr('NULL'),
                 'service_handled',
                 'service_state',
                 'service_notifications_enabled',
-                'service_is_flapping'
+                'service_is_flapping',
+                'service_in_downtime',
             )
         );
         $this->subQueries[] = $services;
