@@ -187,12 +187,16 @@ class ViewConfig
 
     protected function writeFile($path, $content, $mode = '0660')
     {
+        $existing = file_exists($path);
         if (file_put_contents($path, $content) === false) {
             throw new NotWritableError('Could not save to %s', $path);
         }
 
-        if ($mode !== null && false === @chmod($path, intval($mode, 8))) {
-            throw new NotWritableError('Failed to set file mode "%o" on file "%s"', $mode, $path);
+        if ($existing === false) {
+            $octalMode = intval($mode, 8);
+            if ($mode !== null && false === @chmod($path, $octalMode)) {
+                throw new NotWritableError('Failed to set file mode "%s" on file "%s"', $mode, $path);
+            }
         }
     }
 
@@ -282,8 +286,9 @@ class ViewConfig
                 );
             }
 
-            if ($mode !== null && false === @chmod($path, intval($mode, 8))) {
-                throw new NotWritableError('Failed to set file mode "%o" on file "%s"', $mode, $path);
+            $octalMode = intval($mode, 8);
+            if ($mode !== null && false === @chmod($path, $octalMode)) {
+                throw new NotWritableError('Failed to set file mode "%s" on file "%s"', $mode, $path);
             }
         }
     }
