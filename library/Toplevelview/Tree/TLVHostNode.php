@@ -29,6 +29,8 @@ class TLVHostNode extends TLVIcingaNode
                 'host_name',
                 'host_hard_state',
                 'host_handled',
+                'host_in_downtime',
+                'host_notifications_enabled',
             ))
             ->where('host_name', $names);
 
@@ -51,8 +53,11 @@ class TLVHostNode extends TLVIcingaNode
 
                 $state = $data->host_hard_state;
 
-                $handled = $data->host_handled;
-                if ($handled === '1') {
+                if ($data->host_in_downtime > 0 || $data->host_notifications_enabled === '0') {
+                    $status->add('downtime_active');
+                    $state = '10';
+                    $handled = '';
+                } elseif ($data->host_handled === '1') {
                     $handled = '_handled';
                 } else {
                     $handled = '_unhandled';
@@ -62,6 +67,8 @@ class TLVHostNode extends TLVIcingaNode
                     $status->add('ok');
                 } elseif ($state === '1' || $state === '2') {
                     $status->add('critical' . $handled);
+                } elseif ($state === '10') {
+                    $status->add('downtime_handled');
                 } else {
                     $status->add('unknown');
                 }
