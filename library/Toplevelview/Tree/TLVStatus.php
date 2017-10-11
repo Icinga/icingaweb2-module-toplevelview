@@ -30,6 +30,8 @@ class TLVStatus
         'ok',
     );
 
+    protected $meta = array();
+
     public function merge(TLVStatus $status)
     {
         $properties = $status->getProperties();
@@ -90,5 +92,24 @@ class TLVStatus
     protected function cssFriendly($key)
     {
         return str_replace('_', ' ', $key);
+    }
+
+    public function getMeta($key)
+    {
+        if (array_key_exists($key, $this->meta)) {
+            return $this->meta[$key];
+        } else {
+            return null;
+        }
+    }
+
+    public function getAllMeta()
+    {
+        return $this->meta;
+    }
+
+    public function setMeta($key, $value)
+    {
+        $this->meta[$key] = $value;
     }
 }

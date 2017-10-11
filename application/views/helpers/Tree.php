@@ -49,12 +49,12 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
                 )
             );
 
-            if (($h = $status->get('hosts_unhandled')) > 0) {
+            if (($h = $status->getMeta('hosts_unhandled')) > 0) {
                 $hostTitle = '(<strong>'
                     . sprintf($this->view->translatePlural('%s unhandled host', '%s unhandled hosts', $h), $h)
                     . '</strong>)';
             } else {
-                $h = $status->get('hosts_total');
+                $h = $status->getMeta('hosts_total');
                 $hostTitle = '(' . sprintf($this->view->translatePlural('%s host', '%s hosts', $h), $h) . ')';
             }
 
