@@ -27,6 +27,7 @@ class TLVStatus
         'warning_handled',
         'unknown_handled',
         'ok',
+        'downtime_handled',
         'missing',
     );
 
