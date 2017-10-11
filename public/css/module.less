@@ -196,6 +196,20 @@
     flex-grow: 1;
 
     overflow: hidden;
+
+    .badges {
+      display: inline-block;
+
+      font-weight: normal;
+      margin-left: 0.2em;
+
+      .badge {
+        font-size: 0.7em;
+
+        border: 0.1em solid white;
+        margin-left: 0.2em;
+      }
+    }
   }
 
   .tlv-tile-title {
@@ -217,6 +231,10 @@
 
     > .tlv-tile-title {
       font-weight: bold;
+
+      > .badges {
+        float: right;
+      }
     }
 
     > .tlv-tiles > .tlv-tile { // second level
@@ -225,6 +243,10 @@
       > .tlv-tile-title {
         height: 100%;
         text-align: center;
+
+        .badge {
+          margin-top: -0.3em;
+        }
 
         &:before {
           content: "";
@@ -269,6 +291,16 @@
         display: none;
       }
     }
+
+    .badges {
+      display: inline-block;
+      font-size: 0.9em;
+
+      .badge {
+        border: 0.1em solid white;
+        margin-left: 0.2em;
+      }
+    }
   }
 
   > .tlv-tree-node {
@@ -284,7 +316,11 @@
     width: 100%;
     white-space: nowrap;
     margin: -0.2em 0 0 -1em;
-    padding: 0.3em 1em 0.3em 0.3em;
+    padding: 0.3em 0.3em 0.3em 0.3em;
+
+    .badges {
+      float: right;
+    }
   }
 
   .tlv-node-icinga {

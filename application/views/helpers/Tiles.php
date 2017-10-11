@@ -1,5 +1,5 @@
 <?php
-/* Icinga Web 2 | (c) 2016 Icinga Development Team | GPLv2+ */
+/* Icinga Web 2 Top Level View | (c) 2017 Icinga Development Team | GPLv2+ */
 
 use Icinga\Module\Toplevelview\Tree\TLVTreeNode;
 
@@ -26,8 +26,10 @@ class Zend_View_Helper_Tiles extends Zend_View_Helper_Abstract
             join(' ', $classes + $statusClasses),
             $title
         );
+        $badges = $this->view->badges($status);
+
         $htm .= $this->view->qlink(
-            $title,
+            $title . $badges,
             'toplevelview/show/tree',
             array(
                 'name' => $node->getRoot()->getConfig()->getName(),
