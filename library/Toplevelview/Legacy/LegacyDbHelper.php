@@ -141,6 +141,9 @@ class LegacyDbHelper
                 $currentLevel = $node->level;
                 $currentId = $node->id;
 
+                // clear current host when node changes
+                $currentHostId = null;
+
                 // remove unused values
                 unset($node->id);
                 unset($node->level);
