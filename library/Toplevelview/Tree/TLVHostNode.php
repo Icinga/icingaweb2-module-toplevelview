@@ -65,6 +65,8 @@ class TLVHostNode extends TLVIcingaNode
                 } else {
                     $status->add('unknown');
                 }
+            } else {
+                $status->add('missing', 1);
             }
         }
         return $this->status;

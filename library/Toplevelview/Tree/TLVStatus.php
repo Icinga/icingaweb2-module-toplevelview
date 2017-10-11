@@ -3,8 +3,6 @@
 
 namespace Icinga\Module\Toplevelview\Tree;
 
-use Icinga\Exception\ProgrammingError;
-
 class TLVStatus
 {
     protected $properties = array(
@@ -22,12 +20,12 @@ class TLVStatus
     protected static $statusPriority = array(
         'critical_unhandled',
         'warning_unhandled',
-        'missing',
-        'unknown_unhandled', // TODO: ?
+        'unknown_unhandled', // Note: old TLV ignored UNKNOWN basically
         'critical_handled',
         'warning_handled',
         'unknown_handled',
         'ok',
+        'missing',
     );
 
     protected $meta = array();
@@ -42,7 +40,6 @@ class TLVStatus
                 $this->properties[$key] += $properties[$key];
             }
         }
-        // TODO: missing?
         return $this;
     }
 

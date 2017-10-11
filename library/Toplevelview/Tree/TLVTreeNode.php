@@ -320,11 +320,10 @@ class TLVTreeNode extends TreeNode
                     $missed = false;
                 }
 
-                /* TODO: old TLV does not count an empty branch as missing...
+                // Note: old TLV does not count an empty branch as missing...
                 if ($missed) {
                     $this->status->add('missing', 1);
                 }
-                */
             }
 
             return $this->status;
