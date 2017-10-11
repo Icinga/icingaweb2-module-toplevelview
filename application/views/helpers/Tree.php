@@ -9,7 +9,7 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
     /** @var \Icinga\Web\View */
     public $view;
 
-    public function tree(TLVTreeNode $node, $classes = array())
+    public function tree(TLVTreeNode $node, $classes = array(), $level = 0)
     {
         $htm = '';
         $htmExtra = '';
@@ -91,14 +91,14 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
         } else {
             $htm .= "<div class=\"tlv-tree-node tlv-status-section collapsible $statusClass $cssClasses\" title=\"$title\">";
             $htm .= '<div class="tlv-tree-title">';
-            $htm .= $this->view->badges($status);
+            $htm .= $this->view->badges($status, $level === 0 ? false : true);
             $htm .= '<i class="icon icon-bycss collapse-handle"></i> ';
             $htm .= $this->view->qlink($title, $url);
             $htm .= $htmExtra;
             $htm .= '</div>';
             if ($node->hasChildren()) {
                 foreach ($node->getChildren() as $child) {
-                    $htm .= $this->tree($child, $classes);
+                    $htm .= $this->tree($child, $classes, $level + 1);
                 }
             }
             $htm .= '</div>';
