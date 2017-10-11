@@ -5,9 +5,9 @@ namespace Icinga\Module\Toplevelview\Monitoring;
 
 use Icinga\Data\ConnectionInterface;
 use Icinga\Module\Monitoring\Backend\MonitoringBackend;
-use Icinga\Module\Monitoring\DataView\ServiceStatus as IcingaServiceStatus;
+use Icinga\Module\Monitoring\DataView\Servicestatus as IcingaServiceStatus;
 
-class ServiceStatus extends IcingaServiceStatus
+class Servicestatus extends IcingaServiceStatus
 {
     /** @noinspection PhpMissingParentConstructorInspection */
     /**
@@ -31,7 +31,7 @@ class ServiceStatus extends IcingaServiceStatus
             parent::getColumns(),
             array(
                 //'service_in_notification_period',
-                'servicenotificationperiod_name',
+                'service_notification_period',
             )
         );
     }

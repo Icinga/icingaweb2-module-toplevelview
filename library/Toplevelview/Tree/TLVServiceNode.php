@@ -5,6 +5,7 @@ namespace Icinga\Module\Toplevelview\Tree;
 
 use Icinga\Application\Benchmark;
 use Icinga\Exception\NotFoundError;
+use Icinga\Module\Toplevelview\Monitoring\Servicestatus;
 
 class TLVServiceNode extends TLVIcingaNode
 {
@@ -46,18 +47,19 @@ class TLVServiceNode extends TLVIcingaNode
 
         $names = array_keys($root->registeredObjects['host']);
 
-        $services = $root->getBackend()->select()
-            ->from('servicestatus', array(
-                'host_name',
-                'service_description',
-                'service_hard_state',
-                'service_handled',
-                'service_notifications_enabled',
-                // TODO: notification_period,
-                'service_is_flapping',
-                'service_in_downtime',
-            ))
-            ->where('host_name', $names);
+        // Note: this uses a patched version of Servicestatus / ServicestatusQuery !
+        $services = new Servicestatus($root->getBackend(), array(
+            'host_name',
+            'service_description',
+            'service_hard_state',
+            'service_handled',
+            'service_notifications_enabled',
+            'service_in_notification_period',
+            'service_notification_period',
+            'service_is_flapping',
+            'service_in_downtime',
+        ));
+        $services->where('host_name', $names);
 
         foreach ($services as $service) {
             $key = sprintf('%s!%s', $service->host_name, $service->service_description);
@@ -80,7 +82,11 @@ class TLVServiceNode extends TLVIcingaNode
 
                 $state = $data->service_hard_state;
 
-                if ($data->service_in_downtime > 0 || $data->service_notifications_enabled === '0') {
+                if (
+                    $data->service_in_downtime > 0
+                    || $data->service_notifications_enabled === '0'
+                    || $data->service_in_notification_period === '0'
+                ) {
                     $status->add('downtime_active');
                     $state = '10';
                     $handled = '';
