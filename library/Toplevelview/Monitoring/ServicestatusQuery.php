@@ -42,8 +42,8 @@ class ServicestatusQuery extends IcingaServicestatusQuery
         );
         $this->select->joinLeft(
             array('ntpr' => $this->prefix . 'timeperiod_timeranges'),
-            'ntpr.timeperiod_id = ntp.timeperiod_id 
-                AND ntpr.day = DAYOFWEEK(UTC_DATE())
+            'ntpr.timeperiod_id = ntp.timeperiod_id
+                AND ntpr.day = DAYOFWEEK(UTC_DATE()) - 1
                 AND ntpr.start_sec <= UNIX_TIMESTAMP() - UNIX_TIMESTAMP(UTC_DATE())
                 AND ntpr.end_sec >= UNIX_TIMESTAMP() - UNIX_TIMESTAMP(UTC_DATE())
             ',
