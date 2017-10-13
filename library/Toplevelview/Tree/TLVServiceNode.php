@@ -89,9 +89,12 @@ class TLVServiceNode extends TLVIcingaNode
                     || $data->service_in_notification_period === '0'
                 ) {
                     $status->add('downtime_active');
-                    $state = '10';
-                    $handled = '';
-                } elseif (
+                    if ($state !== '0') {
+                        $state = '10';
+                    }
+                }
+
+                if (
                     $data->service_handled === '1'
                     || $data->service_is_flapping === '1'
                 ) {
