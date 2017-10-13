@@ -111,10 +111,9 @@ class LegacyDbHelper
             $node->id = (int) $node->id;
             $node->level = (int) $node->level;
 
-            $chain[$node->level] = $node;
-
             if ($currentId === null || $currentId !== $node->id) {
                 // only add the node once (all hosts, services and hostgroups are attached on the same node)
+                $chain[$node->level] = $node;
 
                 if ($tree === null || $node->id === $root_id) {
                     $currentParent = $tree = $node;
@@ -148,7 +147,6 @@ class LegacyDbHelper
                     unset($node->display_name);
                 }
 
-                $currentLevel = $node->level;
                 $currentId = $node->id;
                 $currentNode = $node;
 
@@ -176,7 +174,7 @@ class LegacyDbHelper
                     $currentNode->children = array();
                 }
 
-                $currentNode->children[$node->host_object_id] = $host;
+                $currentNode->children['host_' . $node->host_object_id] = $host;
                 $hosts[$node->host_object_id][] = $host;
             }
             unset($currentNode->host_object_id);
@@ -191,7 +189,7 @@ class LegacyDbHelper
                 if (! property_exists($currentNode, 'children')) {
                     $currentNode->children = array();
                 }
-                $currentNode->children[$node->service_object_id] = $service;
+                $currentNode->children['hostservice_' . $node->service_object_id] = $service;
                 $services[$node->service_object_id][] = $service;
             }
             unset($currentNode->service_object_id);
@@ -205,7 +203,7 @@ class LegacyDbHelper
                 if (! property_exists($currentNode, 'children')) {
                     $currentNode->children = array();
                 }
-                $currentNode->children[$node->hostgroup_object_id] = $hostgroup;
+                $currentNode->children['hostgroup_' . $node->hostgroup_object_id] = $hostgroup;
                 $hostgroups[$node->hostgroup_object_id][] = $hostgroup;
             }
             unset($currentNode->hostgroup_object_id);
