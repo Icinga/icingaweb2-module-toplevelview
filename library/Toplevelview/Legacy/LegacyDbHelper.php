@@ -118,6 +118,15 @@ class LegacyDbHelper
 
                 if ($tree === null || $node->id === $root_id) {
                     $currentParent = $tree = $node;
+
+                    // minor tweak: remove "top level view" from title
+                    $newTitle = preg_replace('/^Top\s*Level\s*View\s*/i', '', $tree->name);
+                    if (strlen($newTitle) > 4) {
+                        $tree->name = $tree->display_name = $newTitle;
+                    }
+
+                    // add old default behavior for status
+                    $tree->host_never_unhandled = true;
                 } elseif ($node->level > $currentLevel) {
                     // level down
                     $currentParent = $chain[$node->level - 1];
