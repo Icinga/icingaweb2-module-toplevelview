@@ -29,7 +29,7 @@ class HostgroupQuery extends IcingaHostgroupQuery
             ),
             'servicenotificationperiod' => array(
                 'service_notification_period'    => 'ntpo.name1',
-                'service_in_notification_period' => 'CASE WHEN ntpr.timeperiod_id IS NOT NULL THEN 1 ELSE 0 END',
+                'service_in_notification_period' => 'CASE WHEN s.notification_timeperiod_object_id IS NULL THEN 1 ELSE CASE WHEN ntpr.timeperiod_id IS NOT NULL THEN 1 ELSE 0 END END',
             ),
         );
 
