@@ -6,4 +6,31 @@
 <div class="content full-form">
     <h1><?= $title ?></h1>
     <?= $form ?>
+    <h2><?= $this->translate('Editor Help') ?></h2>
+    <table class="name-value-table">
+        <tr>
+            <th>Ctrl-F / Cmd-F</th>
+            <td><?= $this->translate('Persistent search (dialog doesn\'t autoclose, enter to find next, Shift-Enter to find previous)') ?></td>
+        </tr>
+        <tr>
+            <th>Ctrl-G / Cmd-G</th>
+            <td><?= $this->translate('Find next') ?></td>
+        </tr>
+        <tr>
+            <th>Shift-Ctrl-G / Shift-Cmd-G</th>
+            <td><?= $this->translate('Find previous') ?></td>
+        </tr>
+        <tr>
+            <th>Shift-Ctrl-F / Cmd-Option-F</th>
+            <td><?= $this->translate('Replace') ?></td>
+        </tr>
+        <tr>
+            <th>Shift-Ctrl-R / Shift-Cmd-Option-F</th>
+            <td><?= $this->translate('Replace all') ?></td>
+        </tr>
+        <tr>
+            <th>Alt-G</th>
+            <td><?= $this->translate('Jump to line') ?></td>
+        </tr>
+    </table>
 </div>

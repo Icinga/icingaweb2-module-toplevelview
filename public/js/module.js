@@ -52,7 +52,8 @@
                     Tab: function(cm) {
                         var spaces = new Array(cm.getOption('indentUnit') + 1).join(' ');
                         cm.replaceSelection(spaces);
-                    }
+                    },
+                    'Ctrl-F': 'findPersistent'
                 });
             });
         },
