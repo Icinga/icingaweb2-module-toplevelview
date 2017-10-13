@@ -95,6 +95,7 @@ class LegacyDbHelper
         $tree = null;
         /** @var stdClass $currentParent */
         $currentParent = null;
+        $currentNode = null;
         $currentLevel = null;
         $currentId = null;
         $chain = array();
@@ -140,6 +141,7 @@ class LegacyDbHelper
 
                 $currentLevel = $node->level;
                 $currentId = $node->id;
+                $currentNode = $node;
 
                 // clear current host when node changes
                 $currentHostId = null;
@@ -161,14 +163,14 @@ class LegacyDbHelper
                 $host->type = 'host';
                 $host->object_id = $node->host_object_id;
 
-                if (! property_exists($node, 'children')) {
-                    $node->children = array();
+                if (! property_exists($currentNode, 'children')) {
+                    $currentNode->children = array();
                 }
 
-                $node->children[] = $host;
+                $currentNode->children[] = $host;
                 $hosts[$node->host_object_id][] = $host;
             }
-            unset($node->host_object_id);
+            unset($currentNode->host_object_id);
 
             if (property_exists($node, 'service_object_id') && $node->service_object_id !== null) {
                 $service = new stdClass;
@@ -177,13 +179,13 @@ class LegacyDbHelper
                 $service->type = 'service';
                 $service->object_id = $node->service_object_id;
 
-                if (! property_exists($node, 'children')) {
-                    $node->children = array();
+                if (! property_exists($currentNode, 'children')) {
+                    $currentNode->children = array();
                 }
-                $node->children[] = $service;
+                $currentNode->children[] = $service;
                 $services[$node->service_object_id][] = $service;
             }
-            unset($node->service_object_id);
+            unset($currentNode->service_object_id);
 
             if (property_exists($node, 'hostgroup_object_id') && $node->hostgroup_object_id !== null) {
                 $hostgroup = new stdClass;
@@ -191,13 +193,13 @@ class LegacyDbHelper
                 $hostgroup->type = 'hostgroup';
                 $hostgroup->object_id = $node->hostgroup_object_id;
 
-                if (! property_exists($node, 'children')) {
-                    $node->children = array();
+                if (! property_exists($currentNode, 'children')) {
+                    $currentNode->children = array();
                 }
-                $node->children[] = $hostgroup;
+                $currentNode->children[] = $hostgroup;
                 $hostgroups[$node->hostgroup_object_id][] = $hostgroup;
             }
-            unset($node->hostgroup_object_id);
+            unset($currentNode->hostgroup_object_id);
         }
 
         return $tree;
