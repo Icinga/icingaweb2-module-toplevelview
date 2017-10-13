@@ -1,0 +1,163 @@
+# Icinga Web 2 - Head for multiple monitoring backends.
+# Copyright (C) 2017 Icinga Development Team
+# This file is distributed under the same license as Toplevelview Module.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Toplevelview Module (0.0.0)\n"
+"Report-Msgid-Bugs-To: dev@icinga.com\n"
+"POT-Creation-Date: 2017-10-13 11:53+0000\n"
+"PO-Revision-Date: 2017-10-13 14:00+0200\n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Basepath: .\n"
+"Last-Translator: Markus Frosch <markus.frosch@icinga.com>\n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.11\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: ../../../../modules/toplevelview/application/views/helpers/Tree.php:58
+#, php-format
+msgid "%s host"
+msgid_plural "%s hosts"
+msgstr[0] "%s Host"
+msgstr[1] "%s Hosts"
+
+#: ../../../../modules/toplevelview/application/views/helpers/Tree.php:54
+#, php-format
+msgid "%s unhandled host"
+msgid_plural "%s unhandled hosts"
+msgstr[0] "%s unbehandelte Problem"
+msgstr[1] "%s unbehandelte Probleme"
+
+#: ../../../../modules/toplevelview/application/views/scripts/index/index.phtml:13
+#: ../../../../modules/toplevelview/application/controllers/EditController.php:53
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: ../../../../modules/toplevelview/configuration.php:9
+msgid "Allow the user to edit Top Level Views"
+msgstr "Erlauben dass Benutzer Top Level Views ändern"
+
+#: ../../../../modules/toplevelview/application/forms/EditForm.php:157
+msgid "Cancel editing"
+msgstr "Bearbeitung abbrechen"
+
+#: ../../../../modules/toplevelview/application/views/scripts/show/actions.phtml:19
+#: ../../../../modules/toplevelview/application/controllers/EditController.php:60
+msgid "Clone"
+msgstr "Klonen"
+
+#: ../../../../modules/toplevelview/application/forms/EditForm.php:169
+msgid "Delete config"
+msgstr "Konfiguration löschen"
+
+#: ../../../../modules/toplevelview/application/views/scripts/index/index.phtml:38
+#: ../../../../modules/toplevelview/application/views/scripts/show/actions.phtml:9
+#: ../../../../modules/toplevelview/application/controllers/EditController.php:33
+#: ../../../../modules/toplevelview/application/controllers/EditController.php:66
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: ../../../../modules/toplevelview/application/views/scripts/edit/index.phtml:9
+msgid "Editor Help"
+msgstr "Editor Hilfe"
+
+#: ../../../../modules/toplevelview/application/forms/EditForm.php:111
+msgid "File name"
+msgstr "Dateiname"
+
+#: ../../../../modules/toplevelview/application/views/scripts/edit/index.phtml:17
+msgid "Find next"
+msgstr "Nächster Treffer"
+
+#: ../../../../modules/toplevelview/application/views/scripts/edit/index.phtml:21
+msgid "Find previous"
+msgstr "Vorheriger Treffer"
+
+#: ../../../../modules/toplevelview/application/controllers/ShowController.php:43
+msgid "Go Fullscreen"
+msgstr "Zur Vollbildansicht"
+
+#: ../../../../modules/toplevelview/application/views/scripts/edit/index.phtml:33
+msgid "Jump to line"
+msgstr "Zu Zeile springen"
+
+#: ../../../../modules/toplevelview/application/views/scripts/show/tree.phtml:16
+#: ../../../../modules/toplevelview/application/views/scripts/show/index.phtml:14
+msgid "Last update"
+msgstr "Letzte Aktualisierung"
+
+#: ../../../../modules/toplevelview/application/views/scripts/edit/index.phtml:13
+msgid ""
+"Persistent search (dialog doesn't autoclose, enter to find next, Shift-Enter "
+"to find previous)"
+msgstr ""
+"Dauerhafte Suche (Dialog schließt nicht automatisch, Enter für nächsten "
+"Treffer, Shift-Enter für Vorherigen)"
+
+#: ../../../../modules/toplevelview/application/views/scripts/edit/index.phtml:25
+msgid "Replace"
+msgstr "Ersetzen"
+
+#: ../../../../modules/toplevelview/application/views/scripts/edit/index.phtml:29
+msgid "Replace all"
+msgstr "Alle Ersetzen"
+
+#: ../../../../modules/toplevelview/application/forms/EditForm.php:136
+msgid "Save for the current Session"
+msgstr "Für die aktuelle Sitzung speichern"
+
+#: ../../../../modules/toplevelview/application/forms/EditForm.php:146
+msgid "Save to config file"
+msgstr "Speichern in Konfigurationsdatei"
+
+#: ../../../../modules/toplevelview/application/views/scripts/show/actions.phtml:30
+msgid "Source"
+msgstr "Quelle"
+
+#: ../../../../modules/toplevelview/application/views/scripts/show/actions.phtml:39
+#: ../../../../modules/toplevelview/application/forms/EditForm.php:101
+msgid ""
+"This config is only stored in your session! Make sure to save it to disk "
+"once your work is complete!"
+msgstr ""
+"Diese Konfiguration ist nur in Ihrer Sitzung gespeichert! Stellen Sie sicher "
+"sie in eine Datei zu speichern wenn Ihre Änderung fertig ist!"
+
+#: ../../../../modules/toplevelview/application/controllers/ShowController.php:24
+#: ../../../../modules/toplevelview/application/controllers/EditController.php:23
+msgid "Tiles"
+msgstr "Kacheln"
+
+#: ../../../../modules/toplevelview/application/forms/EditForm.php:56
+msgid "Top Level View restored from disk"
+msgstr "Top Level View von Speicher wiederhergestellt"
+
+#: ../../../../modules/toplevelview/application/forms/EditForm.php:60
+msgid "Top Level View successfully deleted"
+msgstr "Top Level View erfolgreich gelöscht"
+
+#: ../../../../modules/toplevelview/application/forms/EditForm.php:53
+msgid "Top Level View successfully saved"
+msgstr "Top Level View erfolgreich gespeichert"
+
+#: ../../../../modules/toplevelview/application/forms/EditForm.php:62
+msgid "Top Level View successfully saved for the current session"
+msgstr "Top Level View erfolgreich für Ihre Sitzung gespeichert"
+
+#: ../../../../modules/toplevelview/application/controllers/ShowController.php:33
+msgid "Tree"
+msgstr "Baum"
+
+#: ../../../../modules/toplevelview/application/views/scripts/index/index.phtml:32
+msgid "Unsaved changes!"
+msgstr "Nicht-Gespeicherte Änderungen!"
+
+#: ../../../../modules/toplevelview/application/forms/EditForm.php:120
+msgid "YAML Config"
+msgstr "YAML Konfiguration"
