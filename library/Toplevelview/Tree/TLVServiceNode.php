@@ -79,6 +79,7 @@ class TLVServiceNode extends TLVIcingaNode
 
             if (($data = $this->root->getFetched($this->type, $key)) !== null) {
                 $status->zero();
+                $status->add('total');
 
                 $state = $data->service_hard_state;
 
