@@ -176,7 +176,7 @@ class LegacyDbHelper
                     $currentNode->children = array();
                 }
 
-                $currentNode->children[] = $host;
+                $currentNode->children[$node->host_object_id] = $host;
                 $hosts[$node->host_object_id][] = $host;
             }
             unset($currentNode->host_object_id);
@@ -191,7 +191,7 @@ class LegacyDbHelper
                 if (! property_exists($currentNode, 'children')) {
                     $currentNode->children = array();
                 }
-                $currentNode->children[] = $service;
+                $currentNode->children[$node->service_object_id] = $service;
                 $services[$node->service_object_id][] = $service;
             }
             unset($currentNode->service_object_id);
@@ -205,7 +205,7 @@ class LegacyDbHelper
                 if (! property_exists($currentNode, 'children')) {
                     $currentNode->children = array();
                 }
-                $currentNode->children[] = $hostgroup;
+                $currentNode->children[$node->hostgroup_object_id] = $hostgroup;
                 $hostgroups[$node->hostgroup_object_id][] = $hostgroup;
             }
             unset($currentNode->hostgroup_object_id);
