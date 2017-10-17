@@ -14,6 +14,12 @@ class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
 {
     protected $notification_periods = false;
 
+    public function __construct($ds, $columns = null, $notification_periods = false)
+    {
+        $this->notification_periods = $notification_periods;
+        parent::__construct($ds, $columns);
+    }
+
     public function init()
     {
         if ($this->notification_periods === true) {
@@ -55,25 +61,6 @@ class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
             }
         }
         parent::init();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isNotificationPeriods()
-    {
-        return $this->notification_periods;
-    }
-
-    /**
-     * @param bool $notification_periods
-     *
-     * @return $this
-     */
-    public function setNotificationPeriods($notification_periods)
-    {
-        $this->notification_periods = $notification_periods === true;
-        return $this;
     }
 
     protected function createSubQuery($queryName, $columns = array())
