@@ -26,6 +26,18 @@ children:
     - host: host_s_warning
     - host: host_s_warning
       service: s_warning
+- name: Single Objects Handled
+  children:
+  - name: CRITICAL handled
+    children:
+    - host: host_s_critical_handled
+    - host: host_s_critical_handled
+      service: s_critical_handled
+  - name: WARNING handled
+    children:
+    - host: host_s_warning_handled
+    - host: host_s_warning_handled
+      service: s_warning_handled
 - name: Hostgroups
   children:
   - name: OK
@@ -47,6 +59,17 @@ children:
     children:
     - host: host_ok
     - name: missing
+  - name: Missing with problems
+    children:
+    - host: host_down
+    - name: missing
+  - name: Missing with handled
+    children:
+    - host: host_down_handled
+    - name: missing
   - name: Empty
     children:
     - name: nothing here
+  - name: Notexisting Object
+    children:
+    - host: notexisting
