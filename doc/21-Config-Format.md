@@ -98,8 +98,8 @@ Attributes:
 Additional options are available to control status behavior of
 the respective view.
 
-* `host_never_unhandled` (boolean) Controls the host not being displayed as an unhandled problem.
-* `notification_periods` (boolean) TODO [#18](https://github.com/Icinga/icingaweb2-module-toplevelview/issues/18)
+* `host_never_unhandled` (boolean) Controls the host not being displayed as an unhandled problem. See [behavior](02-Behavior.md#host-always-handled) (Default: false)
+* `notification_periods` (boolean) Controls checking notification_period to be in_period. See [behavior](02-Behavior.md#enabling-notification-period) (Default: false)
 
 These options are just set on the root node:
 

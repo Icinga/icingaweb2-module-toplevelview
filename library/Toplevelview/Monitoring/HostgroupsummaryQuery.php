@@ -12,10 +12,17 @@ use Zend_Db_Select;
  */
 class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
 {
+    protected $notification_periods = false;
+
     public function init()
     {
-        $serviceOutDowntime = 'service_notifications_enabled = 1 AND service_in_downtime = 0 AND service_in_notification_period = 1';
-        $serviceInDowntime = '(service_notifications_enabled = 0 OR service_in_downtime = 1 OR service_in_notification_period = 0)';
+        if ($this->notification_periods === true) {
+            $serviceOutDowntime = 'service_notifications_enabled = 1 AND service_in_downtime = 0 AND service_in_notification_period = 1';
+            $serviceInDowntime = '(service_notifications_enabled = 0 OR service_in_downtime = 1 OR service_in_notification_period = 0)';
+        } else {
+            $serviceOutDowntime = 'service_notifications_enabled = 1 AND service_in_downtime = 0';
+            $serviceInDowntime = '(service_notifications_enabled = 0 OR service_in_downtime = 1)';
+        }
         $hostOutDowntime = 'host_notifications_enabled = 1 AND host_in_downtime = 0';
         $hostInDowntime = '(host_notifications_enabled = 0 OR host_in_downtime = 1)';
         $patchServicesHandled = "(service_handled = 1 OR service_is_flapping = 1) AND $serviceOutDowntime";
@@ -50,6 +57,25 @@ class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
         parent::init();
     }
 
+    /**
+     * @return bool
+     */
+    public function isNotificationPeriods()
+    {
+        return $this->notification_periods;
+    }
+
+    /**
+     * @param bool $notification_periods
+     *
+     * @return $this
+     */
+    public function setNotificationPeriods($notification_periods)
+    {
+        $this->notification_periods = $notification_periods === true;
+        return $this;
+    }
+
     protected function createSubQuery($queryName, $columns = array())
     {
         if ($queryName === 'Hostgroup') {
@@ -66,43 +92,44 @@ class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
             'Hostgroup',
             array()
         );
-        $hosts = $this->createSubQuery(
-            'Hostgroup',
-            array(
-                'hostgroup_alias',
-                'hostgroup_name',
-                'host_handled',
-                'host_notifications_enabled',
-                'host_state',
-                'host_is_flapping',
-                'host_in_downtime',
-                'service_handled'                => new Zend_Db_Expr('NULL'),
-                'service_state'                  => new Zend_Db_Expr('NULL'),
-                'service_notifications_enabled'  => new Zend_Db_Expr('NULL'),
-                'service_in_notification_period' => new Zend_Db_Expr('NULL'),
-                'service_is_flapping'            => new Zend_Db_Expr('NULL'),
-                'service_in_downtime'            => new Zend_Db_Expr('NULL'),
-            )
+        $hostColumns = array(
+            'hostgroup_alias',
+            'hostgroup_name',
+            'host_handled',
+            'host_notifications_enabled',
+            'host_state',
+            'host_is_flapping',
+            'host_in_downtime',
+            'service_handled'               => new Zend_Db_Expr('NULL'),
+            'service_state'                 => new Zend_Db_Expr('NULL'),
+            'service_notifications_enabled' => new Zend_Db_Expr('NULL'),
+            'service_is_flapping'           => new Zend_Db_Expr('NULL'),
+            'service_in_downtime'           => new Zend_Db_Expr('NULL'),
         );
+
+        $serviceColumns = array(
+            'hostgroup_alias',
+            'hostgroup_name',
+            'host_handled'               => new Zend_Db_Expr('NULL'),
+            'host_state'                 => new Zend_Db_Expr('NULL'),
+            'host_notifications_enabled' => new Zend_Db_Expr('NULL'),
+            'host_is_flapping'           => new Zend_Db_Expr('NULL'),
+            'host_in_downtime'           => new Zend_Db_Expr('NULL'),
+            'service_handled',
+            'service_state',
+            'service_notifications_enabled',
+            'service_is_flapping',
+            'service_in_downtime',
+        );
+
+        if ($this->notification_periods === true) {
+            $hostColumns['service_in_notification_period'] = new Zend_Db_Expr('NULL');
+            $serviceColumns['service_in_notification_period'] = 'service_in_notification_period';
+        }
+
+        $hosts = $this->createSubQuery('Hostgroup', $hostColumns);
         $this->subQueries[] = $hosts;
-        $services = $this->createSubQuery(
-            'Hostgroup',
-            array(
-                'hostgroup_alias',
-                'hostgroup_name',
-                'host_handled'               => new Zend_Db_Expr('NULL'),
-                'host_state'                 => new Zend_Db_Expr('NULL'),
-                'host_notifications_enabled' => new Zend_Db_Expr('NULL'),
-                'host_is_flapping'           => new Zend_Db_Expr('NULL'),
-                'host_in_downtime'           => new Zend_Db_Expr('NULL'),
-                'service_handled',
-                'service_state',
-                'service_notifications_enabled',
-                'service_in_notification_period',
-                'service_is_flapping',
-                'service_in_downtime',
-            )
-        );
+        $services = $this->createSubQuery('Hostgroup', $serviceColumns);
         $this->subQueries[] = $services;
         $this->summaryQuery = $this->db->select()->union(array($hosts, $services), Zend_Db_Select::SQL_UNION_ALL);
         $this->select->from(array('hostgroupsummary' => $this->summaryQuery), array());

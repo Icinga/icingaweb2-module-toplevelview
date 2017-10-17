@@ -82,8 +82,14 @@ Every host problem is set to unhandled by default.
 This helps when alerting is mostly based on service states, and the host
 is only a container.
 
+This was a behavior of the old Top Level View, and is enabled on convert.  
+
 ### Enabling notification period
 
 Option `notification_periods`
 
-TODO [#18](https://github.com/Icinga/icingaweb2-module-toplevelview/issues/18)
+Checks the configured notification_period and handles "out of period" as downtime active state.
+
+This was a behavior of the old Top Level View, and is enabled on convert.  
+
+Also see [limitations](90-Limits.md) for this setting.

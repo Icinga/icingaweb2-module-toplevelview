@@ -6,6 +6,7 @@ namespace Icinga\Module\Toplevelview\Tree;
 use Icinga\Application\Benchmark;
 use Icinga\Exception\NotFoundError;
 use Icinga\Module\Toplevelview\Monitoring\Hostgroupsummary;
+use Icinga\Module\Toplevelview\Monitoring\HostgroupsummaryQuery;
 
 class TLVHostGroupNode extends TLVIcingaNode
 {
@@ -47,6 +48,11 @@ class TLVHostGroupNode extends TLVIcingaNode
             'services_downtime_handled',
             'services_downtime_active',
         ));
+
+        /** @var HostgroupsummaryQuery $query */
+        $query = $hostgroups->getQuery();
+        $query->setNotificationPeriods($root->get('notification_periods'));
+
         $hostgroups->where('hostgroup_name', $names);
 
         foreach ($hostgroups as $hostgroup) {
