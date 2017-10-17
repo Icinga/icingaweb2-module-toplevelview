@@ -13,6 +13,9 @@ class ServicestatusQuery extends IcingaServicestatusQuery
     public function init()
     {
         $patchedColumnMap = array(
+            'servicestatus'             => array(
+                'service_handled_wo_host' => 'CASE WHEN ss.problem_has_been_acknowledged > 0 THEN 1 ELSE 0 END',
+            ),
             'servicenotificationperiod' => array(
                 'service_notification_period'    => 'ntpo.name1',
                 'service_in_notification_period' => 'CASE WHEN s.notification_timeperiod_object_id IS NULL THEN 1 ELSE CASE WHEN ntpr.timeperiod_id IS NOT NULL THEN 1 ELSE 0 END END',

@@ -52,6 +52,7 @@ class TLVServiceNode extends TLVIcingaNode
             'service_description',
             'service_hard_state',
             'service_handled',
+            'service_handled_wo_host',
             'service_notifications_enabled',
             'service_notification_period',
             'service_is_flapping',
@@ -94,6 +95,13 @@ class TLVServiceNode extends TLVIcingaNode
                     $notInPeriod = false;
                 }
 
+                if ($this->getRoot()->get('host_never_unhandled') === true) {
+                    $isHandled = $data->service_handled_wo_host === '1';
+                } else {
+                    $isHandled = $data->service_handled === '1';
+                }
+                $isHandled = $isHandled || $data->service_is_flapping === '1';
+
                 if (
                     $data->service_in_downtime > 0
                     || $data->service_notifications_enabled === '0'
@@ -105,10 +113,7 @@ class TLVServiceNode extends TLVIcingaNode
                     }
                 }
 
-                if (
-                    $data->service_handled === '1'
-                    || $data->service_is_flapping === '1'
-                ) {
+                if ($isHandled) {
                     $handled = '_handled';
                 } else {
                     $handled = '_unhandled';

@@ -13,10 +13,12 @@ use Zend_Db_Select;
 class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
 {
     protected $notification_periods = false;
+    protected $host_never_unhandled = false;
 
-    public function __construct($ds, $columns = null, $notification_periods = false)
+    public function __construct($ds, $columns = null, $notification_periods = false, $host_never_unhandled = false)
     {
         $this->notification_periods = $notification_periods;
+        $this->host_never_unhandled = $host_never_unhandled;
         parent::__construct($ds, $columns);
     }
 
@@ -29,10 +31,18 @@ class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
             $serviceOutDowntime = 'service_notifications_enabled = 1 AND service_in_downtime = 0';
             $serviceInDowntime = '(service_notifications_enabled = 0 OR service_in_downtime = 1)';
         }
+
         $hostOutDowntime = 'host_notifications_enabled = 1 AND host_in_downtime = 0';
         $hostInDowntime = '(host_notifications_enabled = 0 OR host_in_downtime = 1)';
-        $patchServicesHandled = "(service_handled = 1 OR service_is_flapping = 1) AND $serviceOutDowntime";
-        $patchServicesUnhandled = "service_handled = 0 AND service_is_flapping = 0 AND $serviceOutDowntime";
+
+        if ($this->host_never_unhandled === true) {
+            $patchServicesHandled = "(service_handled_wo_host = 1 OR service_is_flapping = 1) AND $serviceOutDowntime";
+            $patchServicesUnhandled = "service_handled_wo_host = 0 AND service_is_flapping = 0 AND $serviceOutDowntime";
+        } else {
+            $patchServicesHandled = "(service_handled = 1 OR service_is_flapping = 1) AND $serviceOutDowntime";
+            $patchServicesUnhandled = "service_handled = 0 AND service_is_flapping = 0 AND $serviceOutDowntime";
+        }
+
         $patchHostsHandled = "(host_handled = 1 OR host_is_flapping = 1) AND $hostOutDowntime";
         $patchHostsUnhandled = "host_handled = 0 AND host_is_flapping = 0 AND $hostOutDowntime";
 
@@ -88,6 +98,7 @@ class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
             'host_is_flapping',
             'host_in_downtime',
             'service_handled'               => new Zend_Db_Expr('NULL'),
+            'service_handled_wo_host'       => new Zend_Db_Expr('NULL'),
             'service_state'                 => new Zend_Db_Expr('NULL'),
             'service_notifications_enabled' => new Zend_Db_Expr('NULL'),
             'service_is_flapping'           => new Zend_Db_Expr('NULL'),
@@ -103,6 +114,7 @@ class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
             'host_is_flapping'           => new Zend_Db_Expr('NULL'),
             'host_in_downtime'           => new Zend_Db_Expr('NULL'),
             'service_handled',
+            'service_handled_wo_host',
             'service_state',
             'service_notifications_enabled',
             'service_is_flapping',
