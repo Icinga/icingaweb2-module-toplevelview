@@ -90,6 +90,10 @@ class IcingaHostgroupQuery extends IdoQuery
             'hs.host_object_id = ho.object_id',
             array()
         );
+
+        // compat for Icinga Web 2.4
+        // avoid patch 06cb980308f3c0d6c7807530576b0230016a15e2
+        $this->groupBase['hoststatus'] = array('hs.hoststatus_id');
     }
 
     /**
@@ -170,5 +174,9 @@ class IcingaHostgroupQuery extends IdoQuery
             'ss.service_object_id = so.object_id',
             array()
         );
+
+        // compat for Icinga Web 2.4
+        // avoid patch 06cb980308f3c0d6c7807530576b0230016a15e2
+        $this->groupBase['servicestatus'] = array('ss.servicestatus_id');
     }
 }
