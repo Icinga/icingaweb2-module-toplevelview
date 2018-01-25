@@ -3,7 +3,6 @@
 
 namespace Icinga\Module\Toplevelview\Monitoring;
 
-use Icinga\Module\Monitoring\Backend\Ido\Query\HostgroupsummaryQuery as IcingaHostgroupsummaryQuery;
 use Zend_Db_Expr;
 use Zend_Db_Select;
 

@@ -3,8 +3,6 @@
 
 namespace Icinga\Module\Toplevelview\Monitoring;
 
-use Icinga\Module\Monitoring\Backend\Ido\Query\HostgroupQuery as IcingaHostgroupQuery;
-
 /**
  * Patched version of HostgroupQuery
  */
