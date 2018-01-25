@@ -166,26 +166,30 @@
 .tlv-header {
   position: relative;
 
-  height: 4em;
+  line-height: 2em;
+  height: 2em;
 
   h1 {
+    display: inline-block;
     border: none;
-    margin: 0;
+    margin: 0 0.5em 0 0;
   }
 
   .last-refresh {
-    position: absolute;
-
-    right: 0;
-    top: 0;
-
+    display: inline-block;
     font-weight: bold;
+    margin: 0 0.5em;
+  }
+
+  .action-links {
+    display: inline-block;
+    margin: 0 0.5em;
   }
 
   .badges {
+    display: inline-block;
     position: absolute;
     right: 0;
-    top: 1.6em;
 
     font-size: 1.2em;
 
@@ -205,8 +209,8 @@
 
   height: 100%;
 
-  margin-top: -4em;
-  padding-top: 4em;
+  margin-top: -2em;
+  padding-top: 2em;
 
   .tlv-tiles {
     display: flex;

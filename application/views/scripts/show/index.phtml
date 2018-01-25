@@ -10,13 +10,10 @@ if (! $this->compact):
 <?php endif ?>
 <div class="content tlv-content">
     <div class="tlv-header">
-        <div class="last-refresh">
-            <?= $this->translate('Last update') ?>
-            <?= $this->timeAgo($tree->getFetchTime()) ?>
-        </div>
         <?= $this->badges($tree->getStatus(), false, true) ?>
         <h1><?= $view->getMeta('name') ?></h1>
         <?= $this->partial('show/actions.phtml', $this) ?>
+        <div class="last-refresh"><?= $this->timeAgo($tree->getFetchTime()) ?></div>
     </div>
     <div class="tlv-view-tiles">
         <?php foreach ($tree->getChildren() as $topTile): ?>
