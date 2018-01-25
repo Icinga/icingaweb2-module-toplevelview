@@ -3,7 +3,7 @@
 Specify the release version.
 
 ```
-VERSION=0.1.0
+VERSION=0.2.0
 ```
 
 ## Issues
@@ -22,6 +22,19 @@ git log --use-mailmap | grep ^Author: | cut -f2- -d' ' | sort | uniq > AUTHORS
 ## Update metadata
 
 Edit and update [module.info](module.info).
+
+## Changelog
+
+Update the [CHANGELOG.md](CHANGELOG.md) file.
+
+Uses [github_changelog_generator](https://github.com/skywinder/github-changelog-generator)
+
+```
+export CHANGELOG_GITHUB_TOKEN=xxx
+github_changelog_generator --future-release v$VERSION
+```
+
+Check if the file has been updated correctly.
 
 ## Git Tag
 
