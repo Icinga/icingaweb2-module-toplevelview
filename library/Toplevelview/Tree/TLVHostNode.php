@@ -70,7 +70,7 @@ class TLVHostNode extends TLVIcingaNode
                 } elseif ($state === '10') {
                     $status->add('downtime_handled');
                 } else {
-                    $status->add('unknown');
+                    $status->add('unknown_handled');
                 }
             } else {
                 $status->add('missing', 1);

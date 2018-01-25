@@ -128,7 +128,7 @@ class TLVServiceNode extends TLVIcingaNode
                 } elseif ($state === '10') {
                     $status->add('downtime_handled');
                 } else {
-                    $status->add('unknown', 1);
+                    $status->add('unknown' . $handled, 1);
                 }
             } else {
                 $status->add('missing', 1);
