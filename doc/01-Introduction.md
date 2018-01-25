@@ -12,6 +12,11 @@ them easily available for overview and drill down.
 This view extends the status logic and behavior of Icinga Web 2 a bit,
 please see later chapters on details.
 
+## Requirements
+
+* Icinga Web 2 >= 2.5.0
+  * and its monitoring module
+
 ## Installation
 
 The view is a simple module for Icinga Web 2, and can be installed via git or a tarball.

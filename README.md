@@ -14,6 +14,13 @@ them easily available for overview and drill down.
 This view extends the status logic and behavior of Icinga Web 2 a bit,
 please see the documentation on details.
 
+## Requirements
+
+* Icinga Web 2 >= 2.5.0
+  * and its monitoring module
+
+Also see [Introduction in docs](doc/01-Introduction.md).
+
 ## Documentation
 
 All documentation can be found inside the [doc](doc/) directory.
