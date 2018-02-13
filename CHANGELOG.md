@@ -1,5 +1,16 @@
 # Change Log
 
+## [v0.2.1](https://github.com/Icinga/icingaweb2-module-toplevelview/tree/v0.2.1) (2018-02-13)
+[Full Changelog](https://github.com/Icinga/icingaweb2-module-toplevelview/compare/v0.2.0...v0.2.1)
+
+**Fixed bugs:**
+
+- UTC timeperiod calculation is wrong [\#29](https://github.com/Icinga/icingaweb2-module-toplevelview/issues/29)
+
+**Merged pull requests:**
+
+- Don't use UTC timestamps for calculating timeperiods [\#30](https://github.com/Icinga/icingaweb2-module-toplevelview/pull/30) ([lazyfrosch](https://github.com/lazyfrosch))
+
 ## [v0.2.0](https://github.com/Icinga/icingaweb2-module-toplevelview/tree/v0.2.0) (2018-01-25)
 [Full Changelog](https://github.com/Icinga/icingaweb2-module-toplevelview/compare/v0.1.0...v0.2.0)
 
