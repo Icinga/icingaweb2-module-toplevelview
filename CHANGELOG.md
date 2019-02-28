@@ -1,5 +1,16 @@
 # Change Log
 
+## [v0.3.0](https://github.com/Icinga/icingaweb2-module-toplevelview/tree/v0.3.0) (2019-02-28)
+[Full Changelog](https://github.com/Icinga/icingaweb2-module-toplevelview/compare/v0.2.1...v0.3.0)
+
+**Implemented enhancements:**
+
+- Allow ignoring a list of notification periods for handled problems [\#34](https://github.com/Icinga/icingaweb2-module-toplevelview/pull/34) ([lazyfrosch](https://github.com/lazyfrosch))
+
+**Closed issues:**
+
+- You need the PHP extension "yaml" in order to use TopLevelView \(rh-php71\) [\#33](https://github.com/Icinga/icingaweb2-module-toplevelview/issues/33)
+
 ## [v0.2.1](https://github.com/Icinga/icingaweb2-module-toplevelview/tree/v0.2.1) (2018-02-13)
 [Full Changelog](https://github.com/Icinga/icingaweb2-module-toplevelview/compare/v0.2.0...v0.2.1)
 
