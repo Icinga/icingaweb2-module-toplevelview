@@ -65,7 +65,8 @@ class LegacyDbHelper
                 'hg.view_id = v.id',
                 array('hg.hostgroup_object_id')
             )->where(
-                'p.id = ?', $root_id
+                'p.id = ?',
+                $root_id
             )->group(array(
                 'n.root_id',
                 'n.lft',
@@ -160,8 +161,7 @@ class LegacyDbHelper
                 unset($node->level);
             }
 
-            if (
-                property_exists($node, 'host_object_id')
+            if (property_exists($node, 'host_object_id')
                 && $node->host_object_id !== null
                 && $currentHostId !== $node->host_object_id
             ) {

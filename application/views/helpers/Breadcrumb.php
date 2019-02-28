@@ -18,13 +18,13 @@ class Zend_View_Helper_Breadcrumb extends Zend_View_Helper_Abstract
         $htm = '<ul class="breadcrumb">';
         foreach ($breadcrumb as $crumb) {
             $htm .= '<li>' . $this->view->qlink(
-                    $crumb->getTitle(),
-                    'toplevelview/show/tree',
-                    array(
+                $crumb->getTitle(),
+                'toplevelview/show/tree',
+                array(
                         'name' => $config_name,
                         'id'   => $crumb->getFullId()
                     )
-                ) . '</li>';
+            ) . '</li>';
         }
         $htm .= '</ul>';
         return $htm;

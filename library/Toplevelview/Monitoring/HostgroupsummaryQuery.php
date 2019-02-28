@@ -23,8 +23,10 @@ class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
     public function init()
     {
         if ($this->getOption('notification_periods') === true) {
-            $serviceOutDowntime = 'service_notifications_enabled = 1 AND service_in_downtime = 0 AND service_in_notification_period = 1';
-            $serviceInDowntime = '(service_notifications_enabled = 0 OR service_in_downtime = 1 OR service_in_notification_period = 0)';
+            $serviceOutDowntime =#
+                'service_notifications_enabled = 1 AND service_in_downtime = 0 AND service_in_notification_period = 1';
+            $serviceInDowntime =
+                '(service_notifications_enabled = 0 OR service_in_downtime = 1 OR service_in_notification_period = 0)';
         } else {
             $serviceOutDowntime = 'service_notifications_enabled = 1 AND service_in_downtime = 0';
             $serviceInDowntime = '(service_notifications_enabled = 0 OR service_in_downtime = 1)';
@@ -46,20 +48,34 @@ class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
 
         $patchedColumnMap = array(
             'hostgroupsummary' => array(
-                'hosts_down_handled'          => "SUM(CASE WHEN host_state = 1 AND $patchHostsHandled THEN 1 ELSE 0 END)",
-                'hosts_down_unhandled'        => "SUM(CASE WHEN host_state = 1 AND $patchHostsUnhandled THEN 1 ELSE 0 END)",
-                'hosts_unreachable_handled'   => "SUM(CASE WHEN host_state = 2 AND $patchHostsHandled THEN 1 ELSE 0 END)",
-                'hosts_unreachable_unhandled' => "SUM(CASE WHEN host_state = 2 AND $patchHostsUnhandled THEN 1 ELSE 0 END)",
-                'hosts_downtime_handled'      => "SUM(CASE WHEN host_state != 0 AND $hostInDowntime THEN 1 ELSE 0 END)",
-                'hosts_downtime_active'       => "SUM(CASE WHEN $hostInDowntime THEN 1 ELSE 0 END)",
-                'services_critical_handled'   => "SUM(CASE WHEN service_state = 2 AND $patchServicesHandled THEN 1 ELSE 0 END)",
-                'services_critical_unhandled' => "SUM(CASE WHEN service_state = 2 AND $patchServicesUnhandled THEN 1 ELSE 0 END)",
-                'services_unknown_handled'    => "SUM(CASE WHEN service_state = 3 AND $patchServicesHandled THEN 1 ELSE 0 END)",
-                'services_unknown_unhandled'  => "SUM(CASE WHEN service_state = 3 AND $patchServicesUnhandled THEN 1 ELSE 0 END)",
-                'services_warning_handled'    => "SUM(CASE WHEN service_state = 1 AND $patchServicesHandled THEN 1 ELSE 0 END)",
-                'services_warning_unhandled'  => "SUM(CASE WHEN service_state = 1 AND $patchServicesUnhandled THEN 1 ELSE 0 END)",
-                'services_downtime_handled'   => "SUM(CASE WHEN service_state != 0 AND $serviceInDowntime THEN 1 ELSE 0 END)",
-                'services_downtime_active'    => "SUM(CASE WHEN $serviceInDowntime THEN 1 ELSE 0 END)",
+                'hosts_down_handled'          =>
+                    "SUM(CASE WHEN host_state = 1 AND $patchHostsHandled THEN 1 ELSE 0 END)",
+                'hosts_down_unhandled'        =>
+                    "SUM(CASE WHEN host_state = 1 AND $patchHostsUnhandled THEN 1 ELSE 0 END)",
+                'hosts_unreachable_handled'   =>
+                    "SUM(CASE WHEN host_state = 2 AND $patchHostsHandled THEN 1 ELSE 0 END)",
+                'hosts_unreachable_unhandled' =>
+                    "SUM(CASE WHEN host_state = 2 AND $patchHostsUnhandled THEN 1 ELSE 0 END)",
+                'hosts_downtime_handled'      =>
+                    "SUM(CASE WHEN host_state != 0 AND $hostInDowntime THEN 1 ELSE 0 END)",
+                'hosts_downtime_active'       =>
+                    "SUM(CASE WHEN $hostInDowntime THEN 1 ELSE 0 END)",
+                'services_critical_handled'   =>
+                    "SUM(CASE WHEN service_state = 2 AND $patchServicesHandled THEN 1 ELSE 0 END)",
+                'services_critical_unhandled' =>
+                    "SUM(CASE WHEN service_state = 2 AND $patchServicesUnhandled THEN 1 ELSE 0 END)",
+                'services_unknown_handled'    =>
+                    "SUM(CASE WHEN service_state = 3 AND $patchServicesHandled THEN 1 ELSE 0 END)",
+                'services_unknown_unhandled'  =>
+                    "SUM(CASE WHEN service_state = 3 AND $patchServicesUnhandled THEN 1 ELSE 0 END)",
+                'services_warning_handled'    =>
+                    "SUM(CASE WHEN service_state = 1 AND $patchServicesHandled THEN 1 ELSE 0 END)",
+                'services_warning_unhandled'  =>
+                    "SUM(CASE WHEN service_state = 1 AND $patchServicesUnhandled THEN 1 ELSE 0 END)",
+                'services_downtime_handled'   =>
+                    "SUM(CASE WHEN service_state != 0 AND $serviceInDowntime THEN 1 ELSE 0 END)",
+                'services_downtime_active'    =>
+                    "SUM(CASE WHEN $serviceInDowntime THEN 1 ELSE 0 END)",
             )
         );
 

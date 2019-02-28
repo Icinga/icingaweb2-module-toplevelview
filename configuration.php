@@ -26,7 +26,6 @@ try {
                 'label' => $viewConfig->getMeta('name'),
                 'url'   => Url::fromPath('toplevelview/show', array('name' => $name)),
             ));
-
         }
     }
 } catch (Exception $e) {

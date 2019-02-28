@@ -25,8 +25,7 @@ class Zend_View_Helper_Badges extends Zend_View_Helper_Abstract
         $values = false;
         $htm .= '<div class="badges">';
         foreach ($status->getProperties() as $key => $value) {
-            if (
-                $problemsOnly === true && ($key === 'ok' || $key === 'downtime_active')
+            if ($problemsOnly === true && ($key === 'ok' || $key === 'downtime_active')
                 || ($key === 'total' && $showTotal !== true)
             ) {
                 continue;

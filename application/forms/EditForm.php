@@ -51,10 +51,10 @@ class EditForm extends Form
             if ($this->getElement('btn_submit_save_file')->getValue() !== null) {
                 $this->viewConfig->store();
                 Notification::success($this->translate('Top Level View successfully saved'));
-            } else if ($cancel !== null && $cancel->getValue() !== null) {
+            } elseif ($cancel !== null && $cancel->getValue() !== null) {
                 $this->viewConfig->clearSession();
                 Notification::success($this->translate('Top Level View restored from disk'));
-            } else if ($delete != null && $delete->getValue() !== null) {
+            } elseif ($delete != null && $delete->getValue() !== null) {
                 $this->viewConfig->delete();
                 $this->setRedirectUrl('toplevelview');
                 Notification::success($this->translate('Top Level View successfully deleted'));
@@ -100,7 +100,8 @@ class EditForm extends Form
                 $this->translate(
                     'This config is only stored in your session!'
                     . ' Make sure to save it to disk once your work is complete!'
-                ), false
+                ),
+                false
             );
         }
 

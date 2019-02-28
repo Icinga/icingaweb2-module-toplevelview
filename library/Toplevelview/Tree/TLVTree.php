@@ -120,8 +120,7 @@ class TLVTree extends TLVTreeNode
             if ($cache->has($cacheName)) {
                 $cachedData = Json::decode($cache->get($cacheName));
 
-                if (
-                    property_exists($cachedData, 'data')
+                if (property_exists($cachedData, 'data')
                     && $cachedData->data !== null
                     && property_exists($cachedData, 'ts')
                     && $cachedData->ts <= $currentTime // too new maybe
@@ -201,8 +200,7 @@ class TLVTree extends TLVTreeNode
     {
         $this->ensureFetched();
 
-        if (
-            array_key_exists($key, $this->registeredObjects[$type])
+        if (array_key_exists($key, $this->registeredObjects[$type])
             && $this->registeredObjects[$type][$key] !== null
         ) {
             return $this->registeredObjects[$type][$key];

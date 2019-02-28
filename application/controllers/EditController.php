@@ -49,20 +49,23 @@ class EditController extends Controller
     {
         $action = $this->getRequest()->getActionName();
         if ($action === 'add') {
-            $this->view->title = sprintf('%s Top Level View',
+            $this->view->title = sprintf(
+                '%s Top Level View',
                 $this->translate('Add')
             );
             $view = new ViewConfig();
             $view->setConfigDir();
-        } else if ($action === 'clone') {
+        } elseif ($action === 'clone') {
             $name = $this->params->getRequired('name');
-            $this->view->title = sprintf('%s Top Level View',
+            $this->view->title = sprintf(
+                '%s Top Level View',
                 $this->translate('Clone')
             );
             $view = clone ViewConfig::loadByName($name);
         } else {
             $this->view->name = $name = $this->params->getRequired('name');
-            $this->view->title = sprintf('%s Top Level View: %s',
+            $this->view->title = sprintf(
+                '%s Top Level View: %s',
                 $this->translate('Edit'),
                 $this->params->getRequired('name')
             );

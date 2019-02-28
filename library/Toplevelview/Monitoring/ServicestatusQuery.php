@@ -28,7 +28,14 @@ class ServicestatusQuery extends IcingaServicestatusQuery
             ),
             'servicenotificationperiod' => array(
                 'service_notification_period'    => 'ntpo.name1',
-                'service_in_notification_period' => 'CASE WHEN ntpo.name1 IS NULL THEN 1 ELSE CASE WHEN ntpr.timeperiod_id IS NOT NULL THEN 1 ELSE 0 END END',
+                'service_in_notification_period' => '
+                    CASE WHEN ntpo.name1 IS NULL
+                        THEN 1
+                        ELSE CASE WHEN ntpr.timeperiod_id IS NOT NULL
+                            THEN 1
+                            ELSE 0
+                        END
+                    END',
             ),
         );
 

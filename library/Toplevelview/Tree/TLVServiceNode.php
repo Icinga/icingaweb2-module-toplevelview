@@ -102,8 +102,7 @@ class TLVServiceNode extends TLVIcingaNode
                 }
                 $isHandled = $isHandled || $data->service_is_flapping === '1';
 
-                if (
-                    $data->service_in_downtime > 0
+                if ($data->service_in_downtime > 0
                     || $data->service_notifications_enabled === '0'
                     || $notInPeriod
                 ) {
