@@ -127,6 +127,7 @@ class LegacyDbHelper
                     // add old default behavior for status
                     $tree->host_never_unhandled = true;
                     $tree->notification_periods = true;
+                    $tree->ignored_notification_periods = ['notification_none']; // migration for Director
                 } elseif ($node->level > $currentLevel) {
                     // level down
                     $currentParent = $chain[$node->level - 1];

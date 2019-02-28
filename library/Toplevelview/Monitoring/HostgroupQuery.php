@@ -10,18 +10,31 @@ use Icinga\Module\Monitoring\Backend\Ido\Query\HostgroupQuery as IcingaHostgroup
  */
 class HostgroupQuery extends IcingaHostgroupQuery
 {
+    use IgnoredNotificationPeriods;
+    use Options;
+
+    public function __construct($ds, $columns = null, $options = null)
+    {
+        $this->setOptions($options);
+        parent::__construct($ds, $columns);
+    }
+
     public function init()
     {
+        if (($periods = $this->getOption('ignored_notification_periods')) !== null) {
+            $this->ignoreNotificationPeriods($periods);
+        }
+
         $patchedColumnMap = array(
-            'servicestatus' => array(
-                'service_notifications_enabled'  => 'ss.notifications_enabled',
-                'service_is_flapping'            => 'ss.is_flapping',
-                'service_state'                  => 'CASE WHEN ss.has_been_checked = 0 OR ss.has_been_checked IS NULL THEN 99 ELSE CASE WHEN ss.state_type = 1 THEN ss.current_state ELSE ss.last_hard_state END END',
-                'service_handled'                => 'CASE WHEN (ss.problem_has_been_acknowledged + COALESCE(hs.current_state, 0)) > 0 THEN 1 ELSE 0 END',
-                'service_handled_wo_host'        => 'CASE WHEN ss.problem_has_been_acknowledged > 0 THEN 1 ELSE 0 END',
-                'service_in_downtime'            => 'CASE WHEN (ss.scheduled_downtime_depth = 0) THEN 0 ELSE 1 END',
+            'servicestatus'             => array(
+                'service_notifications_enabled' => 'ss.notifications_enabled',
+                'service_is_flapping'           => 'ss.is_flapping',
+                'service_state'                 => 'CASE WHEN ss.has_been_checked = 0 OR ss.has_been_checked IS NULL THEN 99 ELSE CASE WHEN ss.state_type = 1 THEN ss.current_state ELSE ss.last_hard_state END END',
+                'service_handled'               => 'CASE WHEN (ss.problem_has_been_acknowledged + COALESCE(hs.current_state, 0)) > 0 THEN 1 ELSE 0 END',
+                'service_handled_wo_host'       => 'CASE WHEN ss.problem_has_been_acknowledged > 0 THEN 1 ELSE 0 END',
+                'service_in_downtime'           => 'CASE WHEN (ss.scheduled_downtime_depth = 0) THEN 0 ELSE 1 END',
             ),
-            'hoststatus'    => array(
+            'hoststatus'                => array(
                 'host_notifications_enabled' => 'hs.notifications_enabled',
                 'host_is_flapping'           => 'hs.is_flapping',
                 'host_state'                 => 'CASE WHEN hs.has_been_checked = 0 OR hs.has_been_checked IS NULL THEN 99 ELSE CASE WHEN hs.state_type = 1 THEN hs.current_state ELSE hs.last_hard_state END END',
@@ -30,7 +43,7 @@ class HostgroupQuery extends IcingaHostgroupQuery
             ),
             'servicenotificationperiod' => array(
                 'service_notification_period'    => 'ntpo.name1',
-                'service_in_notification_period' => 'CASE WHEN s.notification_timeperiod_object_id IS NULL THEN 1 ELSE CASE WHEN ntpr.timeperiod_id IS NOT NULL THEN 1 ELSE 0 END END',
+                'service_in_notification_period' => 'CASE WHEN ntpo.object_id IS NULL THEN 1 ELSE CASE WHEN ntpr.timeperiod_id IS NOT NULL THEN 1 ELSE 0 END END',
             ),
         );
 
@@ -45,24 +58,34 @@ class HostgroupQuery extends IcingaHostgroupQuery
 
     protected function joinServicenotificationperiod()
     {
+        $extraJoinCond = '';
+
+        if ($this->hasIgnoredNotifications()) {
+            $extraJoinCond .= $this->db->quoteInto(
+                ' AND ntpo.name1 NOT IN (?)',
+                $this->getIgnoredNotificationPeriods()
+            );
+        }
+
         $this->select->joinLeft(
-            array('ntp' => $this->prefix . 'timeperiods'),
-            'ntp.timeperiod_object_id = s.notification_timeperiod_object_id AND ntp.config_type = 1 AND ntp.instance_id = s.instance_id',
-            array()
+            ['ntp' => $this->prefix . 'timeperiods'],
+            'ntp.timeperiod_object_id = s.notification_timeperiod_object_id'
+            . ' AND ntp.config_type = 1 AND ntp.instance_id = s.instance_id',
+            []
         );
         $this->select->joinLeft(
-            array('ntpo' => $this->prefix . 'objects'),
-            'ntpo.object_id = s.notification_timeperiod_object_id',
-            array()
+            ['ntpo' => $this->prefix . 'objects'],
+            'ntpo.object_id = s.notification_timeperiod_object_id' . $extraJoinCond,
+            []
         );
         $this->select->joinLeft(
-            array('ntpr' => $this->prefix . 'timeperiod_timeranges'),
-            'ntpr.timeperiod_id = ntp.timeperiod_id
+            ['ntpr' => $this->prefix . 'timeperiod_timeranges'],
+            "ntpr.timeperiod_id = ntp.timeperiod_id
                 AND ntpr.day = DAYOFWEEK(CURRENT_DATE()) - 1
                 AND ntpr.start_sec <= UNIX_TIMESTAMP() - UNIX_TIMESTAMP(CURRENT_DATE())
                 AND ntpr.end_sec >= UNIX_TIMESTAMP() - UNIX_TIMESTAMP(CURRENT_DATE())
-            ',
-            array()
+            ",
+            []
         );
     }
 }

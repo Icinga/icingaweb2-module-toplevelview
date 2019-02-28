@@ -12,19 +12,17 @@ use Zend_Db_Select;
  */
 class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
 {
-    protected $notification_periods = false;
-    protected $host_never_unhandled = false;
+    use Options;
 
-    public function __construct($ds, $columns = null, $notification_periods = false, $host_never_unhandled = false)
+    public function __construct($ds, $columns = null, $options = null)
     {
-        $this->notification_periods = $notification_periods;
-        $this->host_never_unhandled = $host_never_unhandled;
+        $this->setOptions($options);
         parent::__construct($ds, $columns);
     }
 
     public function init()
     {
-        if ($this->notification_periods === true) {
+        if ($this->getOption('notification_periods') === true) {
             $serviceOutDowntime = 'service_notifications_enabled = 1 AND service_in_downtime = 0 AND service_in_notification_period = 1';
             $serviceInDowntime = '(service_notifications_enabled = 0 OR service_in_downtime = 1 OR service_in_notification_period = 0)';
         } else {
@@ -35,7 +33,7 @@ class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
         $hostOutDowntime = 'host_notifications_enabled = 1 AND host_in_downtime = 0';
         $hostInDowntime = '(host_notifications_enabled = 0 OR host_in_downtime = 1)';
 
-        if ($this->host_never_unhandled === true) {
+        if ($this->getOption('host_never_unhandled') === true) {
             $patchServicesHandled = "(service_handled_wo_host = 1 OR service_is_flapping = 1) AND $serviceOutDowntime";
             $patchServicesUnhandled = "service_handled_wo_host = 0 AND service_is_flapping = 0 AND $serviceOutDowntime";
         } else {
@@ -77,7 +75,7 @@ class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
     {
         if ($queryName === 'Hostgroup') {
             // use locally patched query
-            return new HostgroupQuery($this->ds, $columns);
+            return new HostgroupQuery($this->ds, $columns, $this->options);
         } else {
             return parent::createSubQuery($queryName, $columns);
         }
@@ -121,7 +119,7 @@ class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
             'service_in_downtime',
         );
 
-        if ($this->notification_periods === true) {
+        if ($this->getOption('notification_periods') === true) {
             $hostColumns['service_in_notification_period'] = new Zend_Db_Expr('NULL');
             $serviceColumns['service_in_notification_period'] = 'service_in_notification_period';
         }
