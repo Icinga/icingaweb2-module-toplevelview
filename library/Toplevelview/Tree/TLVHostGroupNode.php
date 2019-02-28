@@ -25,6 +25,11 @@ class TLVHostGroupNode extends TLVIcingaNode
 
         $names = array_keys($root->registeredObjects['hostgroup']);
 
+        $options = [];
+        foreach (['notification_periods', 'host_never_unhandled', 'ignored_notification_periods'] as $opt) {
+            $options[$opt] = $root->get($opt);
+        }
+
         // Note: this uses a patched version of Hostsgroupsummary / HostgroupsummaryQuery !
         $hostgroups = new Hostgroupsummary(
             $root->getBackend(),
@@ -49,8 +54,7 @@ class TLVHostGroupNode extends TLVIcingaNode
                 'services_downtime_handled',
                 'services_downtime_active',
             ),
-            $root->get('notification_periods'),
-            $root->get('host_never_unhandled')
+            $options
         );
 
         $hostgroups->where('hostgroup_name', $names);

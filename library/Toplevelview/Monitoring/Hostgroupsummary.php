@@ -18,21 +18,16 @@ class Hostgroupsummary extends IcingaHostgroupsummary
     /**
      * @param ConnectionInterface $connection
      * @param array|null          $columns
+     * @param array|null          $options
      * @noinspection PhpMissingParentConstructorInspection
      */
     public function __construct(
         ConnectionInterface $connection,
         array $columns = null,
-        $notification_periods = false,
-        $host_never_unhandled = false
+        $options = null
     ) {
         /** @var MonitoringBackend $connection */
         $this->connection = $connection;
-        $this->query = new HostgroupsummaryQuery(
-            $connection->getResource(),
-            $columns,
-            $notification_periods,
-            $host_never_unhandled
-        );
+        $this->query = new HostgroupsummaryQuery($connection->getResource(), $columns, $options);
     }
 }

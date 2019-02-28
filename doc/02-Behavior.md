@@ -93,3 +93,9 @@ Checks the configured notification_period and handles "out of period" as downtim
 This was a behavior of the old Top Level View, and is enabled on convert.  
 
 Also see [limitations](90-Limits.md) for this setting.
+
+### Ignoring certain notification periods
+
+Option `ignored_notification_periods`
+
+This notification periods will be ignored for "out of period" checking, see above.
