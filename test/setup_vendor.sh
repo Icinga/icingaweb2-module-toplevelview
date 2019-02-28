@@ -1,22 +1,20 @@
-#!/bin/bash
+#!/bin/sh
 
 set -ex
 
 MODULE_HOME=${MODULE_HOME:="$(dirname "$(readlink -f $(dirname "$0"))")"}
 PHP_VERSION="$(php -r 'echo phpversion();')"
 
-ICINGAWEB_VERSION=${ICINGAWEB_VERSION:=2.5.0}
-# TODO: Remove for 2.5.0
-if [[ "$ICINGAWEB_VERSION" =~ 2.5.* ]]; then
-  ICINGAWEB_GITREF=${ICINGAWEB_GITREF:="origin/master"}
-fi
+ICINGAWEB_VERSION=${ICINGAWEB_VERSION:=2.6.2}
+ICINGAWEB_GITREF=${ICINGAWEB_GITREF:=}
+PHPCS_VERSION=${PHPCS_VERSION:=3.3.1}
 
-PHPCS_VERSION=${PHPCS_VERSION:=2.9.1}
-
-if [ "$PHP_VERSION" '<' 5.6.0 ]; then
-  PHPUNIT_VERSION=${PHPUNIT_VERSION:=4.8}
+if [ "$PHP_VERSION" '<' 7.0.0 ]; then
+  PHPUNIT_VERSION=${PHPUNIT_VERSION:=5.7.9}
+elif [ "$PHP_VERSION" '<' 5.6.0 ]; then
+  PHPUNIT_VERSION=${PHPUNIT_VERSION:=4.8.36}
 else
-  PHPUNIT_VERSION=${PHPUNIT_VERSION:=5.7}
+  PHPUNIT_VERSION=${PHPUNIT_VERSION:=6.5.9}
 fi
 
 cd ${MODULE_HOME}
@@ -67,3 +65,10 @@ if [ ! -e "${phpcs_path}".phar ]; then
     https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${PHPCS_VERSION}/phpcs.phar
 fi
 ln -svf "${phpcs_path}".phar phpcs.phar
+
+phpcbf_path="phpcbf-${PHPCS_VERSION}"
+if [ ! -e "${phpcbf_path}".phar ]; then
+  wget -O "${phpcbf_path}".phar \
+    https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${PHPCS_VERSION}/phpcbf.phar
+fi
+ln -svf "${phpcbf_path}".phar phpcbf.phar
