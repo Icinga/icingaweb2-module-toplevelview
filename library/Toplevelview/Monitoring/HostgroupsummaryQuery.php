@@ -3,6 +3,7 @@
 
 namespace Icinga\Module\Toplevelview\Monitoring;
 
+use Icinga\Data\Filter\Filter;
 use Icinga\Module\Monitoring\Backend\Ido\Query\HostgroupsummaryQuery as IcingaHostgroupsummaryQuery;
 use Zend_Db_Expr;
 use Zend_Db_Select;
@@ -141,8 +142,12 @@ class HostgroupsummaryQuery extends IcingaHostgroupsummaryQuery
         }
 
         $hosts = $this->createSubQuery('Hostgroup', $hostColumns);
+        // ignore empty hostgroups in this subquery
+        $hosts->setFilter(Filter::expression('ho.object_id', '>', 0));
         $this->subQueries[] = $hosts;
         $services = $this->createSubQuery('Hostgroup', $serviceColumns);
+        // ignore empty hostgroups in this subquery
+        $services->setFilter(Filter::expression('ho.object_id', '>', 0));
         $this->subQueries[] = $services;
         $this->summaryQuery = $this->db->select()->union(array($hosts, $services), Zend_Db_Select::SQL_UNION_ALL);
         $this->select->from(array('hostgroupsummary' => $this->summaryQuery), array());
