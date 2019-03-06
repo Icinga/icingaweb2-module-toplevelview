@@ -1,5 +1,13 @@
 # Change Log
 
+## [v0.3.1](https://github.com/Icinga/icingaweb2-module-toplevelview/tree/v0.3.1) (2019-03-06)
+[Full Changelog](https://github.com/Icinga/icingaweb2-module-toplevelview/compare/v0.3.0...v0.3.1)
+
+**Fixed bugs:**
+
+- Implement Notification Period ignoring for TLVServiceNode [\#36](https://github.com/Icinga/icingaweb2-module-toplevelview/pull/36) ([lazyfrosch](https://github.com/lazyfrosch))
+- HostgroupsummaryQuery: Ignore hostgroups that are empty [\#35](https://github.com/Icinga/icingaweb2-module-toplevelview/pull/35) ([lazyfrosch](https://github.com/lazyfrosch))
+
 ## [v0.3.0](https://github.com/Icinga/icingaweb2-module-toplevelview/tree/v0.3.0) (2019-02-28)
 [Full Changelog](https://github.com/Icinga/icingaweb2-module-toplevelview/compare/v0.2.1...v0.3.0)
 
