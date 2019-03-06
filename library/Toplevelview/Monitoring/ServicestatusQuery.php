@@ -10,17 +10,20 @@ use Icinga\Module\Monitoring\Backend\Ido\Query\ServicestatusQuery as IcingaServi
  */
 class ServicestatusQuery extends IcingaServicestatusQuery
 {
-    // TODO: not used in this query
-    //use IgnoredNotificationPeriods;
-    //use Options;
+    use IgnoredNotificationPeriods;
+    use Options;
+
+    public function __construct($ds, $columns = null, $options = null)
+    {
+        $this->setOptions($options);
+        parent::__construct($ds, $columns);
+    }
 
     public function init()
     {
-        /* TODO: not used in this query
         if (($periods = $this->getOption('ignored_notification_periods')) !== null) {
             $this->ignoreNotificationPeriods($periods);
         }
-        */
 
         $patchedColumnMap = array(
             'servicestatus'             => array(
@@ -52,11 +55,12 @@ class ServicestatusQuery extends IcingaServicestatusQuery
     {
         $extraJoinCond = '';
 
-        /* TODO: not used in this query
-        if (! empty ($this->ignoredNotificationPeriods)) {
-            $extraJoinCond .= $this->db->quoteInto(' AND ntpo.name1 NOT IN (?)', $this->ignoredNotificationPeriods);
+        if ($this->hasIgnoredNotifications()) {
+            $extraJoinCond .= $this->db->quoteInto(
+                ' AND ntpo.name1 NOT IN (?)',
+                $this->getIgnoredNotificationPeriods()
+            );
         }
-        */
 
         $this->select->joinLeft(
             ["ntp" => $this->prefix . 'timeperiods'],
