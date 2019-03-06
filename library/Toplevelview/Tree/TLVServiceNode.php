@@ -59,12 +59,17 @@ class TLVServiceNode extends TLVIcingaNode
             'service_in_downtime',
         );
 
+        $options = [];
+        foreach (['notification_periods', 'host_never_unhandled', 'ignored_notification_periods'] as $opt) {
+            $options[$opt] = $root->get($opt);
+        }
+
         if ($root->get('notification_periods') === true) {
             $columns[] = 'service_in_notification_period';
         }
 
         // Note: this uses a patched version of Servicestatus / ServicestatusQuery !
-        $services = new Servicestatus($root->getBackend(), $columns);
+        $services = new Servicestatus($root->getBackend(), $columns, $options);
         $services->where('host_name', $names);
 
         foreach ($services as $service) {

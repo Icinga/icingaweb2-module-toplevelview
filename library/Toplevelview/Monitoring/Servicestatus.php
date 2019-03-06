@@ -15,11 +15,11 @@ class Servicestatus extends IcingaServiceStatus
      * @param array|null          $columns
      * @noinspection PhpMissingParentConstructorInspection
      */
-    public function __construct(ConnectionInterface $connection, array $columns = null)
+    public function __construct(ConnectionInterface $connection, array $columns = null, $options = null)
     {
         /** @var MonitoringBackend $connection */
         $this->connection = $connection;
-        $this->query = new ServicestatusQuery($connection->getResource(), $columns);
+        $this->query = new ServicestatusQuery($connection->getResource(), $columns, $options);
     }
 
     /**
