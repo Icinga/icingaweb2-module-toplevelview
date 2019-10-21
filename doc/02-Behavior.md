@@ -62,7 +62,7 @@ The following behaviors will trigger the downtime logic:
 
 * Host or Service is in an active downtime
 * Notifications are disabled for the host or service
-* Host or Service is out of it's notification period
+* Host or Service is out of its notification period
 
 If those conditions are met:
 
