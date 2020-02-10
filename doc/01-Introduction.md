@@ -35,12 +35,12 @@ sure to reload your web server after installing the module.
 You should download the latest released tarball from [GitHub](https://github.com/Icinga/icingaweb2-module-toplevelview/releases).
 
     tar xf icingaweb2-module-toplevelview-0.x.x.tar.gz
-    mv icingaweb2-module-toplevelview-0.x.x/ /usr/share/icingaweb2/module/toplevelview
+    mv icingaweb2-module-toplevelview-0.x.x/ /usr/share/icingaweb2/modules/toplevelview
 
 Or if you prefer use git.
 
     git clone https://github.com/Icinga/icingaweb2-module-toplevelview.git \
-      /usr/share/icingaweb2/module/toplevelview
+      /usr/share/icingaweb2/modules/toplevelview
 
 Enable the module in the web interface, or via CLI:
 
