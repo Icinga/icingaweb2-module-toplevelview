@@ -176,7 +176,7 @@ class LegacyDbHelper
                     $this->db->update(
                         "toplevelview_${type}",
                         ["${type}_object_id" => $object->new_object_id],
-                        ['id', $object->id]
+                        ['id = ?' => $object->id]
                     );
                 }
             }
