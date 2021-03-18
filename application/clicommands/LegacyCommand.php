@@ -6,9 +6,7 @@ namespace Icinga\Module\Toplevelview\Clicommands;
 use Icinga\Exception\ConfigurationError;
 use Icinga\Module\Monitoring\Backend\MonitoringBackend;
 use Icinga\Module\Toplevelview\Command;
-use Icinga\Module\Toplevelview\Config\ConfigEmitter;
 use Icinga\Module\Toplevelview\Legacy\LegacyDbHelper;
-use Icinga\Module\Toplevelview\ViewConfig;
 use Zend_Db_Adapter_Pdo_Sqlite;
 
 /**
@@ -54,6 +52,7 @@ class LegacyCommand extends Command
      *   --target <file>  Target database path (will be overwritten)
      *   --old <backend>  OLD IDO backend (configured in monitoring module)
      *   --new <backend>  New IDO backend (configured in monitoring module) (optional)
+     *   --purge          Remove unresolvable data during update (see log)
      */
     public function idomigrateAction()
     {
@@ -61,6 +60,7 @@ class LegacyCommand extends Command
         $old = $this->params->getRequired('old');
         $target = $this->params->getRequired('target');
         $new = $this->params->get('new');
+        $purge = $this->params->shift('purge');
 
         $db = $this->sqlite($dbFile);
 
@@ -70,7 +70,7 @@ class LegacyCommand extends Command
         // Use the copy as db
         $helper->setDb($helper->copySqliteDb($db, $target));
 
-        $result = $helper->migrateObjectIds(false);
+        $result = $helper->migrateObjectIds(false, $purge);
         foreach ($result as $type => $c) {
             printf("%s: %d\n", $type, $c);
         }

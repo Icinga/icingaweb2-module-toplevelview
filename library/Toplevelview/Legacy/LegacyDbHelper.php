@@ -97,11 +97,14 @@ class LegacyDbHelper
      * Since data is not stored as names, we need to lookup a name for each id,
      * and get the new id from the other backend.
      *
-     * @param bool $noop
+     * @param bool $noop          Do not update the database
+     * @param bool $removeUnknown Remove objects that are unknown in (new) IDO DB
      *
      * @return int[]
+     * @throws IcingaException
+     * @throws \Zend_Db_Adapter_Exception
      */
-    public function migrateObjectIds($noop = false)
+    public function migrateObjectIds($noop = false, $removeUnknown = false)
     {
         $result = [
             'host'      => 0,
@@ -167,17 +170,24 @@ class LegacyDbHelper
                 }
             }
 
-            if ($errors > 0) {
-                throw new IcingaException("errors have occured during IDO id migration - see log");
+            if (! $removeUnknown && $errors > 0) {
+                throw new IcingaException("errors have occurred during IDO id migration - see log");
             }
 
             if (! $noop) {
                 foreach ($objects as $object) {
-                    $this->db->update(
-                        "toplevelview_${type}",
-                        ["${type}_object_id" => $object->new_object_id],
-                        ['id = ?' => $object->id]
-                    );
+                    if (property_exists($object, 'new_object_id')) {
+                        $this->db->update(
+                            "toplevelview_${type}",
+                            ["${type}_object_id" => $object->new_object_id],
+                            ['id = ?' => $object->id]
+                        );
+                    } else if ($removeUnknown) {
+                        $this->db->delete(
+                            "toplevelview_${type}",
+                            ['id = ?' => $object->id]
+                        );
+                    }
                 }
             }
         }
