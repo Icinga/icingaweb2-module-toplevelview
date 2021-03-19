@@ -180,12 +180,12 @@ class LegacyDbHelper
                         $this->db->update(
                             "toplevelview_${type}",
                             ["${type}_object_id" => $object->new_object_id],
-                            ['id = ?' => $object->id]
+                            ["${type}_object_id = ?" => $object->object_id]
                         );
                     } else if ($removeUnknown) {
                         $this->db->delete(
                             "toplevelview_${type}",
-                            ['id = ?' => $object->id]
+                            ["${type}_object_id = ?" => $object->object_id]
                         );
                     }
                 }
