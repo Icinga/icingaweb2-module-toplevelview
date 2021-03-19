@@ -2,7 +2,8 @@ version: '2'
 
 services:
   web:
-    image: lazyfrosch/icingaweb2:dev
+    image: lazyfrosch/icingaweb2:sqlite
+    build: test/docker/
     ports:
       - 8080:80
     links:

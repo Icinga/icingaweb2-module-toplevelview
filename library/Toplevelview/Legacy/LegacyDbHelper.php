@@ -4,11 +4,14 @@
 namespace Icinga\Module\Toplevelview\Legacy;
 
 use Icinga\Application\Benchmark;
+use Icinga\Application\Logger;
+use Icinga\Exception\IcingaException;
 use Icinga\Exception\NotFoundError;
 use Icinga\Exception\ProgrammingError;
 use Icinga\Module\Monitoring\Backend\MonitoringBackend;
 use stdClass;
 use Zend_Db_Adapter_Pdo_Abstract;
+use Zend_Db_Adapter_Pdo_Sqlite;
 
 class LegacyDbHelper
 {
@@ -17,6 +20,15 @@ class LegacyDbHelper
 
     /** @var MonitoringBackend */
     protected $backend;
+
+    /** @var MonitoringBackend */
+    protected $oldBackend;
+
+    protected static $idoObjectIds = [
+        'host'      => 1,
+        'service'   => 2,
+        'hostgroup' => 3,
+    ];
 
     public function __construct(Zend_Db_Adapter_Pdo_Abstract $db, MonitoringBackend $backend = null)
     {
@@ -38,6 +50,174 @@ class LegacyDbHelper
             ->where('h.root_id = h.id');
 
         return $this->db->fetchAll($query);
+    }
+
+    /**
+     * Purges stale object references from the database
+     *
+     * Apparently the original editor replaces the tree data,
+     * but leaves unreferenced objects where the view_id has
+     * no referenced row in toplevelview_view.
+     *
+     * @param bool $noop Only check but don't delete
+     *
+     * @return array object types with counts cleaned up
+     */
+    public function cleanupUnreferencedObjects($noop = false)
+    {
+        $results = [
+            'host'      => 0,
+            'hostgroup' => 0,
+            'service'   => 0
+        ];
+
+        foreach (array_keys($results) as $type) {
+            $query = $this->db->select()
+                ->from("toplevelview_${type} AS o", ['id'])
+                ->joinLeft('toplevelview_view AS v', 'v.id = o.view_id', [])
+                ->where('v.id IS NULL');
+
+            Logger::debug("searching for unreferenced %s objects: %s", $type, (string) $query);
+
+            $ids = $this->db->fetchCol($query);
+            $results[$type] = count($ids);
+
+            if (! $noop) {
+                Logger::debug("deleting unreferenced %s objects: %s", $type, json_encode($ids));
+                $this->db->delete("toplevelview_${type}", sprintf('id IN (%s)', join(', ', $ids)));
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * Migrate object ids from an old MonitoringBackend to a new one
+     *
+     * Since data is not stored as names, we need to lookup a name for each id,
+     * and get the new id from the other backend.
+     *
+     * @param bool $noop          Do not update the database
+     * @param bool $removeUnknown Remove objects that are unknown in (new) IDO DB
+     *
+     * @return int[]
+     * @throws IcingaException
+     * @throws \Zend_Db_Adapter_Exception
+     */
+    public function migrateObjectIds($noop = false, $removeUnknown = false)
+    {
+        $result = [
+            'host'      => 0,
+            'service'   => 0,
+            'hostgroup' => 0,
+        ];
+
+        foreach (array_keys($result) as $type) {
+            $query = $this->db->select()
+                ->from("toplevelview_${type}", ['id', "${type}_object_id AS object_id"]);
+
+            Logger::debug("querying stored objects of type %s: %s", $type, (string) $query);
+
+            $objects = [];
+
+            // Load objects indexed by object_id
+            foreach ($this->db->fetchAll($query) as $row) {
+                $objects[$row['object_id']] = (object) $row;
+            }
+
+            // Load names from old DB
+            $idoObjects = $this->oldBackend->getResource()->select()
+                ->from('icinga_objects', ['object_id', 'name1', 'name2'])
+                ->where('objecttype_id', self::$idoObjectIds[$type]);
+
+            // Amend objects with names from old DB
+            foreach ($idoObjects->fetchAll() as $row) {
+                $id = $row->object_id;
+                if (array_key_exists($id, $objects)) {
+                    $idx = $row->name1;
+                    if ($row->name2 !== null) {
+                        $idx .= '!' . $row->name2;
+                    }
+
+                    $objects[$id]->name = $idx;
+                }
+            }
+
+            // Load names from new DB and index by name
+            $newObjects = [];
+            foreach ($this->backend->getResource()->fetchAll($idoObjects) as $row) {
+                $idx = $row->name1;
+                if ($row->name2 !== null) {
+                    $idx .= '!' . $row->name2;
+                }
+
+                $newObjects[$idx] = $row;
+            }
+
+            // Process all objects and store new id
+            $errors = 0;
+            foreach ($objects as $object) {
+                if (! property_exists($object, 'name')) {
+                    Logger::error("object %s %d has not been found in old IDO", $type, $object->object_id);
+                    $errors++;
+                } else if (! array_key_exists($object->name, $newObjects)) {
+                    Logger::error("object %s %d '%s' has not been found in new IDO",
+                        $type, $object->object_id, $object->name);
+                    $errors++;
+                } else {
+                    $object->new_object_id = $newObjects[$object->name]->object_id;
+                    $result[$type]++;
+                }
+            }
+
+            if (! $removeUnknown && $errors > 0) {
+                throw new IcingaException("errors have occurred during IDO id migration - see log");
+            }
+
+            if (! $noop) {
+                foreach ($objects as $object) {
+                    if (property_exists($object, 'new_object_id')) {
+                        $this->db->update(
+                            "toplevelview_${type}",
+                            ["${type}_object_id" => $object->new_object_id],
+                            ["${type}_object_id = ?" => $object->object_id]
+                        );
+                    } else if ($removeUnknown) {
+                        $this->db->delete(
+                            "toplevelview_${type}",
+                            ["${type}_object_id = ?" => $object->object_id]
+                        );
+                    }
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param Zend_Db_Adapter_Pdo_Sqlite $db
+     * @param string                     $target
+     *
+     * @return Zend_Db_Adapter_Pdo_Sqlite
+     */
+    public function copySqliteDb(Zend_Db_Adapter_Pdo_Sqlite $db, $target)
+    {
+        // Lock database for copy
+        $db->query('PRAGMA locking_mode = EXCLUSIVE');
+        $db->query('BEGIN EXCLUSIVE');
+
+        $file = $db->getConfig()['dbname'];
+        if (! copy($file, $target)) {
+            throw new IcingaException("could not copy '%s' to '%s'", $file, $target);
+        }
+
+        $db->query('COMMIT');
+        $db->query('PRAGMA locking_mode = NORMAL');
+
+        return new Zend_Db_Adapter_Pdo_Sqlite([
+            'dbname' => $target,
+        ]);
     }
 
     protected function fetchDatabaseHierarchy($root_id)
@@ -319,5 +499,27 @@ class LegacyDbHelper
             throw new ProgrammingError('monitoringBackend has not been set at runtime!');
         }
         return $this->backend;
+    }
+
+    /**
+     * @param MonitoringBackend $oldBackend
+     *
+     * @return LegacyDbHelper
+     */
+    public function setOldBackend(MonitoringBackend $oldBackend)
+    {
+        $this->oldBackend = $oldBackend;
+        return $this;
+    }
+
+    /**
+     * @param Zend_Db_Adapter_Pdo_Sqlite $db
+     *
+     * @return $this
+     */
+    public function setDb($db)
+    {
+        $this->db = $db;
+        return $this;
     }
 }
