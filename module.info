@@ -1,5 +1,5 @@
 Module: toplevelview
-Version: 0.3.1
+Version: 0.3.2
 Depends: monitoring>=2.5.0
 Description: Top Level View
  Top Level View is a hierarchy based status view for Icinga Web 2.
