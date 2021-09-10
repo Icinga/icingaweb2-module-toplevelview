@@ -63,18 +63,18 @@
             var $el = $(event.currentTarget);
             var $parent = $el.parents('.tlv-tree-node');
             var $all = $el.find('.tlv-tree-node');
-            if (($parent.length === 0 && $all.hasClass('collapsed')) || $el.hasClass('collapsed')) {
-                $el.removeClass('collapsed');
-                $all.removeClass('collapsed');
+            if (($parent.length === 0 && $all.hasClass('tlv-collapsed')) || $el.hasClass('tlv-collapsed')) {
+                $el.removeClass('tlv-collapsed');
+                $all.removeClass('tlv-collapsed');
             } else {
-                $el.addClass('collapsed');
-                $all.addClass('collapsed');
+                $el.addClass('tlv-collapsed');
+                $all.addClass('tlv-collapsed');
             }
         },
 
         collapseOnLoad: function (event) {
             var $el = $(event.currentTarget);
-            $el.find('.tlv-view-tree .tlv-tree-node.collapsible.ok').addClass('collapsed');
+            $el.find('.tlv-view-tree .tlv-tree-node.tlv-collapsible.ok').addClass('tlv-collapsed');
         },
 
         buttonClick: function (event) {

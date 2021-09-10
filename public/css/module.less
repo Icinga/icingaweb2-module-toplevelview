@@ -309,7 +309,7 @@
 
     width: 100%;
 
-    &.collapsed {
+    &.tlv-collapsed {
       width: auto;
     }
 
@@ -320,7 +320,7 @@
 
     padding: 0.2em 0 0 1em;
 
-    &.collapsed {
+    &.tlv-collapsed {
       > .tlv-tree-node, > .tlv-node-icinga {
         display: none;
       }
@@ -370,14 +370,14 @@
   }
 }
 
-.collapsible {
-  .icon.collapse-handle::before {
+.tlv-collapsible {
+  .icon.tlv-collapse-handle::before {
     font-size: 1.3em;
     content: '\e81d';
   }
 
   .collapsed {
-    .icon.collapse-handle::before {
+    .icon.tlv-collapse-handle::before {
       content: '\e820';
     }
   }
