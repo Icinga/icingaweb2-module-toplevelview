@@ -395,7 +395,7 @@
     .badge {
       line-height: 1.25em;
       font-size: 0.8em;
-      border: 1px solid white;
+      border: 1px solid @white;
       margin: -0.25em 1px 0 0;
     }
   }
@@ -418,13 +418,13 @@
 }
 
 .breadcrumb li a {
-  color: white;
+  color: @text-color;
   margin: 0;
   font-size: 1.2em;
   text-decoration: none;
   padding-left: 2em;
   line-height: 2.5em;
-  background: @icinga-blue;
+  background: @gray-light;
   position: relative;
   display: block;
   float: left;
@@ -447,13 +447,13 @@
 }
 
 .breadcrumb li a:before {
-  border-left: 1.2em solid white;
+  border-left: 1.2em solid @gray-lightest;
   margin-left: 1px;
   z-index: 1;
 }
 
 .breadcrumb li a:after {
-  border-left: 1.2em solid @icinga-blue;
+  border-left: 1.2em solid @gray-light;
   z-index: 2;
 }
 
@@ -471,12 +471,11 @@
 }
 
 .breadcrumb li:not(:last-child) a:hover {
-  background: @text-color;
-  color: white;
+  background-color: @gray-lighter;
 }
 
 .breadcrumb li:not(:last-child) a:hover:after {
-  border-left-color: @text-color;
+  border-left-color: @gray-lighter;
 }
 
 .breadcrumb li a:focus {
@@ -513,9 +512,7 @@ textarea.code-editor {
 .CodeMirror {
   min-height: 60em;
   width: 100%;
-
   margin-bottom: 1em;
-
   border: 1px solid @gray-light;
 
   pre {
