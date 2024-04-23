@@ -9,6 +9,12 @@ if (! $this->compact):
 </div>
 <?php endif ?>
 <div class="content tlv-content">
+    <?php if ($view->hasBeenLoadedFromSession()): ?>
+        <div class="warning-note">
+            <?= $this->translate('This config is only stored in your session!'
+                . ' Make sure to save it to disk once your work is complete!') ?>
+        </div>
+    <?php endif; ?>
     <div class="tlv-header">
         <?= $this->badges($tree->getStatus(), false, true) ?>
         <h1><?= $view->getMeta('name') ?></h1>
