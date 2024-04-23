@@ -45,7 +45,9 @@
                 var mode = el.getAttribute('data-codemirror-mode');
                 var editor = CodeMirror.fromTextArea(el, {
                     lineNumbers: true,
-                    mode: mode
+                    mode: mode,
+                    foldGutter: true,
+                    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
                 });
                 // avoid entering tab chars
                 editor.setOption('extraKeys', {
