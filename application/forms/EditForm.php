@@ -156,6 +156,7 @@ class EditForm extends Form
                 array(
                     'ignore'     => true,
                     'label'      => $this->translate('Cancel editing'),
+                    'class'      => 'btn-cancel',
                     'decorators' => array('ViewHelper')
                 )
             );
@@ -168,6 +169,7 @@ class EditForm extends Form
                 array(
                     'ignore'     => true,
                     'label'      => $this->translate('Delete config'),
+                    'class'      => 'btn-remove',
                     'decorators' => array('ViewHelper')
                 )
             );
