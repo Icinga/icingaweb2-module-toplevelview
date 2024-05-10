@@ -2,14 +2,11 @@
 .*.sw[op]
 *~
 /.idea/
-
-# Except those related to git
 !.git*
-
-# Docker
-/docker-compose.yml
+*TODO*
 
 # Artifacts from vendor parts in testing
+/docker-compose.yml
 /*.phar
 /Icinga
 /Zend
