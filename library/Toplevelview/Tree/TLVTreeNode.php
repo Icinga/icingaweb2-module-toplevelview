@@ -9,6 +9,9 @@ use Icinga\Exception\ConfigurationError;
 use Icinga\Exception\NotImplementedError;
 use Icinga\Exception\ProgrammingError;
 
+/**
+ * TLVTreeNode represents a node in the TLV tree
+ */
 class TLVTreeNode extends TreeNode
 {
     /**

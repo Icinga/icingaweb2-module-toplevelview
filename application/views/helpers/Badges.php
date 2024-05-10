@@ -17,6 +17,10 @@ class Zend_View_Helper_Badges extends Zend_View_Helper_Abstract
         return trim($s);
     }
 
+    /**
+     * badges renders a TLVNode's TLVStatus into HTML.
+     * A badge represents the number of status of a given node
+     */
     public function badges(TLVStatus $status, $problemsOnly = true, $showTotal = false)
     {
         $htm = '';

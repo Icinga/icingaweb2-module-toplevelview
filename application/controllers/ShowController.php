@@ -58,7 +58,6 @@ class ShowController extends Controller
         $this->view->name = $name = $this->params->getRequired('name');
         $this->view->view = $view = ViewConfig::loadByName($name);
         $tree = $view->getTree();
-        $tree->setBackend($this->monitoringBackend());
 
         if (($lifetime = $this->getParam('cache')) !== null) {
             $tree->setCacheLifetime($lifetime);
@@ -73,7 +72,6 @@ class ShowController extends Controller
         $this->view->view = $view = ViewConfig::loadByName($name);
         $tree = $view->getTree();
         $this->view->node = $tree->getById($this->params->getRequired('id'));
-        $tree->setBackend($this->monitoringBackend());
 
         if (($lifetime = $this->getParam('cache')) !== null) {
             $tree->setCacheLifetime($lifetime);

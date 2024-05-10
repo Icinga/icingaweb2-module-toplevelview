@@ -5,8 +5,13 @@ namespace Icinga\Module\Toplevelview\Tree;
 
 use Icinga\Application\Benchmark;
 use Icinga\Exception\NotFoundError;
-use Icinga\Module\Toplevelview\Monitoring\Hostgroupsummary;
+use Icinga\Module\Icingadb\Model\Hostgroupsummary;
+use ipl\Stdlib\Filter;
+use stdClass;
 
+/**
+ * TLVHostGroupNode represents a Hostgroup in the tree
+ */
 class TLVHostGroupNode extends TLVIcingaNode
 {
     protected $type = 'hostgroup';
@@ -23,112 +28,100 @@ class TLVHostGroupNode extends TLVIcingaNode
             throw new NotFoundError('No hostgroups registered to fetch!');
         }
 
-        $names = array_keys($root->registeredObjects['hostgroup']);
-
-        $options = [];
-        foreach (['notification_periods', 'host_never_unhandled', 'ignored_notification_periods'] as $opt) {
-            $options[$opt] = $root->get($opt);
+        $hgFilter = Filter::any();
+        foreach (array_keys($root->registeredObjects['hostgroup']) as $name) {
+            $hgFilter->add(Filter::equal('hostgroup_name', $name));
         }
 
-        // Note: this uses a patched version of Hostsgroupsummary / HostgroupsummaryQuery !
-        $hostgroups = new Hostgroupsummary(
-            $root->getBackend(),
-            array(
-                'hostgroup_name',
-                'hosts_down_handled',
-                'hosts_down_unhandled',
-                'hosts_total',
-                'hosts_unreachable_handled',
-                'hosts_unreachable_unhandled',
-                'hosts_downtime_handled',
-                'hosts_downtime_active',
-                'hosts_up',
-                'services_critical_handled',
-                'services_critical_unhandled',
-                'services_ok',
-                'services_total',
-                'services_unknown_handled',
-                'services_unknown_unhandled',
-                'services_warning_handled',
-                'services_warning_unhandled',
-                'services_downtime_handled',
-                'services_downtime_active',
-            ),
-            $options
-        );
+        $hostgroups = Hostgroupsummary::on($root->getDb());
 
-        $hostgroups->where('hostgroup_name', $names);
+        $hostgroups->filter($hgFilter);
 
         foreach ($hostgroups as $hostgroup) {
-            $root->registeredObjects['hostgroup'][$hostgroup->hostgroup_name] = $hostgroup;
+            // TODO We cannot store the ORM Models with json_encore
+            // Thus I'm converting things to objects that can be stored
+            // Maybe there's a better way? iterator_to_array does not work.
+            $hg = new stdClass;
+            $hg->hosts_total = $hostgroup->hosts_total;
+            $hg->hosts_up = $hostgroup->hosts_up;
+            $hg->hosts_total = $hostgroup->hosts_total;
+            $hg->services_total = $hostgroup->services_total;
+            $hg->hosts_up = $hostgroup->hosts_up;
+            $hg->services_ok = $hostgroup->services_ok;
+            $hg->hosts_down_handled = $hostgroup->hosts_down_handled;
+            $hg->hosts_down_unhandled = $hostgroup->hosts_down_unhandled;
+            $hg->services_warning_handled = $hostgroup->services_warning_handled;
+            $hg->services_warning_unhandled = $hostgroup->services_warning_unhandled;
+            $hg->services_critical_handled = $hostgroup->services_critical_handled;
+            $hg->services_critical_unhandled = $hostgroup->services_critical_unhandled;
+            $hg->services_unknown_handled = $hostgroup->services_unknown_handled;
+            $hg->services_unknown_unhandled = $hostgroup->services_unknown_unhandled;
+
+            $root->registeredObjects['hostgroup'][$hostgroup->name] = $hg;
         }
 
         Benchmark::measure('Finished fetching hostgroups');
     }
 
-    public function getStatus()
+    /**
+     * getStatus returns the current status for the Hostgroup
+     *
+     * @return TLVStatus
+     */
+    public function getStatus(): TLVStatus
     {
-        if ($this->status === null) {
-            $this->status = $status = new TLVStatus();
-            $key = $this->getKey();
-
-            if (($data = $this->root->getFetched($this->type, $key)) !== null) {
-                $status->set('total', $data->hosts_total + $data->services_total);
-                $status->set('ok', $data->hosts_up + $data->services_ok);
-
-                $status->set('critical_handled', $data->services_critical_handled);
-                $status->set('critical_unhandled', $data->services_critical_unhandled);
-
-                if ($this->getRoot()->get('host_never_unhandled') === true) {
-                    $status->add(
-                        'critical_handled',
-                        $data->hosts_down_handled
-                        + $data->hosts_unreachable_handled
-                        + $data->hosts_down_unhandled
-                        + $data->hosts_unreachable_unhandled
-                    );
-                } else {
-                    $status->add(
-                        'critical_handled',
-                        $data->hosts_down_handled
-                        + $data->hosts_unreachable_handled
-                    );
-                    $status->add(
-                        'critical_unhandled',
-                        $data->hosts_down_unhandled
-                        + $data->hosts_unreachable_unhandled
-                    );
-                }
-
-                $status->set('warning_handled', $data->services_warning_handled);
-                $status->set('warning_unhandled', $data->services_warning_unhandled);
-                $status->set('unknown_handled', $data->services_unknown_handled);
-                $status->set('unknown_unhandled', $data->services_unknown_unhandled);
-
-                $status->set(
-                    'downtime_handled',
-                    $data->hosts_downtime_handled
-                    + $data->services_downtime_handled
-                );
-                $status->set(
-                    'downtime_active',
-                    $data->hosts_downtime_active
-                    + $data->services_downtime_active
-                );
-
-                // extra metadata for view
-                $status->setMeta('hosts_total', $data->hosts_total);
-                $status->setMeta(
-                    'hosts_unhandled',
-                    $data->hosts_down_unhandled
-                    + $data->hosts_unreachable_unhandled
-                );
-
-                $status->set('missing', 0);
-            } else {
-                $status->add('missing', 1);
-            }
+        if ($this->status !== null) {
+            return $this->status;
         }
+
+        $this->status = $status = new TLVStatus();
+        $key = $this->getKey();
+
+        $hostgroup = $this->root->getFetched($this->type, $key);
+
+        if ($hostgroup === null) {
+            $this->status->add('missing', 1);
+            return $this->status;
+        }
+
+        $status->set('total', $hostgroup->hosts_total + $hostgroup->services_total);
+        $status->set('ok', $hostgroup->hosts_up + $hostgroup->services_ok);
+
+        $status->set('critical_handled', $hostgroup->services_critical_handled);
+        $status->set('critical_unhandled', $hostgroup->services_critical_unhandled);
+
+        // Override the host status to handled if the option is set
+        if ($this->getRoot()->get('override_host_problem_to_handled') === true) {
+            $status->add(
+                'critical_handled',
+                $hostgroup->hosts_down_handled
+                + $hostgroup->hosts_down_unhandled
+            );
+        } else {
+            $status->add(
+                'critical_handled',
+                $hostgroup->hosts_down_handled
+            );
+            $status->add(
+                'critical_unhandled',
+                $hostgroup->hosts_down_unhandled
+            );
+        }
+
+        $status->set('warning_handled', $hostgroup->services_warning_handled);
+        $status->set('warning_unhandled', $hostgroup->services_warning_unhandled);
+        $status->set('unknown_handled', $hostgroup->services_unknown_handled);
+        $status->set('unknown_unhandled', $hostgroup->services_unknown_unhandled);
+
+        // extra metadata for view
+        $status->setMeta('hosts_total', $hostgroup->hosts_total);
+        $status->setMeta(
+            'hosts_unhandled',
+            $hostgroup->hosts_down_unhandled
+        );
+
+        $status->set('missing', 0);
+
         return $this->status;
     }
 }

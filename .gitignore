@@ -2,10 +2,13 @@
 .*.sw[op]
 *~
 /.idea/
-!.git*
+\#*
+.\#*
 *TODO*
+!.git*
 
 # Artifacts from vendor parts in testing
+.phplint.cache/
 /docker-compose.yml
 /*.phar
 /Icinga

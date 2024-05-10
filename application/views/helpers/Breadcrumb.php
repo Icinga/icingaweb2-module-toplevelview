@@ -9,6 +9,8 @@ class Zend_View_Helper_Breadcrumb extends Zend_View_Helper_Abstract
     public $view;
 
     /**
+     * breadcrumb renders a list of TLVTreeNodes into a HTML breadcrumb list
+     *
      * @param TLVTreeNode[] $breadcrumb
      *
      * @return string
