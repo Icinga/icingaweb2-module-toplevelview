@@ -1,5 +1,29 @@
 # Changelog
 
+## [v0.3.4](https://github.com/Icinga/icingaweb2-module-toplevelview/tree/v0.3.4) (2024-06-12)
+
+This will be the final version with support for
+Icinga Web monitoring module. Future versions will use IcingaDB Web.
+
+**Implemented enhancements:**
+
+- Improve CSS for dark/light theme
+- Add confirmation dialog to deletion button
+- Add Icinga Web CSS classes to delete and cancel button
+- Update codemirror5 to latest version and add code folding
+- Update README to include php-yaml requirement
+
+**Fixed bugs:**
+
+- Fix CSS issue with node collapse icon
+- Change unsaved work warning position to avoid breaking the layout
+
+## [v0.3.3](https://github.com/Icinga/icingaweb2-module-toplevelview/tree/v0.3.3) (2021-09-10)
+
+**Implemented enhancements:**
+
+- Rename collapse feature for Icinga Web >= 2.7 ([lazyfrosch](https://github.com/lazyfrosch))
+
 ## [v0.3.2](https://github.com/Icinga/icingaweb2-module-toplevelview/tree/v0.3.2) (2021-03-19)
 
 [Full Changelog](https://github.com/Icinga/icingaweb2-module-toplevelview/compare/v0.3.1...v0.3.2)
