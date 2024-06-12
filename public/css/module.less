@@ -376,11 +376,12 @@
     content: '\e81d';
   }
 
-  .collapsed {
+}
+
+.tlv-collapsed {
     .icon.tlv-collapse-handle::before {
-      content: '\e820';
+        content: '\e820';
     }
-  }
 }
 
 /** BEGIN of breadcrumb **/
@@ -497,16 +498,10 @@
 }
 
 .warning-note {
-  display: inline-block;
-
-  padding: 1px 5px;
+  padding: 0.5em;
+  margin: 0.5em;
   background: @tlv-color-warning-bg;
   color: @tlv-color-warning-fg
-}
-
-textarea.code-editor {
-  min-height: 45em;
-  width: 100%;
 }
 
 .CodeMirror {

@@ -39,7 +39,11 @@ $this->provideJsFile('vendor/codemirror/addon/search/searchcursor.js');
 $this->provideJsFile('vendor/codemirror/addon/search/search.js');
 $this->provideJsFile('vendor/codemirror/addon/search/matchesonscrollbar.js');
 $this->provideJsFile('vendor/codemirror/addon/search/jump-to-line.js');
+$this->provideJsFile('vendor/codemirror/addon/fold/foldcode.js');
+$this->provideJsFile('vendor/codemirror/addon/fold/foldgutter.js');
+$this->provideJsFile('vendor/codemirror/addon/fold/indent-fold.js');
 
 $this->provideCssFile('vendor/codemirror/codemirror.css');
 $this->provideCssFile('vendor/codemirror/addon/dialog/dialog.css');
 $this->provideCssFile('vendor/codemirror/addon/search/matchesonscrollbar.css');
+$this->provideCssFile('vendor/codemirror/addon/fold/foldgutter.css');
