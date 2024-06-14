@@ -39,13 +39,13 @@ class ShowController extends Controller
             );
         }
 
+
         $fullscreen = new Tab(array(
-            'title' => $this->translate('Go Fullscreen'),
-            'icon'  => 'dashboard',
+            'title' => $this->translate('Fullscreen'),
             'url'   => ((string) $tiles) . '&view=compact&showFullscreen'
         ));
         $fullscreen->setTargetBlank();
-        $tabs->addAsDropdown('fullscreen', $fullscreen);
+        $tabs->add('fullscreen', $fullscreen);
 
         $action = $this->getRequest()->getActionName();
         if ($tab = $tabs->get($action)) {
