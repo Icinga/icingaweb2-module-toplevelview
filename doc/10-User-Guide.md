@@ -10,7 +10,7 @@ To understand the status behavior, see the [chapter about behavior](02-Behavior.
 
 Unhandled problems can be identified based on color saturation of the tiles.
 
-In addition counters show you how many states of what kind lay below.  
+In addition counters show you how many states of what kind lay below.
 
 ![Unhandled colors](screenshots/colors-unhandled.png)
 
@@ -36,7 +36,7 @@ Every Icinga status object, a host, service or hostgroup is a single tile
 here.
 
 Counters are meant to give you an indication about how many problems, or
-even objects are there. 
+even objects are there.
 
 ## Viewing Icinga details
 
@@ -59,7 +59,8 @@ over hosts in that group.
 
 ## Note about caching
 
-Please be aware that the data display in Top Level View is cached, for 60
-seconds by default.
+Please be aware that the data displayed in the Top Level View is cached for 60
+seconds by default. This can be adjusted using the URL parameter `cache`.
+For example: `toplevelview/show/tree?name=example-view&cache=30`
 
 Latest state changes will only be reflected after that caching time.

@@ -7,14 +7,22 @@ use Icinga\Application\Logger;
 use Icinga\Exception\IcingaException;
 use Icinga\Exception\NotFoundError;
 use Icinga\Exception\ProgrammingError;
-use Icinga\Module\Monitoring\Backend\MonitoringBackend;
+use Icinga\Module\Icingadb\Common\Database;
 use Icinga\Module\Toplevelview\Util\Json;
 use Icinga\Module\Toplevelview\ViewConfig;
 use Icinga\Web\FileCache;
 use stdClass;
 
+/**
+ * TLVTree represents the root of the TLV tree
+ */
 class TLVTree extends TLVTreeNode
 {
+    /**
+     * @var Database
+     */
+    use Database;
+
     protected static $titleKey = 'name';
 
     public $registeredTypes = array();
@@ -28,11 +36,6 @@ class TLVTree extends TLVTreeNode
     protected $fetchTime;
 
     protected $cacheLifetime = 60;
-
-    /**
-     * @var MonitoringBackend
-     */
-    protected $backend;
 
     /**
      * @var ViewConfig
@@ -207,17 +210,6 @@ class TLVTree extends TLVTreeNode
         } else {
             return null;
         }
-    }
-
-    public function getBackend()
-    {
-        return $this->backend;
-    }
-
-    public function setBackend(MonitoringBackend $backend)
-    {
-        $this->backend = $backend;
-        return $this;
     }
 
     /**

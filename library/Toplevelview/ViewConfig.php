@@ -422,7 +422,6 @@ class ViewConfig
 
     public static function session()
     {
-        // TODO: is this CLI safe?
         return Session::getSession();
     }
 

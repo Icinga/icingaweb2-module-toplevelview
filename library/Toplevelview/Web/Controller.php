@@ -9,6 +9,10 @@ use Icinga\Exception\IcingaException;
 use Icinga\Module\Monitoring\Backend\MonitoringBackend;
 use Icinga\Web\Controller as IcingaController;
 
+/**
+ * Controller wraps around the Icinga\Web\Controller to
+ * check for the PHP YAML extension
+ */
 class Controller extends IcingaController
 {
     /** @var  MonitoringBackend */
@@ -21,25 +25,6 @@ class Controller extends IcingaController
         if (! extension_loaded('yaml')) {
             throw new ConfigurationError('You need the PHP extension "yaml" in order to use TopLevelView');
         }
-    }
-
-    /**
-     * Retrieves the Icinga MonitoringBackend
-     *
-     * @param string|null $name
-     *
-     * @return MonitoringBackend
-     * @throws IcingaException When monitoring is not enabled
-     */
-    protected function monitoringBackend($name = null)
-    {
-        if ($this->monitoringBackend === null) {
-            if (! Icinga::app()->getModuleManager()->hasEnabled('monitoring')) {
-                throw new IcingaException('The module "monitoring" must be enabled and configured!');
-            }
-            $this->monitoringBackend = MonitoringBackend::instance($name);
-        }
-        return $this->monitoringBackend;
     }
 
     protected function setViewScript($name, $controller = null)

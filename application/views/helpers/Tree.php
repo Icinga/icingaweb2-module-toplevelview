@@ -9,6 +9,10 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
     /** @var \Icinga\Web\View */
     public $view;
 
+    /**
+     * tree takes a TLVTreeNode and renders it recursively into HTML.
+     * It is used in a Controller to render the full tree.
+     */
     public function tree(TLVTreeNode $node, $classes = array(), $level = 0)
     {
         $htm = '';
@@ -23,29 +27,23 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
 
         if ($type === 'host') {
             $icon = 'host';
-            $url = Url::fromPath(
-                'monitoring/host/show',
-                array(
-                    'host' => $node->get('host')
-                )
-            );
+            $url = Url::fromPath('icingadb/host', ['name' => $node->get('host')]);
         } elseif ($type === 'service') {
             $icon = 'service';
             $url = Url::fromPath(
-                'monitoring/service/show',
-                array(
-                    'host'    => $node->get('host'),
-                    'service' => $node->get('service')
-                )
+                'icingadb/service',
+                [
+                    'name' => $node->get('service'),
+                    'host.name' => $node->get('host')
+                ]
             );
         } elseif ($type === 'hostgroup') {
             $icon = 'cubes';
             $url = Url::fromPath(
-                'monitoring/list/services',
+                'icingadb/services',
                 array(
-                    'hostgroup' => $node->get('hostgroup'),
-                    'sort'      => 'service_severity',
-                    'dir'       => 'desc',
+                    'hostgroup.name' => $node->get('hostgroup'),
+                    'sort' => 'service.state.severity desc'
                 )
             );
 
@@ -60,11 +58,10 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
 
             $htmExtra .= ' ' . $this->view->qlink(
                 $hostTitle,
-                'monitoring/list/hosts',
+                'icingadb/hosts',
                 array(
-                    'hostgroup' => $node->get('hostgroup'),
-                    'sort'      => 'host_severity',
-                    'dir'       => 'desc',
+                    'hostgroup.name' => $node->get('hostgroup'),
+                    'sort' => 'service.state.severity desc'
                 ),
                 null,
                 false

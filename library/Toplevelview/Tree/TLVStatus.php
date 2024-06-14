@@ -3,6 +3,9 @@
 
 namespace Icinga\Module\Toplevelview\Tree;
 
+/**
+ * TLVStatus represents the status for a TLVTreeNode that is shown in the view
+ */
 class TLVStatus
 {
     protected $properties = array(
@@ -22,7 +25,7 @@ class TLVStatus
     protected static $statusPriority = array(
         'critical_unhandled',
         'warning_unhandled',
-        'unknown_unhandled', // Note: old TLV ignored UNKNOWN basically
+        'unknown_unhandled',
         'critical_handled',
         'warning_handled',
         'unknown_handled',
