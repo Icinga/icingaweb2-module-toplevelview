@@ -14,7 +14,7 @@ $section
     ->setLabel('Top Level View')
     ->setUrl('toplevelview')
     ->setIcon('sitemap')
-    ->setPriority(20);
+    ->setPriority(50);
 
 try {
     if (extension_loaded('yaml')) {
