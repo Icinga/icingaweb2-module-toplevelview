@@ -6,7 +6,6 @@ namespace Icinga\Module\Toplevelview\Controllers;
 use Icinga\Module\Toplevelview\ViewConfig;
 use Icinga\Module\Toplevelview\Web\Controller;
 use Icinga\Web\Url;
-use Icinga\Web\Widget\Tab;
 
 class ShowController extends Controller
 {
@@ -14,38 +13,25 @@ class ShowController extends Controller
     {
         $tabs = $this->getTabs();
 
-        $tiles = Url::fromPath('toplevelview/show', array(
-            'name' => $this->params->getRequired('name')
-        ));
+        $url = Url::fromRequest()->setParams(clone $this->params);
 
-        $tabs->add(
-            'index',
-            array(
-                'title' => $this->translate('Tiles'),
-                'url'   => $tiles
-            )
-        );
+        $tiles = Url::fromPath('toplevelview/show', ['name' => $this->params->getRequired('name')]);
 
+        $tabs->add('index', [
+            'title' => $this->translate('Tree'),
+            'url'   => $tiles
+        ]);
+
+        // Add new Tabs for the entire tree
         if (($id = $this->getParam('id')) !== null) {
-            $tabs->add(
-                'tree',
-                array(
-                    'title' => $this->translate('Tree'),
-                    'url'   => Url::fromPath('toplevelview/show/tree', array(
-                        'name' => $this->params->getRequired('name'),
-                        'id'   => $id
-                    ))
-                )
-            );
+            $tabs->add('tree', [
+                'title' => $this->translate('Tiles'),
+                'url'   => Url::fromPath('toplevelview/show/tree', [
+                    'name' => $this->params->getRequired('name'),
+                    'id'   => $id
+                ])
+            ]);
         }
-
-
-        $fullscreen = new Tab(array(
-            'title' => $this->translate('Fullscreen'),
-            'url'   => ((string) $tiles) . '&view=compact&showFullscreen'
-        ));
-        $fullscreen->setTargetBlank();
-        $tabs->add('fullscreen', $fullscreen);
 
         $action = $this->getRequest()->getActionName();
         if ($tab = $tabs->get($action)) {

@@ -3,21 +3,15 @@
 
 namespace Icinga\Module\Toplevelview\Web;
 
-use Icinga\Application\Icinga;
 use Icinga\Exception\ConfigurationError;
-use Icinga\Exception\IcingaException;
-use Icinga\Module\Monitoring\Backend\MonitoringBackend;
-use Icinga\Web\Controller as IcingaController;
+use ipl\Web\Compat\CompatController;
 
 /**
  * Controller wraps around the Icinga\Web\Controller to
  * check for the PHP YAML extension
  */
-class Controller extends IcingaController
+class Controller extends CompatController
 {
-    /** @var  MonitoringBackend */
-    protected $monitoringBackend;
-
     public function init()
     {
         parent::init();
@@ -27,7 +21,7 @@ class Controller extends IcingaController
         }
     }
 
-    protected function setViewScript($name, $controller = null)
+    protected function setViewScript($name, $controller = null): void
     {
         if ($controller !== null) {
             $name = sprintf('%s/%s', $controller, $name);

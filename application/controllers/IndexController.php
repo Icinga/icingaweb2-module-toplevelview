@@ -6,17 +6,19 @@ namespace Icinga\Module\Toplevelview\Controllers;
 use Icinga\Module\Toplevelview\ViewConfig;
 use Icinga\Module\Toplevelview\Web\Controller;
 
+/**
+ * IndexController loads all existing Views from their YAML files.
+ */
 class IndexController extends Controller
 {
     public function indexAction()
     {
-        $this->getTabs()->add(
-            'index',
-            array(
-                'title' => 'Top Level View',
-                'url'   => 'toplevelview',
-            )
-        )->activate('index');
+        $this->getTabs()->add('index', [
+            'title' => 'Top Level View',
+            'url'   => 'toplevelview',
+        ])->activate('index');
+
+        // Load add views from the existing YAML files
         $this->view->views = ViewConfig::loadAll();
 
         $this->setAutorefreshInterval(30);

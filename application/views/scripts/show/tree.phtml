@@ -6,15 +6,15 @@ $tree = $view->getTree();
 
 if (! $this->compact):
 ?>
-<div class="controls">
+<div class="controls separated">
     <?= $this->tabs ?>
+    <?= $this->partial('show/actions.phtml', $this) ?>
 </div>
 <?php endif ?>
 <div class="content tlv-view-tree">
     <div class="tlv-header">
         <?= $this->badges($tree->getStatus(), false, true) ?>
         <h1><?= $view->getMeta('name') ?></h1>
-        <?= $this->partial('show/actions.phtml', $this) ?>
         <div class="last-refresh"><?= $this->timeAgo($tree->getFetchTime()) ?></div>
     </div>
     <?= $this->breadcrumb($node->getBreadCrumb(), $view->getName()) ?>

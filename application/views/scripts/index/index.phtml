@@ -2,12 +2,8 @@
 /** @var array $views */
 
 if (! $this->compact): ?>
-    <div class="controls">
+    <div class="controls separated">
         <?= $this->tabs ?>
-    </div>
-<?php endif ?>
-<div class="content">
-    <div class="tlv-overview-tiles">
         <div class="action-links">
             <?= $this->qlink(
                 $this->translate('Add'),
@@ -19,7 +15,10 @@ if (! $this->compact): ?>
                 )
             ) ?>
         </div>
-
+    </div>
+<?php endif ?>
+<div class="content separated">
+    <div class="tlv-overview-tiles">
         <?php
         foreach ($views as $name => $view):
             /** @var \Icinga\Module\Toplevelview\ViewConfig $view */
