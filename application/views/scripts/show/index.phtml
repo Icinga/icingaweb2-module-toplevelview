@@ -1,11 +1,15 @@
 <?php
+use Icinga\Module\Toplevelview\Util\Str;
+
 /** @var \Icinga\Web\View $this */
 /** @var \Icinga\Module\Toplevelview\ViewConfig $view */
+
 $tree = $view->getTree();
 if (! $this->compact):
 ?>
-<div class="controls">
+<div class="controls separated">
     <?= $this->tabs ?>
+    <?= $this->partial('show/actions.phtml', $this) ?>
 </div>
 <?php endif ?>
 <div class="content tlv-content">
@@ -17,8 +21,7 @@ if (! $this->compact):
     <?php endif; ?>
     <div class="tlv-header">
         <?= $this->badges($tree->getStatus(), false, true) ?>
-        <h1><?= $view->getMeta('name') ?></h1>
-        <?= $this->partial('show/actions.phtml', $this) ?>
+        <h1><?= Str::limit($view->getMeta('name'), 40) ?></h1>
         <div class="last-refresh"><?= $this->timeAgo($tree->getFetchTime()) ?></div>
     </div>
     <div class="tlv-view-tiles">

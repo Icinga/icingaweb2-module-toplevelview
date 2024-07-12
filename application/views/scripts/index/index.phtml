@@ -1,13 +1,11 @@
 <?php
+use Icinga\Module\Toplevelview\Util\Str;
+
 /** @var array $views */
 
 if (! $this->compact): ?>
-    <div class="controls">
+    <div class="controls separated">
         <?= $this->tabs ?>
-    </div>
-<?php endif ?>
-<div class="content">
-    <div class="tlv-overview-tiles">
         <div class="action-links">
             <?= $this->qlink(
                 $this->translate('Add'),
@@ -19,14 +17,17 @@ if (! $this->compact): ?>
                 )
             ) ?>
         </div>
-
+    </div>
+<?php endif ?>
+<div class="content separated">
+    <div class="tlv-overview-tiles">
         <?php
         foreach ($views as $name => $view):
             /** @var \Icinga\Module\Toplevelview\ViewConfig $view */
             $url = $this->url('toplevelview/show', array('name' => $name));
             ?>
             <div class="tlv-overview-tile">
-                <div class="tlv-title"><?= $this->qlink($view->getMeta('name'), $url) ?></div>
+                <div class="tlv-title"><?= $this->qlink(Str::limit($view->getMeta('name')), $url) ?></div>
                 <div class="tlv-name"><?= $name ?></div>
                 <?php if ($view->hasBeenLoadedFromSession()): ?>
                     <div class="unsaved"><?= $this->translate('Unsaved changes!') ?></div>

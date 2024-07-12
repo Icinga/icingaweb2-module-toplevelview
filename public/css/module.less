@@ -2,19 +2,13 @@
 
 .tlv-overview-tiles .tlv-overview-tile {
   display: block;
-
   float: left;
-
   padding: 1em;
   margin: 1em;
-
   position: relative;
-
   width: 20em;
   height: 10em;
-
   border: 1px solid @gray;
-
   text-decoration: none;
 
   .tlv-title {
@@ -35,16 +29,13 @@
   .unsaved {
     display: inline-block;
     padding: 0.2em;
-
     font-weight: bold;
-
     background: @tlv-color-warning-bg;
     color: @tlv-color-warning-fg;
   }
 }
 
 // see Icinga Web 2: public/css/icinga/base.less
-//@import '../../vendor/icingaweb2/public/css/icinga/base.less';
 @tlv-color-critical-bg: @color-critical;
 @tlv-color-critical-fg: white;
 @tlv-color-critical-handled-bg: #FFCCBC; // Material Design Deep Orange 100
@@ -69,6 +60,13 @@
 @tlv-color-missing-fg: #333;
 
 .tlv-status-tile {
+  .badges {
+    .badge {
+      border: 0.1em solid @white;
+      margin-left: 0.2em;
+    }
+  }
+
   &.critical, &.down {
     background-color: @tlv-color-critical-bg;
     color: @tlv-color-critical-fg;
@@ -153,7 +151,6 @@
   position: relative;
   width: 100%;
   height: 100%;
-
   padding-right: 0 !important;
   padding-left: 0 !important;
 
@@ -163,9 +160,9 @@
   }
 }
 
+/** BEGIN of header **/
 .tlv-header {
   position: relative;
-
   line-height: 2em;
   height: 2em;
 
@@ -190,7 +187,6 @@
     display: inline-block;
     position: absolute;
     right: 0;
-
     font-size: 1.2em;
 
     .badge {
@@ -198,17 +194,16 @@
     }
   }
 }
+/** END of header **/
 
+/** BEGIN of tiles **/
 .tlv-view-tiles {
   position: relative;
-
   clear: both;
   display: flex;
   flex-wrap: wrap;
   align-content: stretch;
-
   height: 100%;
-
   margin-top: -2em;
   padding-top: 2em;
 
@@ -217,10 +212,8 @@
     flex-wrap: wrap;
     align-content: stretch;
     flex-grow: 1;
-
     width: 100%;
     height: 100%;
-
     margin-top: -2.3em; // - padding title - margin tile
     padding-top: 2.3em; // + padding title + margin tile
   }
@@ -228,19 +221,16 @@
   .tlv-tile {
     margin: 0.1em;
     flex-grow: 1;
-
     overflow: hidden;
 
     .badges {
       display: inline-block;
-
       font-weight: normal;
       margin-left: 0.2em;
 
       .badge {
         font-size: 0.7em;
-
-        border: 0.1em solid white;
+        border: 0.1em solid @white;
         margin-left: 0.2em;
       }
     }
@@ -250,16 +240,13 @@
     display: inline-block;
     height: 1.8em;
     width: 100%;
-
     padding: 0.1em;
   }
 
   > .tlv-tile { // first level
     min-width: 40%;
-
     border-style: solid;
     border-width: 1px 1px 1px 4px;
-
     padding: 0.1em;
     margin: 0.3em 0.5em;
 
@@ -292,6 +279,7 @@
     }
   }
 }
+/** END of tiles **/
 
 #layout.wide-layout .tlv-view-tiles .tlv-tile-title {
   font-size: 1.3em;
@@ -301,12 +289,12 @@
   font-size: 1.1em;
 }
 
+/** BEGIN of tree **/
 .tlv-view-tree {
   .tlv-tree-node {
     display: flex;
     flex-wrap: wrap;
     flex-grow: 1;
-
     width: 100%;
 
     &.tlv-collapsed {
@@ -315,9 +303,7 @@
 
     background: none;
     border-style: solid;
-
     border-width: 2px 0 0 5px;
-
     padding: 0.2em 0 0 1em;
 
     &.tlv-collapsed {
@@ -330,8 +316,8 @@
       display: inline-block;
       font-size: 0.9em;
 
-      .badge {
-        border: 0.1em solid white;
+     .badge {
+        border: 0.1em solid @white;
         margin-left: 0.2em;
       }
     }
@@ -359,16 +345,14 @@
 
   .tlv-node-icinga {
     flex-grow: 1;
-
     margin: 0.2em;
     padding: 0.2em 1em;
     white-space: nowrap;
-
     border-radius: 0.5em;
-
     font-size: 0.9em;
   }
 }
+/** END of tree **/
 
 .tlv-collapsible {
   .icon.tlv-collapse-handle::before {
@@ -389,7 +373,7 @@
   list-style: none;
   overflow: hidden;
   padding: 0;
-
+  // breadcrumb badges
   .badges {
     display: inline-block;
     padding: 0 0 0 0.5em;

@@ -11,7 +11,7 @@ For details on the format see [yaml.org](http://yaml.org/).
 
 The configuration is structured in a hierarchical object structure like:
 
-    root object -> children (array) -> objects -> more children 
+    root object -> children (array) -> objects -> more children
 
 Every node is unique in the tree, but names can be repeated. An Icinga objects can be inserted multiple times.
 
@@ -95,24 +95,19 @@ Attributes:
 
 ## Options
 
-Additional options are available to control status behavior of
-the respective view.
-
-* `host_never_unhandled` (boolean) Controls the host not being displayed as an unhandled problem. See [behavior](02-Behavior.md#host-always-handled) (Default: false)
-* `notification_periods` (boolean) Controls checking notification_period to be in_period. See [behavior](02-Behavior.md#enabling-notification-period) (Default: false)
-
+Additional options are available to control status behavior of the respective view.
 These options are just set on the root node:
 
 ```yaml
 name: Test Config with Options
-host_never_unhandled: true
+override_host_problem_to_handled: true
 children:
 - name: Section 1
 ```
 
 ## Examples
 
-Here is a longer example from a testing configuration
+Here is a longer example from a testing configuration:
 
 ```yaml
 name: Test

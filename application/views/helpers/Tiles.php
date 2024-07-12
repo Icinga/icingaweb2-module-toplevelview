@@ -8,6 +8,9 @@ class Zend_View_Helper_Tiles extends Zend_View_Helper_Abstract
     /** @var \Icinga\Web\View */
     public $view;
 
+    /**
+     * tiles renders a TLVTreeNode into a HTML TLV tile
+     */
     public function tiles(TLVTreeNode $node, $levels = 2, $classes = array())
     {
         $htm = '';

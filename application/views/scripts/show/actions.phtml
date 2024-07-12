@@ -4,6 +4,32 @@
 <div class="action-links">
     <?php
     if (! $this->compact) {
+        echo $this->qlink(
+            $this->translate('Source'),
+            'toplevelview/show/source',
+            array('name' => $view->getName()),
+            array(
+                'class'            => 'action-link',
+                'icon'             => 'doc-text',
+                'data-base-target' => '_next'
+            )
+        );
+
+        echo $this->qlink(
+            $this->translate('Fullscreen'),
+            'toplevelview/show',
+            array(
+                'name' => $view->getName(),
+                'view' => 'compact',
+                'showFullscreen' => true
+            ),
+            array(
+                'class'            => 'action-link',
+                'icon'             => 'resize-full',
+                'target' => '_blank'
+            )
+        );
+
         if ($this->hasPermission('toplevelview/edit')) {
             echo $this->qlink(
                 $this->translate('Edit'),
@@ -24,12 +50,6 @@
                     'icon'             => 'rewind',
                     'data-base-target' => '_next'
                 )
-            );
-        } else {
-            echo $this->qlink(
-                $this->translate('Source'),
-                'toplevelview/show/source',
-                array('name' => $view->getName())
             );
         }
     }

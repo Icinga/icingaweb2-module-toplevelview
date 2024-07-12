@@ -17,7 +17,7 @@ please see the documentation on details.
 ## Requirements
 
 * Icinga Web 2 >= 2.5.0
-  * and its monitoring module
+* Icinga DB Web >= 1.0.0
 * php-yaml
 
 Also see [Introduction in docs](doc/01-Introduction.md).
@@ -25,21 +25,6 @@ Also see [Introduction in docs](doc/01-Introduction.md).
 ## Documentation
 
 All documentation can be found inside the [doc](doc/) directory.
-
-Also available inside Icinga Web 2 with the doc module.
-
-## Development Environment
-
-    ./test/setup_vendor.sh
-
-    cp docker-compose.dev.yml docker-compose.yml
-    # adjust to your needs
-
-    docker-compose up -d
-
-Then access [http://localhost:8080](http://localhost:8080).
-
-Default admin user is `icingaadmin` with password `icinga`.
 
 ## License
 
