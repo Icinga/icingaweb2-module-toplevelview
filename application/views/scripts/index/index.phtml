@@ -1,4 +1,6 @@
 <?php
+use Icinga\Module\Toplevelview\Util\Str;
+
 /** @var array $views */
 
 if (! $this->compact): ?>
@@ -25,7 +27,7 @@ if (! $this->compact): ?>
             $url = $this->url('toplevelview/show', array('name' => $name));
             ?>
             <div class="tlv-overview-tile">
-                <div class="tlv-title"><?= $this->qlink($view->getMeta('name'), $url) ?></div>
+                <div class="tlv-title"><?= $this->qlink(Str::limit($view->getMeta('name')), $url) ?></div>
                 <div class="tlv-name"><?= $name ?></div>
                 <?php if ($view->hasBeenLoadedFromSession()): ?>
                     <div class="unsaved"><?= $this->translate('Unsaved changes!') ?></div>

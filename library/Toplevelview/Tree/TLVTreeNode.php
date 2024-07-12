@@ -3,6 +3,8 @@
 
 namespace Icinga\Module\Toplevelview\Tree;
 
+use Icinga\Module\Toplevelview\Util\Str;
+
 use Icinga\Application\Benchmark;
 use Icinga\Data\Tree\TreeNode;
 use Icinga\Exception\ConfigurationError;
@@ -233,7 +235,7 @@ class TLVTreeNode extends TreeNode
     public function getTitle()
     {
         if (array_key_exists(static::$titleKey, $this->properties)) {
-            return $this->properties[static::$titleKey];
+            return Str::limit($this->properties[static::$titleKey], 45);
         } else {
             return null;
         }

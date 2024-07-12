@@ -1,4 +1,6 @@
 <?php
+use Icinga\Module\Toplevelview\Util\Str;
+
 /** @var \Icinga\Module\Toplevelview\ViewConfig $view */
 /** @var \Icinga\Module\Toplevelview\Tree\TLVTreeNode $node */
 
@@ -14,7 +16,7 @@ if (! $this->compact):
 <div class="content tlv-view-tree">
     <div class="tlv-header">
         <?= $this->badges($tree->getStatus(), false, true) ?>
-        <h1><?= $view->getMeta('name') ?></h1>
+        <h1><?= Str::limit($view->getMeta('name'), 40) ?></h1>
         <div class="last-refresh"><?= $this->timeAgo($tree->getFetchTime()) ?></div>
     </div>
     <?= $this->breadcrumb($node->getBreadCrumb(), $view->getName()) ?>
