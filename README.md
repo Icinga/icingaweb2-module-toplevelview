@@ -26,21 +26,6 @@ Also see [Introduction in docs](doc/01-Introduction.md).
 
 All documentation can be found inside the [doc](doc/) directory.
 
-Also available inside Icinga Web 2 with the doc module.
-
-## Development Environment
-
-    ./test/setup_vendor.sh
-
-    cp docker-compose.dev.yml docker-compose.yml
-    # adjust to your needs
-
-    docker-compose up -d
-
-Then access [http://localhost:8080](http://localhost:8080).
-
-Default admin user is `icingaadmin` with password `icinga`.
-
 ## License
 
 Icinga Web TopLevelView is licensed under the terms of the [GNU General Public License Version 2](COPYING).

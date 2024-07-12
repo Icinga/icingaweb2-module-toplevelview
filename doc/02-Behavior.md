@@ -30,7 +30,7 @@ Similar to Icinga Web 2 you can easily see unhandled problems by the strength of
 ![Unhandled problems](screenshots/colors-unhandled.png)
 ![Handled problems](screenshots/colors-handled.png)
 
-## SOFT and HARD states
+## Only HARD states
 
 While the normal monitoring views will always show you all current states,
 the **Top Level Views will only show hard states**.
@@ -48,9 +48,9 @@ By default handled would be true if:
 
 In Top Level View, a few things are different:
 
+* Flapping means the state is handled
 * Downtimes are handled special (see next topic)
 * Notification settings can influence a status (see next topic)
-* Flapping means the state is handled
 
 ## Downtime and Notifications
 

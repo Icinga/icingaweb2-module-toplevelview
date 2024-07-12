@@ -9,8 +9,7 @@ This view presents you an overview of the overall status of the sub-hierarchies.
 With a caching layer, this view can aggregate thousands of status objects and make
 them easily available for overview and drill down.
 
-This view extends the status logic and behavior of Icinga Web 2 a bit,
-please see later chapters on details.
+**Hint:** Top Level View uses additional status logic for its views, see later chapters on details.
 
 ## Installation
 
