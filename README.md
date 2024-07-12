@@ -17,7 +17,7 @@ please see the documentation on details.
 ## Requirements
 
 * Icinga Web 2 >= 2.5.0
-* Icinga DB Web >=1.0.0
+* Icinga DB Web >= 1.0.0
 * php-yaml
 
 Also see [Introduction in docs](doc/01-Introduction.md).
