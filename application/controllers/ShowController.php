@@ -34,6 +34,7 @@ class ShowController extends Controller
         }
 
         $action = $this->getRequest()->getActionName();
+
         if ($tab = $tabs->get($action)) {
             $tab->setActive();
         }
@@ -56,7 +57,9 @@ class ShowController extends Controller
     {
         $this->view->name = $name = $this->params->getRequired('name');
         $this->view->view = $view = ViewConfig::loadByName($name);
+
         $tree = $view->getTree();
+
         $this->view->node = $tree->getById($this->params->getRequired('id'));
 
         if (($lifetime = $this->getParam('cache')) !== null) {
