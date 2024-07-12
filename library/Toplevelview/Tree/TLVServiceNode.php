@@ -20,11 +20,16 @@ class TLVServiceNode extends TLVIcingaNode
 
     public function getTitle()
     {
-        return sprintf(
-            '%s: %s',
-            $this->get('host'),
-            $this->get('service')
-        );
+        $key = $this->getKey();
+        $obj = $this->root->getFetched($this->type, $key);
+
+        $n = $this->get($this->type);
+
+        if (isset($obj->display_name)) {
+            $n = $obj->display_name;
+        }
+
+        return sprintf('%s: %s', $this->get('host'), $n);
     }
 
     public function register()
@@ -69,14 +74,15 @@ class TLVServiceNode extends TLVIcingaNode
             // Maybe there's a better way? iterator_to_array does not work.
             $s = new stdClass;
             $s->state = new stdClass;
-            $s->notifications_enabled = $service->notifications_enabled;
+            $s->name = $service->name;
             $s->display_name = $service->display_name;
+            $s->notifications_enabled = $service->notifications_enabled;
             $s->state->hard_state = $service->state->hard_state;
             $s->state->is_flapping = $service->state->is_flapping;
             $s->state->is_handled = $service->state->is_handled;
             $s->state->in_downtime = $service->state->in_downtime;
 
-            $key = sprintf('%s!%s', $service->host->name, $service->display_name);
+            $key = sprintf('%s!%s', $service->host->name, $service->name);
             if (array_key_exists($key, $root->registeredObjects['service'])) {
                 $root->registeredObjects['service'][$key] = $s;
             }
