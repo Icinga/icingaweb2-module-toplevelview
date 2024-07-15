@@ -20,6 +20,20 @@ class TLVHostNode extends TLVIcingaNode
 
     protected static $titleKey = 'host';
 
+    public function getTitle()
+    {
+        $key = $this->getKey();
+        $obj = $this->root->getFetched($this->type, $key);
+
+        $n = $this->get($this->key);
+
+        if (isset($obj->display_name)) {
+            $n = $obj->display_name;
+        }
+
+        return sprintf('%s', $n);
+    }
+
     public static function fetch(TLVTree $root)
     {
         Benchmark::measure('Begin fetching hosts');
@@ -45,6 +59,7 @@ class TLVHostNode extends TLVIcingaNode
             // Maybe there's a better way? iterator_to_array does not work.
             $h = new stdClass;
             $h->state = new stdClass;
+            $h->display_name = $host->display_name;
             $h->notifications_enabled = $host->notifications_enabled;
             $h->state->hard_state = $host->state->hard_state;
             $h->state->is_flapping = $host->state->is_flapping;

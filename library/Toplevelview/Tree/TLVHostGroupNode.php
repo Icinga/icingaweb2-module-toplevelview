@@ -20,6 +20,20 @@ class TLVHostGroupNode extends TLVIcingaNode
 
     protected static $titleKey = 'hostgroup';
 
+    public function getTitle()
+    {
+        $key = $this->getKey();
+        $obj = $this->root->getFetched($this->type, $key);
+
+        $n = $this->get($this->key);
+
+        if (isset($obj->display_name)) {
+            $n = $obj->display_name;
+        }
+
+        return sprintf('%s', $n);
+    }
+
     public static function fetch(TLVTree $root)
     {
         Benchmark::measure('Begin fetching hostgroups');
@@ -42,6 +56,7 @@ class TLVHostGroupNode extends TLVIcingaNode
             // Thus I'm converting things to objects that can be stored
             // Maybe there's a better way? iterator_to_array does not work.
             $hg = new stdClass;
+            $hg->display_name = $hostgroup->display_name;
             $hg->hosts_total = $hostgroup->hosts_total;
             $hg->hosts_up = $hostgroup->hosts_up;
             $hg->hosts_total = $hostgroup->hosts_total;
