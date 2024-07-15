@@ -20,9 +20,9 @@ if (! $this->compact):
         </div>
     <?php endif; ?>
     <div class="tlv-header">
-        <?= $this->badges($tree->getStatus(), false, true) ?>
         <h1><?= Str::limit($view->getMeta('name'), 40) ?></h1>
         <div class="last-refresh"><?= $this->timeAgo($tree->getFetchTime()) ?></div>
+        <?= $this->badges($tree->getStatus(), false, true) ?>
     </div>
     <div class="tlv-view-tiles">
         <?php foreach ($tree->getChildren() as $topTile): ?>
