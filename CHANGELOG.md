@@ -1,5 +1,29 @@
 # Changelog
 
+## [v0.4.0](https://github.com/Icinga/icingaweb2-module-toplevelview/tree/v0.4.0) (2024-07-16)
+
+**Breaking changes:**
+
+- Remove support for the Icinga Web monitoring module
+
+Future versions will only use IcingaDB Web.
+
+- Remove `notification_periods` and `ignored_notification_periods` options
+
+These options changed the state behavior of the module significantly (when compared to Icinga Web)
+and thus caused some confusion/limitations.
+
+- Rename `host_never_unhandled` to `override_host_problem_to_handled`
+
+Tried to make this options clearer to understand.
+
+**Implemented enhancements:**
+
+- Add support for Icinga DB
+- Views use the display names for object if configured
+- Improve the View's headers styling
+- Improve handling of long View names (uses ellipsis now)
+
 ## [v0.3.4](https://github.com/Icinga/icingaweb2-module-toplevelview/tree/v0.3.4) (2024-06-12)
 
 This will be the final version with support for
