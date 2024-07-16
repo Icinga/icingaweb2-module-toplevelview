@@ -21,7 +21,7 @@ Tried to make this options clearer to understand.
 
 - Add support for Icinga DB
 - Views use the display names for object if configured
-- Improve the Views headers styling
+- Improve the View's headers styling
 - Improve handling of long View names (uses ellipsis now)
 
 ## [v0.3.4](https://github.com/Icinga/icingaweb2-module-toplevelview/tree/v0.3.4) (2024-06-12)
