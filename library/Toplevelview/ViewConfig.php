@@ -3,189 +3,138 @@
 
 namespace Icinga\Module\Toplevelview;
 
-use Icinga\Application\Benchmark;
+use Icinga\Module\Toplevelview\Model\View;
+
 use Icinga\Application\Icinga;
-use Icinga\Exception\InvalidPropertyException;
-use Icinga\Exception\NotImplementedError;
-use Icinga\Exception\NotReadableError;
 use Icinga\Exception\NotWritableError;
-use Icinga\Exception\ProgrammingError;
-use Icinga\Module\Toplevelview\Tree\TLVTree;
+use Icinga\Exception\NotReadableError;
 use Icinga\Util\DirectoryIterator;
 use Icinga\Web\Session;
 
+/**
+ * Manages the View's configurations, loads and stores Views.
+ */
 class ViewConfig
 {
     const FORMAT_YAML = 'yml';
     const SESSION_PREFIX = 'toplevelview_view_';
 
-    protected $config_dir;
-
-    protected $name;
-
-    protected $format;
-
-    protected $file_path;
-
-    protected $view;
-
-    protected $raw;
-
-    protected $tree;
-
-    protected $hasBeenLoaded = false;
-    protected $hasBeenLoadedFromSession = false;
-
     /**
-     * Content of the file
-     *
+     * The module's configuration directory
      * @var string
      */
-    protected $text;
+    protected $config_dir;
 
-    protected $textChecksum;
-
-    /**
-     * @param             $name
-     * @param string|null $config_dir
-     * @param string      $format
-     *
-     * @return static
-     */
-    public static function loadByName($name, $config_dir = null, $format = self::FORMAT_YAML)
+    public function __construct()
     {
-        $object = new static;
-        $object
-            ->setName($name)
-            ->setConfigDir($config_dir)
-            ->setFormat($format)
-            ->load();
+        // Ensure the Views configuration directory exists
+        $config_dir_module = Icinga::app()
+                           ->getModuleManager()
+                           ->getModule('toplevelview')
+                           ->getConfigDir();
 
-        return $object;
+        $config_dir = $config_dir_module . DIRECTORY_SEPARATOR . 'views';
+        $this->ensureDirExists($config_dir_module);
+        $this->ensureDirExists($config_dir);
+        // Set the configuration directory
+        $this->config_dir = $config_dir;
     }
 
     /**
-     * @param string|null $config_dir
-     * @param string      $format
+     * getConfigDir returns the configuration directory
      *
-     * @return static[]
-     */
-    public static function loadAll($config_dir = null, $format = self::FORMAT_YAML)
-    {
-        $suffix = '.' . $format;
-
-        $config_dir = static::configDir($config_dir);
-        $directory = new DirectoryIterator($config_dir, $suffix);
-
-        $views = array();
-        foreach ($directory as $name => $path) {
-            if (is_dir($path)) {
-                // no not descend and ignore directories
-                continue;
-            }
-            $name = basename($name, $suffix);
-            $views[$name] = static::loadByName($name, $config_dir, $format);
-        }
-
-        // try to load from session
-        $len = strlen(self::SESSION_PREFIX);
-        foreach (static::session()->getAll() as $k => $v) {
-            if (substr($k, 0, $len) === self::SESSION_PREFIX) {
-                $name = substr($k, $len);
-                if (! array_key_exists($name, $views)) {
-                    $views[$name] = static::loadByName($name, $config_dir, $format);
-                }
-            }
-        }
-
-        ksort($views);
-
-        return $views;
-    }
-
-    /**
      * @return string
+     * @throws ProgrammingError When dir is not yet set
      */
-    public function getFilePath()
+    public function getConfigDir(): string
     {
-        if ($this->file_path === null) {
-            if ($this->format === null) {
-                throw new ProgrammingError('format not set!');
-            }
-            $this->file_path = $this->getConfigDir() . DIRECTORY_SEPARATOR . $this->name . '.' . $this->format;
+        if ($this->config_dir === null) {
+            throw new ProgrammingError('Configuration directory does not exit');
         }
-        return $this->file_path;
+        return $this->config_dir;
     }
 
     /**
-     * @param string $file_path
+     * ensureDirExists checks if a given path exists and creates the path if it doesn't
      *
-     * @return $this
+     * @param string $path Path to create the directory at
+     * @param string $mode Mode to create the directory with
      */
-    public function setFilePath($file_path)
+    protected function ensureDirExists($path, $mode = '2770'): void
     {
-        $this->file_path = $file_path;
-        return $this;
+        if (file_exists($path)) {
+            return;
+        }
+
+        if (mkdir($path) !== true) {
+            throw new NotWritableError(
+                'Configuration directory does not exit, and it could not be created: %s',
+                $path
+            );
+        }
+
+        $octalMode = intval($mode, 8);
+        if ($mode !== null && false === @chmod($path, $octalMode)) {
+            throw new NotWritableError('Failed to set file mode "%s" on file "%s"', $mode, $path);
+        }
     }
 
     /**
-     * @return $this
+     * loadFromSession loads a View stored in the user's session
+     *
+     * @param string $name name of the View
+     * @param string $format format of the View
+     * @return ?View
      */
-    public function load()
+    protected function loadFromSession($name, $format): ?View
     {
-        if ($this->text === null) {
-            $this->loadFromSession();
+        // Try to load data from the session
+        $sessionConfig = Session::getSession()->get(self::SESSION_PREFIX . $name);
+        // If there is none, we return
+        if ($sessionConfig === null) {
+            return null;
         }
-        if ($this->text === null) {
-            $this->loadFromFile();
-        }
-        return $this;
+        // If there is data, create the View with the data
+        $view = (new View($name, $format))->setText($sessionConfig);
+        $view->hasBeenLoadedFromSession = true;
+        $view->hasBeenLoaded = true;
+
+        return $view;
     }
 
-    public function loadFromFile()
+    /**
+     * loadFromFile loads a View stored in a configuration file
+     *
+     * @param string $name name of the View
+     * @param string $format format of the View
+     * @return ?View
+     */
+    protected function loadFromFile($name, $format): ?View
     {
-        $file_path = $this->getFilePath();
-        $this->text = file_get_contents($file_path);
-        if ($this->text === false) {
+        // Try to load the data from the file
+        $file_path = $this->getConfigDir() . DIRECTORY_SEPARATOR . $name . '.' . $format;
+        $text = file_get_contents($file_path);
+        // Throw error if we cannot read it
+        if ($text === false) {
             throw new NotReadableError('Could not read file %s', $file_path);
         }
-        $this->view = null;
-        $this->hasBeenLoadedFromSession = false;
-        $this->hasBeenLoaded = true;
-        return $this;
+        // If there is data, create the View with the data
+        $view = (new View($name, $format))->setText($text);
+        $view->hasBeenLoadedFromSession = false;
+        $view->hasBeenLoaded = true;
+
+        return $view;
     }
 
     /**
-     * @return string
-     */
-    public function getText()
-    {
-        return $this->text;
-    }
-
-    public function getTextChecksum()
-    {
-        if ($this->textChecksum === null) {
-            $this->textChecksum = sha1($this->text);
-        }
-        return $this->textChecksum;
-    }
-
-    /**
-     * @param $text
+     * writeFile writes the given content to a given path.
+     * Used to store the View's YAML content.
      *
-     * @return $this
+     * @param $path Path to the file
+     * @param $content Content of the file
+     * @param $mode Mode of the new file
      */
-    public function setText($text)
-    {
-        $this->text = $text;
-        $this->textChecksum = null;
-        $this->raw = null;
-        $this->tree = null;
-        return $this;
-    }
-
-    protected function writeFile($path, $content, $mode = '0660')
+    protected function writeFile($path, $content, $mode = '0660'): void
     {
         $existing = file_exists($path);
         if (file_put_contents($path, $content) === false) {
@@ -200,288 +149,164 @@ class ViewConfig
         }
     }
 
-    protected function storeBackup($force = false)
+    /**
+     * Load a View by its name
+     *
+     * @param             $name
+     * @param string|null $config_dir
+     * @param string      $format
+     *
+     * @return ?View
+     */
+    public function loadByName($name, $format = self::FORMAT_YAML): ?View
     {
-        $backupDir = $this->getConfigBackupDir();
+        // Try to load from session
+        $view = $this->loadFromSession($name, $format);
 
-        $this->ensureConfigDir($backupDir);
+        if (isset($view)) {
+            return $view;
+        }
+
+        // Try to load the view from the file
+        $view = $this->loadFromFile($name, $format);
+
+        return $view;
+    }
+
+    /**
+     * loadAll loads and returns all available Views.
+     *
+     * @param string|null $config_dir
+     * @param string      $format
+     *
+     * @return View[]
+     */
+    public function loadAll($format = self::FORMAT_YAML): array
+    {
+        $suffix = '.' . $format;
+
+        $views = array();
+
+        // Load the YAML files for the Views from the config directory
+        $directory = new DirectoryIterator($this->config_dir, $suffix);
+
+        foreach ($directory as $name => $path) {
+            if (is_dir($path)) {
+                // Do not descend and ignore directories
+                continue;
+            }
+            $name = basename($name, $suffix);
+            $view = $this->loadByName($name, $format);
+
+            if (isset($view)) {
+                $views[$name] = $view;
+            }
+        }
+
+        // Try to load View from the session
+        $len = strlen(self::SESSION_PREFIX);
+
+        foreach (Session::getSession()->getAll() as $k => $v) {
+            if (substr($k, 0, $len) === self::SESSION_PREFIX) {
+                $name = substr($k, $len);
+                if (! array_key_exists($name, $views)) {
+                    $view = $this->loadByName($name, $format);
+
+                    if (isset($view)) {
+                        $views[$name] = $view;
+                    }
+                }
+            }
+        }
+        // Sort and return the views
+        ksort($views);
+
+        return $views;
+    }
+
+    /**
+     * storeToSession stores a View's text to the user's session
+     *
+     * @param $view
+     */
+    public function storeToSession($view): void
+    {
+        Session::getSession()->set(self::SESSION_PREFIX . $view->getName(), $view->getText());
+    }
+
+    /**
+     * clearSession removes a view from the user's session
+     *
+     * @param $view
+     */
+    public function clearSession($view): void
+    {
+        Session::getSession()->delete(self::SESSION_PREFIX . $view->getName());
+    }
+
+    /**
+     * storeToFile stores a View to its configuration file
+     *
+     * @param $view
+     */
+    public function storeToFile($view): void
+    {
+        $file_path = $this->getConfigDir() . DIRECTORY_SEPARATOR . $view->getName() . '.' . $view->getFormat();
+        // Store a backup of the existing config
+        if (file_exists($file_path)) {
+            $this->storeBackup($view);
+        }
+        // Write the content to the file and clear the session
+        $this->writeFile($file_path, $view->getText());
+        $this->clearSession($view);
+    }
+
+    /**
+     * delete removes a Views configuration file
+     *
+     * @param $view
+     */
+    public function delete($view): void
+    {
+        $file_path = $this->getConfigDir() . DIRECTORY_SEPARATOR . $view->getName() . '.' . $view->getFormat();
+
+        $this->clearSession($view);
+
+        if (file_exists($file_path)) {
+            $this->storeBackup($view, true);
+            unlink($file_path);
+        }
+    }
+
+    /**
+     * storeBackup stores a timestamped backup file of a View's file,
+     * if the content has changed
+     *
+     * @param $view
+     * @param $force Stores a backup even if the content hasn't changed
+     */
+    protected function storeBackup($view, $force = false): void
+    {
+        $backup_dir = $this->getConfigDir() . DIRECTORY_SEPARATOR . $view->getName();
+        $this->ensureDirExists($backup_dir);
 
         $ts = (string) time();
-        $backup = $backupDir . DIRECTORY_SEPARATOR . $ts . '.' . $this->format;
+        $backup = $backup_dir . DIRECTORY_SEPARATOR . $ts . '.' . $view->getFormat();
 
         if (file_exists($backup)) {
             throw new ProgrammingError('History file with timestamp already present: %s', $backup);
         }
 
-        $existingFile = $this->getFilePath();
-        $oldText = file_get_contents($existingFile);
+        $existing_file = $this->getConfigDir() . DIRECTORY_SEPARATOR . $view->getName() . '.' . $view->getFormat();
+        $oldText = file_get_contents($existing_file);
+
         if ($oldText === false) {
-            throw new NotReadableError('Could not read file %s', $existingFile);
+            throw new NotReadableError('Could not read file %s', $existing_file);
         }
 
-        // only save backup if changed or forced
-        if ($force || $oldText !== $this->text) {
+        // Only store a backup if the text changed or forced is set to true
+        if ($force || $oldText !== $view->getText()) {
             $this->writeFile($backup, $oldText);
         }
-    }
-
-    public function store()
-    {
-        $config_dir = $this->getConfigDir();
-        $file_path = $this->getFilePath();
-
-        $this->ensureConfigDir($config_dir);
-
-        // ensure to save history
-        if (file_exists($file_path)) {
-            $this->storeBackup();
-        }
-
-        $this->writeFile($file_path, $this->text);
-
-        $this->clearSession();
-        return $this;
-    }
-
-    /**
-     * @return string
-     * @throws ProgrammingError When dir is not yet set
-     */
-    public function getConfigDir()
-    {
-        if ($this->config_dir === null) {
-            throw new ProgrammingError('config_dir not yet set!');
-        }
-        return $this->config_dir;
-    }
-
-    /**
-     * @return string
-     */
-    public function getConfigBackupDir()
-    {
-        return $this->getConfigDir() . DIRECTORY_SEPARATOR . $this->name;
-    }
-
-    /**
-     * @param string $config_dir
-     *
-     * @return $this
-     * @throws NotReadableError
-     */
-    public function setConfigDir($config_dir = null)
-    {
-        $this->config_dir = static::configDir($config_dir);
-        $this->file_path = null;
-        return $this;
-    }
-
-    protected static function ensureConfigDir($path, $mode = '2770')
-    {
-        if (! file_exists($path)) {
-            if (mkdir($path) !== true) {
-                throw new NotWritableError(
-                    'Config path did not exit, and it could not be created: %s',
-                    $path
-                );
-            }
-
-            $octalMode = intval($mode, 8);
-            if ($mode !== null && false === @chmod($path, $octalMode)) {
-                throw new NotWritableError('Failed to set file mode "%s" on file "%s"', $mode, $path);
-            }
-        }
-    }
-
-    public static function configDir($config_dir = null)
-    {
-        $config_dir_module = Icinga::app()->getModuleManager()->getModule('toplevelview')->getConfigDir();
-        if ($config_dir === null) {
-            $config_dir = $config_dir_module . DIRECTORY_SEPARATOR . 'views';
-        }
-
-        static::ensureConfigDir($config_dir_module);
-        static::ensureConfigDir($config_dir);
-
-        return $config_dir;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param mixed $name
-     *
-     * @return $this
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-        $this->file_path = null;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFormat()
-    {
-        return $this->format;
-    }
-
-    /**
-     * @param string $format
-     *
-     * @return $this
-     */
-    public function setFormat($format)
-    {
-        $this->format = $format;
-        $this->file_path = null;
-        return $this;
-    }
-
-    public function getMeta($key)
-    {
-        $this->ensureParsed();
-        if ($key !== 'children' && array_key_exists($key, $this->raw)) {
-            return $this->raw[$key];
-        } else {
-            return null;
-        }
-    }
-
-    public function setMeta($key, $value)
-    {
-        if ($key === 'children') {
-            throw new ProgrammingError('You can not edit children here!');
-        }
-        $this->raw[$key] = $value;
-        return $this;
-    }
-
-    public function getMetaData()
-    {
-        $this->ensureParsed();
-        $data = array();
-        foreach ($this->raw as $key => $value) {
-            if ($key !== 'children') {
-                $data[$key] = $value;
-            }
-        }
-        return $data;
-    }
-
-    protected function ensureParsed()
-    {
-        if ($this->raw === null) {
-            Benchmark::measure('Begin parsing YAML document');
-
-            $text = $this->getText();
-            if ($text === null) {
-                // new ViewConfig
-                $this->raw = array();
-            } elseif ($this->format == self::FORMAT_YAML) {
-                // TODO: use stdClass instead of Array?
-                $this->raw = yaml_parse($text);
-                if (! is_array($this->raw)) {
-                    throw new InvalidPropertyException('Could not parse YAML config!');
-                }
-            } else {
-                throw new NotImplementedError("Unknown format '%s'", $this->format);
-            }
-
-            Benchmark::measure('Finished parsing YAML document');
-        }
-    }
-
-    /**
-     * Loads the Tree for this configuration
-     *
-     * @return TLVTree
-     */
-    public function getTree()
-    {
-        if ($this->tree === null) {
-            $this->ensureParsed();
-            $this->tree = $tree = TLVTree::fromArray($this->raw);
-            $tree->setConfig($this);
-        }
-        return $this->tree;
-    }
-
-    protected function getSessionVarName()
-    {
-        return self::SESSION_PREFIX . $this->name;
-    }
-
-    public static function session()
-    {
-        return Session::getSession();
-    }
-
-    public function loadFromSession()
-    {
-        if (($sessionConfig = $this->session()->get($this->getSessionVarName())) !== null) {
-            $this->text = $sessionConfig;
-            $this->hasBeenLoadedFromSession = true;
-            $this->hasBeenLoaded = true;
-        }
-        return $this;
-    }
-
-    public function clearSession()
-    {
-        $this->session()->delete($this->getSessionVarName());
-    }
-
-    public function storeToSession()
-    {
-        $this->session()->set($this->getSessionVarName(), $this->text);
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasBeenLoadedFromSession()
-    {
-        return $this->hasBeenLoadedFromSession;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasBeenLoaded()
-    {
-        return $this->hasBeenLoaded;
-    }
-
-    public function __clone()
-    {
-        $this->name = null;
-        $this->raw = null;
-        $this->tree = null;
-
-        $this->hasBeenLoaded = false;
-        $this->hasBeenLoadedFromSession = false;
-    }
-
-    public function delete()
-    {
-        $file_path = $this->getFilePath();
-
-        $this->clearSession();
-
-        if (file_exists($file_path)) {
-            $this->storeBackup(true);
-            unlink($file_path);
-        }
-
-        return $this;
     }
 }

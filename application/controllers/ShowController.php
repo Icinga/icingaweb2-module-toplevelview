@@ -5,6 +5,7 @@ namespace Icinga\Module\Toplevelview\Controllers;
 
 use Icinga\Module\Toplevelview\ViewConfig;
 use Icinga\Module\Toplevelview\Web\Controller;
+
 use Icinga\Web\Url;
 
 class ShowController extends Controller
@@ -43,7 +44,11 @@ class ShowController extends Controller
     public function indexAction()
     {
         $this->view->name = $name = $this->params->getRequired('name');
-        $this->view->view = $view = ViewConfig::loadByName($name);
+
+        $c = new ViewConfig();
+        $view = $c->loadByName($name);
+        $this->view->view = $view;
+
         $tree = $view->getTree();
 
         if (($lifetime = $this->getParam('cache')) !== null) {
@@ -56,7 +61,10 @@ class ShowController extends Controller
     public function treeAction()
     {
         $this->view->name = $name = $this->params->getRequired('name');
-        $this->view->view = $view = ViewConfig::loadByName($name);
+
+        $c = new ViewConfig();
+        $view = $c->loadByName($name);
+        $this->view->view = $view;
 
         $tree = $view->getTree();
 
@@ -72,7 +80,10 @@ class ShowController extends Controller
     public function sourceAction()
     {
         $this->view->name = $name = $this->params->getRequired('name');
-        $this->view->view = $view = ViewConfig::loadByName($name);
+
+        $c = new ViewConfig();
+        $view = $c->loadByName($name);
+        $this->view->view = $view;
 
         $this->view->text = $view->getText();
         $this->setViewScript('index', 'text');
