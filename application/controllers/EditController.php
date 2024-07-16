@@ -48,13 +48,23 @@ class EditController extends Controller
             $this->view->title = sprintf('%s Top Level View', $this->translate('Add'));
             $view = new View('', $c::FORMAT_YAML);
         } elseif ($action === 'clone') {
+            // Clone the view and give it to the View
             $name = $this->params->getRequired('name');
             $this->view->title = sprintf('%s Top Level View', $this->translate('Clone'));
-            // Clone the view and give it to the $config
+
+            // Check if the user has permissions/restrictions for this View
+            $restrictions = $c->getRestrictions('toplevelview/filter/edit');
+            $c->assertAccessToView($restrictions, $name);
+
             $view = clone $c->loadByName($name);
         } else {
             $this->view->name = $name = $this->params->getRequired('name');
             $this->view->title = sprintf('%s Top Level View: %s', $this->translate('Edit'), $this->params->getRequired('name'));
+
+            // Check if the user has permissions/restrictions for this View
+            $restrictions = $c->getRestrictions('toplevelview/filter/edit');
+            $c->assertAccessToView($restrictions, $name);
+
             $view = $c->loadByName($name);
         }
 

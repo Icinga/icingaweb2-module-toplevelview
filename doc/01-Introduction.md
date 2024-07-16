@@ -62,3 +62,13 @@ Or if you prefer use git.
 Enable the module in the web interface, or via CLI:
 
     icingacli module enable toplevelview
+
+## Permissions and Restrictions
+
+Top Level View offers the following permissions and restrictions:
+
+* Permission `toplevelview/edit`, allow the user to edit Top Level Views
+* Restriction `toplevelview/filter/edit`, restrict edit rights to Views that match the filter (comma-separated values)
+* Restriction `toplevelview/filter/views`, restrict access to Views that match the filter (comma-separated values)
+
+**Hint:** Commas in filenames should be avoided.

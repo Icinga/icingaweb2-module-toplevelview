@@ -8,16 +8,15 @@ use Icinga\Web\Url;
 
 $this->providePermission('toplevelview/edit', $this->translate('Allow the user to edit Top Level Views'));
 
-// TODO Implement these restrictions in the ViewConfig
-// $this->provideRestriction(
-//     'toplevelview/filter/edit',
-//     $this->translate('Restrict edit rights to Views that match the filter (comma-separated values)')
-// );
+$this->provideRestriction(
+    'toplevelview/filter/edit',
+    $this->translate('Restrict edit rights to Views that match the filter (comma-separated values)')
+);
 
-// $this->provideRestriction(
-//     'toplevelview/filter/views',
-//     $this->translate('Restrict access to Views that match the filter (comma-separated values)')
-// );
+$this->provideRestriction(
+    'toplevelview/filter/views',
+    $this->translate('Restrict access to Views that match the filter (comma-separated values)')
+);
 
 /** @var \Icinga\Web\Navigation\NavigationItem $section */
 $section = $this->menuSection('toplevelview');
@@ -26,23 +25,6 @@ $section
     ->setUrl('toplevelview')
     ->setIcon('sitemap')
     ->setPriority(50);
-
-try {
-    if (extension_loaded('yaml')) {
-        /** @var \Icinga\Application\Modules\MenuItemContainer $section */
-        $c = new ViewConfig();
-        $views = $c->loadAll();
-
-        foreach ($views as $name => $viewConfig) {
-            $section->add($name, array(
-                'label' => $viewConfig->getMeta('name'),
-                'url'   => Url::fromPath('toplevelview/show', array('name' => $name)),
-            ));
-        }
-    }
-} catch (Exception $e) {
-    // don't fail here...
-}
 
 $this->provideJsFile('vendor/codemirror/codemirror.js');
 $this->provideJsFile('vendor/codemirror/mode/yaml.js');

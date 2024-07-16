@@ -7,6 +7,7 @@ if (! $this->compact): ?>
     <div class="controls separated">
         <?= $this->tabs ?>
         <div class="action-links">
+            <?php if ($this->hasPermission('toplevelview/edit')): ?>
             <?= $this->qlink(
                 $this->translate('Add'),
                 'toplevelview/edit/add',
@@ -16,6 +17,7 @@ if (! $this->compact): ?>
                     'icon'  => 'plus',
                 )
             ) ?>
+            <?php endif; ?>
         </div>
     </div>
 <?php endif ?>
@@ -31,20 +33,6 @@ if (! $this->compact): ?>
                 <div class="tlv-name"><?= $name ?></div>
                 <?php if ($view->hasBeenLoadedFromSession()): ?>
                     <div class="unsaved"><?= $this->translate('Unsaved changes!') ?></div>
-                <?php endif; ?>
-
-                <?php if (! $this->compact && $this->hasPermission('toplevelview/edit')): ?>
-                    <div class="action-links">
-                        <?= $this->qlink(
-                            $this->translate('Edit'),
-                            'toplevelview/edit',
-                            array('name' => $view->getName()),
-                            array(
-                                'class' => 'action-link',
-                                'icon'  => 'edit',
-                            )
-                        ) ?>
-                    </div>
                 <?php endif; ?>
             </div>
         <?php endforeach; ?>
