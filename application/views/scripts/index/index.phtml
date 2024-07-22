@@ -30,7 +30,7 @@ if (! $this->compact): ?>
                 <div class="tlv-title"><?= $this->qlink($view->getMeta('name'), $url) ?></div>
                 <div class="tlv-name"><?= $name ?></div>
                 <?php if ($view->hasBeenLoadedFromSession()): ?>
-                    <div class="unsaved"><?= $this->translate('Unsaved changes!') ?></div>
+                    <p class="warning-note"><?= $this->translate('Unsaved changes!') ?></p>
                 <?php endif; ?>
 
                 <?php if (! $this->compact && $this->hasPermission('toplevelview/edit')): ?>
