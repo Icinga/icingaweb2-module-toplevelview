@@ -26,14 +26,6 @@
     right: 0;
     bottom: 1em;
   }
-
-  .unsaved {
-    display: inline-block;
-    padding: 0.2em;
-    font-weight: bold;
-    background: @tlv-color-warning-bg;
-    color: @tlv-color-warning-fg;
-  }
 }
 
 // see Icinga Web 2: public/css/icinga/base.less
@@ -469,8 +461,8 @@
 
 .warning-note {
   padding: 0.5em;
-  margin: 0.5em;
-  background: @tlv-color-warning-bg;
+  border-radius: 0.5em;
+  background: fade(@tlv-color-warning-bg, 40%);
   color: @tlv-color-warning-fg
 }
 
@@ -496,4 +488,8 @@ div[href].action:hover {
   a[href]:first-of-type {
     text-decoration: underline;
   }
+}
+
+ul.form-errors {
+  list-style: none;
 }
