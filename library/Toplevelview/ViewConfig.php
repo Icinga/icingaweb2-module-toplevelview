@@ -4,6 +4,7 @@
 namespace Icinga\Module\Toplevelview;
 
 use Icinga\Module\Toplevelview\Model\View;
+use Icinga\Module\Toplevelview\Util\Auth;
 
 use Icinga\Application\Icinga;
 use Icinga\Exception\NotWritableError;
@@ -16,6 +17,8 @@ use Icinga\Web\Session;
  */
 class ViewConfig
 {
+    use Auth;
+
     const FORMAT_YAML = 'yml';
     const SESSION_PREFIX = 'toplevelview_view_';
 
@@ -152,14 +155,21 @@ class ViewConfig
     /**
      * Load a View by its name
      *
-     * @param             $name
-     * @param string|null $config_dir
-     * @param string      $format
+     * @param string $name Name of the view to load
+     * @param string $format The format of the view
+     * @param ipl\Stdlib\Filter $restrictions Filter that represents the restriction
      *
      * @return ?View
      */
-    public function loadByName($name, $format = self::FORMAT_YAML): ?View
+    public function loadByName($name, $format = self::FORMAT_YAML, $restrictions = null): ?View
     {
+        // If restrictions are set, check if the user has access to view the View
+        if (isset($restrictions)) {
+            if (!$this->hasAccessToView($restrictions, $name)) {
+                return null;
+            }
+        }
+
         // Try to load from session
         $view = $this->loadFromSession($name, $format);
 
@@ -184,7 +194,7 @@ class ViewConfig
     public function loadAll($format = self::FORMAT_YAML): array
     {
         $suffix = '.' . $format;
-
+        $restrictions = $this->getRestrictions('toplevelview/filter/views');
         $views = array();
 
         // Load the YAML files for the Views from the config directory
@@ -196,7 +206,7 @@ class ViewConfig
                 continue;
             }
             $name = basename($name, $suffix);
-            $view = $this->loadByName($name, $format);
+            $view = $this->loadByName($name, $format, $restrictions);
 
             if (isset($view)) {
                 $views[$name] = $view;
@@ -210,7 +220,7 @@ class ViewConfig
             if (substr($k, 0, $len) === self::SESSION_PREFIX) {
                 $name = substr($k, $len);
                 if (! array_key_exists($name, $views)) {
-                    $view = $this->loadByName($name, $format);
+                    $view = $this->loadByName($name, $format, $restrictions);
 
                     if (isset($view)) {
                         $views[$name] = $view;

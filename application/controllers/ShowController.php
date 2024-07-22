@@ -13,9 +13,7 @@ class ShowController extends Controller
     public function init()
     {
         $tabs = $this->getTabs();
-
         $url = Url::fromRequest()->setParams(clone $this->params);
-
         $tiles = Url::fromPath('toplevelview/show', ['name' => $this->params->getRequired('name')]);
 
         $tabs->add('index', [
@@ -46,6 +44,11 @@ class ShowController extends Controller
         $this->view->name = $name = $this->params->getRequired('name');
 
         $c = new ViewConfig();
+
+        // Check if the user has permissions/restrictions for this View
+        $restrictions = $c->getRestrictions('toplevelview/filter/views');
+        $c->assertAccessToView($restrictions, $name);
+
         $view = $c->loadByName($name);
         $this->view->view = $view;
 
@@ -63,6 +66,11 @@ class ShowController extends Controller
         $this->view->name = $name = $this->params->getRequired('name');
 
         $c = new ViewConfig();
+
+        // Check if the user has permissions/restrictions for this View
+        $restrictions = $c->getRestrictions('toplevelview/filter/views');
+        $c->assertAccessToView($restrictions, $name);
+
         $view = $c->loadByName($name);
         $this->view->view = $view;
 
@@ -82,6 +90,11 @@ class ShowController extends Controller
         $this->view->name = $name = $this->params->getRequired('name');
 
         $c = new ViewConfig();
+
+        // Check if the user has permissions/restrictions for this View
+        $restrictions = $c->getRestrictions('toplevelview/filter/views');
+        $c->assertAccessToView($restrictions, $name);
+
         $view = $c->loadByName($name);
         $this->view->view = $view;
 
