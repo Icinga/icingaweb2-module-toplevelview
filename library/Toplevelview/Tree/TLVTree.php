@@ -3,13 +3,14 @@
 
 namespace Icinga\Module\Toplevelview\Tree;
 
+use Icinga\Module\Toplevelview\Util\Json;
+use Icinga\Module\Toplevelview\Model\View;
+
 use Icinga\Application\Logger;
 use Icinga\Exception\IcingaException;
 use Icinga\Exception\NotFoundError;
 use Icinga\Exception\ProgrammingError;
 use Icinga\Module\Icingadb\Common\Database;
-use Icinga\Module\Toplevelview\Util\Json;
-use Icinga\Module\Toplevelview\ViewConfig;
 use Icinga\Web\FileCache;
 use stdClass;
 
@@ -38,9 +39,9 @@ class TLVTree extends TLVTreeNode
     protected $cacheLifetime = 60;
 
     /**
-     * @var ViewConfig
+     * @var View
      */
-    protected $config;
+    protected $view;
 
     public function getById($id)
     {
@@ -65,21 +66,21 @@ class TLVTree extends TLVTreeNode
     }
 
     /**
-     * @return ViewConfig
+     * @return View
      */
-    public function getConfig()
+    public function getView()
     {
-        return $this->config;
+        return $this->view;
     }
 
     /**
-     * @param ViewConfig $config
+     * @param View $view
      *
      * @return $this
      */
-    public function setConfig(ViewConfig $config)
+    public function setView(View $view)
     {
-        $this->config = $config;
+        $this->view = $view;
         return $this;
     }
 
@@ -100,11 +101,11 @@ class TLVTree extends TLVTreeNode
 
     protected function getCacheName()
     {
-        $config = $this->getConfig();
+        $view = $this->getView();
         return sprintf(
             '%s-%s.json',
-            $config->getName(),
-            $config->getTextChecksum()
+            $view->getName(),
+            $view->getTextChecksum()
         );
     }
 

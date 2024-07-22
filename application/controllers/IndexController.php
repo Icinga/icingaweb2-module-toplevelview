@@ -19,7 +19,10 @@ class IndexController extends Controller
         ])->activate('index');
 
         // Load add views from the existing YAML files
-        $this->view->views = ViewConfig::loadAll();
+        $c = new ViewConfig();
+        $views = $c->loadAll();
+
+        $this->view->views = $views;
 
         $this->setAutorefreshInterval(30);
     }

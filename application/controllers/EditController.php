@@ -3,9 +3,11 @@
 
 namespace Icinga\Module\Toplevelview\Controllers;
 
+use Icinga\Module\Toplevelview\Model\View;
 use Icinga\Module\Toplevelview\Forms\EditForm;
 use Icinga\Module\Toplevelview\ViewConfig;
 use Icinga\Module\Toplevelview\Web\Controller;
+
 use Icinga\Web\Url;
 
 class EditController extends Controller
@@ -39,26 +41,30 @@ class EditController extends Controller
     {
         $action = $this->getRequest()->getActionName();
 
+        $c = new ViewConfig();
+        $view = null;
+
         if ($action === 'add') {
             $this->view->title = sprintf('%s Top Level View', $this->translate('Add'));
-            $view = new ViewConfig();
-            $view->setConfigDir();
+            $view = new View('', $c::FORMAT_YAML);
         } elseif ($action === 'clone') {
             $name = $this->params->getRequired('name');
             $this->view->title = sprintf('%s Top Level View', $this->translate('Clone'));
-            $view = clone ViewConfig::loadByName($name);
+            // Clone the view and give it to the $config
+            $view = clone $c->loadByName($name);
         } else {
             $this->view->name = $name = $this->params->getRequired('name');
             $this->view->title = sprintf('%s Top Level View: %s', $this->translate('Edit'), $this->params->getRequired('name'));
-            $view = ViewConfig::loadByName($name);
+            $view = $c->loadByName($name);
         }
 
+        $view->setFormat($c::FORMAT_YAML);
+
         $this->view->form = $form = new EditForm();
+        $form->setViewConfig($c);
+        $form->setViews($view);
 
-        $view->setFormat(ViewConfig::FORMAT_YAML);
-        $form->setViewConfig($view);
         $form->handleRequest();
-
         $this->setViewScript('edit/index');
     }
 

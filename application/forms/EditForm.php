@@ -3,8 +3,10 @@
 
 namespace Icinga\Module\Toplevelview\Forms;
 
-use Exception;
 use Icinga\Module\Toplevelview\ViewConfig;
+use Icinga\Module\Toplevelview\Model\View;
+
+use Exception;
 use Icinga\Web\Form;
 use Icinga\Web\Notification;
 use Icinga\Web\Url;
@@ -14,7 +16,12 @@ class EditForm extends Form
     /**
      * @var ViewConfig
      */
-    protected $viewConfig;
+    protected $viewconfig;
+
+    /**
+     * @var View
+     */
+    protected $view;
 
     /**
      * {@inheritdoc}
@@ -24,9 +31,15 @@ class EditForm extends Form
         $this->setName('form_toplevelview_edit');
     }
 
-    public function setViewConfig(ViewConfig $viewConfig)
+    public function setViews(View $view)
     {
-        $this->viewConfig = $viewConfig;
+        $this->view = $view;
+        return $this;
+    }
+
+    public function setViewConfig(ViewConfig $config)
+    {
+        $this->viewconfig = $config;
         return $this;
     }
 
@@ -36,26 +49,27 @@ class EditForm extends Form
     public function onSuccess()
     {
         try {
-            $this->viewConfig->setName($this->getValue('name'));
-            $this->viewConfig->setText($this->getValue('config'));
+            $this->view->setName($this->getValue('name'));
+            $this->view->setText($this->getValue('config'));
 
             // ensure config can be parsed...
-            $this->viewConfig->getMetaData();
-            $this->viewConfig->getTree();
+            $this->view->getMetaData();
+            $this->view->getTree();
 
-            $this->viewConfig->storeToSession();
+            // Store the view to the session
+            $this->viewconfig->storeToSession($this->view);
 
             $cancel = $this->getElement('btn_submit_cancel');
             $delete = $this->getElement('btn_submit_delete');
 
             if ($this->getElement('btn_submit_save_file')->getValue() !== null) {
-                $this->viewConfig->store();
+                $this->viewconfig->storeToFile($this->view);
                 Notification::success($this->translate('Top Level View successfully saved'));
             } elseif ($cancel !== null && $cancel->getValue() !== null) {
-                $this->viewConfig->clearSession();
+                $this->viewconfig->clearSession($this->view);
                 Notification::success($this->translate('Top Level View restored from disk'));
             } elseif ($delete != null && $delete->getValue() !== null) {
-                $this->viewConfig->delete();
+                $this->viewconfig->delete($this->view);
                 $this->setRedirectUrl('toplevelview');
                 Notification::success($this->translate('Top Level View successfully deleted'));
             } else {
@@ -70,8 +84,8 @@ class EditForm extends Form
 
     public function getRedirectUrl()
     {
-        if ($this->redirectUrl === null && ($name = $this->viewConfig->getName()) !== null) {
-            $this->redirectUrl = Url::fromPath('toplevelview/show', array('name' => $name));
+        if ($this->redirectUrl === null && ($name = $this->view->getName()) !== null) {
+            $this->redirectUrl = Url::fromPath('toplevelview/show', ['name' => $name]);
         }
         return parent::getRedirectUrl();
     }
@@ -84,8 +98,8 @@ class EditForm extends Form
     public function onRequest()
     {
         $values = array();
-        $values['name'] = $this->viewConfig->getName();
-        $values['config'] = $this->viewConfig->getText();
+        $values['name'] = $this->view->getName();
+        $values['config'] = $this->view->getText();
 
         $this->populate($values);
     }
@@ -95,7 +109,7 @@ class EditForm extends Form
      */
     public function createElements(array $formData)
     {
-        if ($this->viewConfig->hasBeenLoadedFromSession()) {
+        if ($this->view->hasBeenLoadedFromSession()) {
             $this->warning(
                 $this->translate(
                     'This config is only stored in your session!'
@@ -117,7 +131,6 @@ class EditForm extends Form
             'textarea',
             'config',
             array(
-                //'required'             => true,
                 'label'                => $this->translate('YAML Config'),
                 'class'                => 'code-editor codemirror',
                 'decorators'           => array(
@@ -149,7 +162,7 @@ class EditForm extends Form
             )
         );
 
-        if ($this->viewConfig->hasBeenLoadedFromSession()) {
+        if ($this->view->hasBeenLoadedFromSession()) {
             $this->addElement(
                 'submit',
                 'btn_submit_cancel',
@@ -162,7 +175,7 @@ class EditForm extends Form
             );
         }
 
-        if ($this->viewConfig->hasBeenLoaded()) {
+        if ($this->view->hasBeenLoaded()) {
             $this->addElement(
                 'submit',
                 'btn_submit_delete',
