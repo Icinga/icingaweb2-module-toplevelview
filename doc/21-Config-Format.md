@@ -82,12 +82,12 @@ Brings in the service state of an individual Icinga service.
 
 Attributes:
 * `host: localhost` hostname in Icinga
-* `service: servicename` servicename in Icinga
+* `service: servicename` service name in Icinga
 * `type: service` (optional - detected by key attribute)
 
-### Icinga Hostgroup
+### Icinga Host group
 
-Brings in the hostgroup summary state.
+Brings in the host group summary state.
 
 Attributes:
 * `hostgroup: linux-servers` hostname in Icinga

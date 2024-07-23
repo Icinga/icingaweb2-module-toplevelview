@@ -3,7 +3,7 @@ Introduction
 
 Top Level View is a hierarchy based status view for Icinga Web 2.
 
-You can define a hierarchical structure containing hosts, services and hostgroups.
+You can define a hierarchical structure containing hosts, services and host groups.
 This view presents you an overview of the overall status of the sub-hierarchies.
 
 Example:
@@ -62,6 +62,8 @@ Or if you prefer use git.
 Enable the module in the web interface, or via CLI:
 
     icingacli module enable toplevelview
+
+**Hint:** This module is capable of strict Content Security Policy (CSP).
 
 ## Permissions and Restrictions
 

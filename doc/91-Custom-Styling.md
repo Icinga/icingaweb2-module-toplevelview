@@ -23,9 +23,9 @@ So that unhandled problems are more visible.
 }
 ```
 
-## Dark fullscreen
+## Dark full screen
 
-When you open the TLV in fullscreen mode, background will be dark.
+When you open the TLV in full screen mode, background will be dark.
 
 ```less
 .fullscreen-layout {

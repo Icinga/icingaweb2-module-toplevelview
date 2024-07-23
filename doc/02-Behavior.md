@@ -22,7 +22,7 @@ Worst status is defined in the following order:
 * downtime_handled
 * missing
 
-In addition counter badges will present you indepth details over the
+In addition counter badges will present you in-depth details over the
 status below a tile or tree element.
 
 Similar to Icinga Web 2 you can easily see unhandled problems by the strength of color.

@@ -32,7 +32,7 @@ on the title area.
 Deeper branches can be opened in a new view by clicking on the title text, but
 this is only needed to filter the shown data.
 
-Every Icinga status object, a host, service or hostgroup is a single tile
+Every Icinga status object, a host, service or host group is a single tile
 here.
 
 Counters are meant to give you an indication about how many problems, or
@@ -49,8 +49,8 @@ service detail view, same goes for hosts.
 
 ![](screenshots/tree-service.png)
 
-The hostgroup ![tile](screenshots/tile-hostgroup.png) gives 2 options,
-default will take you to a service overview for that hostgroup, sorted by problems.
+The host group ![tile](screenshots/tile-hostgroup.png) gives 2 options,
+default will take you to a service overview for that host group, sorted by problems.
 
 While clicking on the `X hosts` link in the tile brings you an overview
 over hosts in that group.
