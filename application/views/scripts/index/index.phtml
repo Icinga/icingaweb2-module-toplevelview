@@ -1,8 +1,4 @@
 <?php
-use Icinga\Module\Toplevelview\Util\Str;
-
-/** @var array $views */
-
 if (! $this->compact): ?>
     <div class="controls separated">
         <?= $this->tabs ?>
@@ -25,16 +21,15 @@ if (! $this->compact): ?>
     <div class="tlv-overview-tiles">
         <?php
         foreach ($views as $name => $view):
-            /** @var \Icinga\Module\Toplevelview\ViewConfig $view */
             $url = $this->url('toplevelview/show', array('name' => $name));
             ?>
-            <div class="tlv-overview-tile">
-                <div class="tlv-title"><?= $this->qlink($view->getMeta('name'), $url) ?></div>
+            <a href="<?= $url ?>" class="tlv-overview-tile">
+                <div class="tlv-title"><?= $view->getMeta('name') ?></div>
                 <div class="tlv-name"><?= $name ?></div>
                 <?php if ($view->hasBeenLoadedFromSession()): ?>
                     <p class="warning-note"><?= $this->translate('Unsaved changes!') ?></p>
                 <?php endif; ?>
-            </div>
+            </a>
         <?php endforeach; ?>
     </div>
 </div>

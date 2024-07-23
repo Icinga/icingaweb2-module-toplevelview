@@ -1,56 +1,75 @@
 /* Copyright (C) 2017 Icinga Development Team <info@icinga.com> */
 
+// See Icinga Web 2: public/css/icinga/base.less
+// All handled are color black to ensure readability, expect for warning
+@tlv-color-critical-bg: @color-critical;
+@tlv-color-critical-fg: white;
+@tlv-color-critical-handled-bg: @color-critical-handled;
+@tlv-color-critical-handled-fg: black;
+
+@tlv-color-warning-bg: @color-warning;
+@tlv-color-warning-fg: black;
+@tlv-color-warning-handled-bg: @color-warning-handled;
+@tlv-color-warning-handled-fg: black;
+
+@tlv-color-unknown-bg: @color-unknown;
+@tlv-color-unknown-fg: white;
+@tlv-color-unknown-handled-bg: @color-unknown-handled;
+@tlv-color-unknown-handled-fg: black;
+
+@tlv-color-ok-bg: @color-ok;
+@tlv-color-ok-fg: @text-color-inverted;
+
+@tlv-color-downtime-bg: @color-ok;
+@tlv-color-downtime-fg: black;
+@tlv-color-downtime-handled-bg: @color-ok;
+@tlv-color-downtime-handled-fg: @color-warning-handled;
+
+@tlv-color-pending-bg: @color-pending;
+@tlv-color-pending-fg: white;
+
+@tlv-color-missing-bg: @gray-light;
+@tlv-color-missing-fg: @text-color;
+
+ul.form-errors {
+  list-style: none;
+  background: @color-critical;
+  li {
+    padding: 0.15em;
+    font-weight: bold;
+    color: white !important;
+    // Hack to center the text
+    text-align: center;
+    margin-left: -1.75em;
+  }
+}
+
 .tlv-overview-tiles .tlv-overview-tile {
   display: block;
   float: left;
   padding: 1em;
-  margin: 1em;
+  margin: 0.5em;
   position: relative;
   width: 20em;
   height: 10em;
-  border: 1px solid @gray;
+  border: 1px solid @gray-light;
   text-decoration: none;
+
+  &:hover {
+    background-color: @tr-hover-color;
+  }
 
   .tlv-title {
     font-weight: bold;
-    font-size: 1.3em;
+    font-size: 1.25em;
     .text-ellipsis();
   }
 
   .tlv-name {
     color: @gray;
-  }
-
-  .action-links {
-    position: absolute;
-    right: 0;
-    bottom: 1em;
+    .text-ellipsis();
   }
 }
-
-// see Icinga Web 2: public/css/icinga/base.less
-@tlv-color-critical-bg: @color-critical;
-@tlv-color-critical-fg: white;
-@tlv-color-critical-handled-bg: #FFCCBC; // Material Design Deep Orange 100
-@tlv-color-critical-handled-fg: #6d4148;
-@tlv-color-warning-bg: @color-warning;
-@tlv-color-warning-fg: #6d572b;
-@tlv-color-warning-handled-bg: #FFF9C4; // Material Design Yellow 100
-@tlv-color-warning-handled-fg: #6d572b;
-@tlv-color-unknown-bg: @color-unknown;
-@tlv-color-unknown-fg: white;
-@tlv-color-unknown-handled-bg: #E1BEE7; // Material Design Purple 100
-@tlv-color-unknown-handled-fg: #57326d;
-@tlv-color-ok-bg: @color-ok;
-@tlv-color-ok-fg: white;
-@tlv-color-downtime-bg: @color-ok;
-@tlv-color-downtime-fg: #333;
-@tlv-color-downtime-handled-bg: @color-ok;
-@tlv-color-downtime-handled-fg: #ffff00;
-@tlv-color-pending-bg: @color-pending;
-@tlv-color-pending-fg: #32486d;
-@tlv-color-missing-bg: #ccc;
-@tlv-color-missing-fg: #333;
 
 .tlv-status-tile {
   .badges {
@@ -463,7 +482,7 @@
   padding: 0.5em;
   border-radius: 0.5em;
   background: fade(@tlv-color-warning-bg, 40%);
-  color: @tlv-color-warning-fg
+  color: @text-color;
 }
 
 .CodeMirror {
@@ -488,8 +507,4 @@ div[href].action:hover {
   a[href]:first-of-type {
     text-decoration: underline;
   }
-}
-
-ul.form-errors {
-  list-style: none;
 }
