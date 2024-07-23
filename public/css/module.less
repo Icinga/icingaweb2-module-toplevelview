@@ -1,34 +1,6 @@
 /* Copyright (C) 2017 Icinga Development Team <info@icinga.com> */
 
-.tlv-overview-tiles .tlv-overview-tile {
-  display: block;
-  float: left;
-  padding: 1em;
-  margin: 1em;
-  position: relative;
-  width: 20em;
-  height: 10em;
-  border: 1px solid @gray;
-  text-decoration: none;
-
-  .tlv-title {
-    font-weight: bold;
-    font-size: 1.3em;
-    .text-ellipsis();
-  }
-
-  .tlv-name {
-    color: @gray;
-  }
-
-  .action-links {
-    position: absolute;
-    right: 0;
-    bottom: 1em;
-  }
-}
-
-// see Icinga Web 2: public/css/icinga/base.less
+// See Icinga Web 2: public/css/icinga/base.less
 @tlv-color-critical-bg: @color-critical;
 @tlv-color-critical-fg: white;
 @tlv-color-critical-handled-bg: #FFCCBC; // Material Design Deep Orange 100
@@ -51,6 +23,33 @@
 @tlv-color-pending-fg: #32486d;
 @tlv-color-missing-bg: #ccc;
 @tlv-color-missing-fg: #333;
+
+.tlv-overview-tiles .tlv-overview-tile {
+  display: block;
+  float: left;
+  padding: 1em;
+  margin: 0.5em;
+  position: relative;
+  width: 20em;
+  height: 10em;
+  border: 1px solid @gray-light;
+  text-decoration: none;
+
+  &:hover {
+    background-color: @tr-hover-color;
+  }
+
+  .tlv-title {
+    font-weight: bold;
+    font-size: 1.25em;
+    .text-ellipsis();
+  }
+
+  .tlv-name {
+    color: @gray;
+    .text-ellipsis();
+  }
+}
 
 .tlv-status-tile {
   .badges {
