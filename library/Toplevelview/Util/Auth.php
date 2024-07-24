@@ -54,6 +54,10 @@ trait Auth
             return true;
         }
 
+        if ($restrictions->isEmpty()) {
+            return true;
+        }
+
         return Filter::match($restrictions, ['name' => $name]);
     }
 
