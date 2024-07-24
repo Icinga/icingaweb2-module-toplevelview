@@ -77,7 +77,7 @@ class EditForm extends Form
             }
             return true;
         } catch (Exception $e) {
-            $this->addError(sprintf('Could not save config: %s', $e->getMessage()));
+            $this->error(sprintf('Could not save config: %s', $e->getMessage()));
             return false;
         }
     }
