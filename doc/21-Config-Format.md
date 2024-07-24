@@ -32,12 +32,13 @@ children:
     - host: localhost
       service: ssh
   - name: Tile 2
-    - hostgroup: linux-servers
+    hostgroup: 'linux-servers'
   - name: Tile 3
 - name: Section 2
+  children:
   - name: Tile 1
   - name: Tile 2
-  - name: 'Tile 3: The return of long names' # some values should be quoted
+  - name: 'Tile 3: The return of long names'
 ```
 
 ## Layers

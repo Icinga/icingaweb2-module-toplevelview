@@ -21,11 +21,8 @@ children:
     - host: anotherhost
       service: ssh
   - name: Tile 2
-    - hostgroup: linux-servers
+    hostgroup: linux-servers
   - name: Tile 3
-- name: Section 2
-  - name: Tile 1
-  - name: Tile 2
 ```
 
 With a caching layer, this view can aggregate thousands of status objects and make
@@ -50,14 +47,14 @@ sure to reload your web server after installing the module.
 
 You should download the latest released tarball from [GitHub](https://github.com/Icinga/icingaweb2-module-toplevelview/releases).
 
-    tar xf icingaweb2-module-toplevelview-0.x.x.tar.gz
-    mv icingaweb2-module-toplevelview-0.x.x/ /usr/share/icingaweb2/modules/toplevelview
+    tar xf icingaweb2-module-toplevelview-1.0.0.tar.gz
+    mv icingaweb2-module-toplevelview-1.0.0/ /usr/share/icingaweb2/modules/toplevelview
 
 Or if you prefer use git.
 
     git clone https://github.com/Icinga/icingaweb2-module-toplevelview.git \
       /usr/share/icingaweb2/modules/toplevelview
-    git checkout v0.x.x
+    git checkout v1.0.0
 
 Enable the module in the web interface, or via CLI:
 
