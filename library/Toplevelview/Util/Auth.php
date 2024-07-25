@@ -20,6 +20,8 @@ trait Auth
     /**
      * assertAccessToView asserts that the current user has permission
      * for the given view. Throws a SecurityException if not.
+     *
+     * @throws SecurityException
      */
     public function assertAccessToView($restrictions, $name)
     {

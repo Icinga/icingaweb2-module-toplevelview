@@ -241,6 +241,11 @@ class TLVTreeNode extends TreeNode
         }
     }
 
+    /**
+     * getKey returns the object's key
+     *
+     * @throws ProgrammingError if the key does not exist
+     */
     public function getKey()
     {
         if ($this->key === null) {
@@ -310,6 +315,8 @@ class TLVTreeNode extends TreeNode
     }
 
     /**
+     * getStatus returns the object's status
+     *
      * @return TLVStatus
      * @throws ProgrammingError
      */

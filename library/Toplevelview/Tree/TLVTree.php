@@ -43,6 +43,11 @@ class TLVTree extends TLVTreeNode
      */
     protected $view;
 
+    /**
+     * Return a child by its ID
+     *
+     * @throws NotFoundError if the id cannot be found
+     */
     public function getById($id)
     {
         $ids = explode('-', $id);
@@ -84,6 +89,11 @@ class TLVTree extends TLVTreeNode
         return $this;
     }
 
+    /**
+     * registerObject adds a new object via its type, name and class
+     *
+     * @throws ProgrammingError if the same type by multiple classes is registered
+     */
     public function registerObject($type, $name, $class)
     {
         if (array_key_exists($type, $this->registeredTypes) && $this->registeredTypes[$type] !== $class) {
@@ -164,6 +174,11 @@ class TLVTree extends TLVTreeNode
         }
     }
 
+    /**
+     * fetchType returns a given type from the registered types
+     *
+     * @throws ProgrammingError if the type has not been registered
+     */
     protected function fetchType($type)
     {
         if (! array_key_exists($type, $this->registeredTypes)) {

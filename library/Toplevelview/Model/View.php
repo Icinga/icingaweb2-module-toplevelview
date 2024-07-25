@@ -89,6 +89,9 @@ class View
 
     /**
      * ensureParsed parses the Views YAML text.
+     *
+     * @throws InvalidPropertyException if the YAML config cannot be parsed
+     * @throws NotImplementedError if the format is unknown
      */
     protected function ensureParsed()
     {
@@ -123,6 +126,11 @@ class View
         }
     }
 
+    /**
+     * setMeta sets a given key's value
+     *
+     * @throws ProgrammingError if you try to edit children here
+     */
     public function setMeta($key, $value)
     {
         if ($key === 'children') {

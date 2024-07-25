@@ -62,6 +62,7 @@ class ViewConfig
      *
      * @param string $path Path to create the directory at
      * @param string $mode Mode to create the directory with
+     * @throws NotWritableError if the directory is not writable
      */
     protected function ensureDirExists($path, $mode = '2770'): void
     {
@@ -110,6 +111,7 @@ class ViewConfig
      *
      * @param string $name name of the View
      * @param string $format format of the View
+     * @throws NotReadableError if the file cannot be read
      * @return ?View
      */
     protected function loadFromFile($name, $format): ?View
@@ -136,6 +138,7 @@ class ViewConfig
      * @param $path Path to the file
      * @param $content Content of the file
      * @param $mode Mode of the new file
+     * @throws NotWritableError if the file is not writable
      */
     protected function writeFile($path, $content, $mode = '0660'): void
     {
@@ -292,8 +295,10 @@ class ViewConfig
      * storeBackup stores a timestamped backup file of a View's file,
      * if the content has changed
      *
-     * @param $view
+     * @param $view The view to store
      * @param $force Stores a backup even if the content hasn't changed
+     * @throws ProgrammingError if the file with timestamp already exists
+     * @throws NotReadableError if the file cannot be read
      */
     protected function storeBackup($view, $force = false): void
     {
