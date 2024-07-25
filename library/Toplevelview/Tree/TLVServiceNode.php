@@ -18,7 +18,7 @@ class TLVServiceNode extends TLVIcingaNode
 
     protected $key = '{host}!{service}';
 
-    public function getTitle()
+    public function getTitle(): string
     {
         $key = $this->getKey();
         $obj = $this->root->getFetched($this->type, $key);
@@ -47,12 +47,12 @@ class TLVServiceNode extends TLVIcingaNode
         return parent::register();
     }
 
-    public function getKey()
+    public function getKey(): string
     {
         return sprintf('%s!%s', $this->properties['host'], $this->properties['service']);
     }
 
-    public static function fetch(TLVTree $root)
+    public static function fetch(TLVTree $root): void
     {
         Benchmark::measure('Begin fetching services');
 

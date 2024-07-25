@@ -23,7 +23,7 @@ trait Auth
      *
      * @throws SecurityException
      */
-    public function assertAccessToView($restrictions, $name)
+    public function assertAccessToView($restrictions, $name): bool
     {
         $user = $this->getAuth()->getUser();
 

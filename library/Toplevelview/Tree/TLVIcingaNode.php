@@ -18,7 +18,7 @@ class TLVIcingaNode extends TLVTreeNode
      *
      * @throws NotImplementedError
      */
-    public static function fetch(/** @noinspection PhpUnusedParameterInspection */ TLVTree $root)
+    public static function fetch(/** @noinspection PhpUnusedParameterInspection */ TLVTree $root): void
     {
         throw new NotImplementedError('fetch() has not been implemented for %s', get_class(new static));
     }

@@ -20,7 +20,7 @@ class TLVHostGroupNode extends TLVIcingaNode
 
     protected static $titleKey = 'hostgroup';
 
-    public function getTitle()
+    public function getTitle(): string
     {
         $key = $this->getKey();
         $obj = $this->root->getFetched($this->type, $key);
@@ -34,7 +34,7 @@ class TLVHostGroupNode extends TLVIcingaNode
         return sprintf('%s', $n);
     }
 
-    public static function fetch(TLVTree $root)
+    public static function fetch(TLVTree $root): void
     {
         Benchmark::measure('Begin fetching hostgroups');
 

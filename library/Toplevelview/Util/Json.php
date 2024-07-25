@@ -17,7 +17,7 @@ class Json extends IcingaJson
      * @return  string
      * @throws  JsonEncodeException
      */
-    public static function encode($value, $options = 0, $depth = 512)
+    public static function encode($value, $options = 0, $depth = 512): string
     {
         if (version_compare(phpversion(), '5.4.0', '<')) {
             $encoded = json_encode($value);
