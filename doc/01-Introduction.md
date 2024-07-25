@@ -6,7 +6,7 @@ Top Level View is a hierarchy based status view for Icinga Web 2.
 You can define a hierarchical structure containing hosts, services and host groups.
 This view presents you an overview of the overall status of the sub-hierarchies.
 
-Example:
+These hierarchical structures are described in a YAML file. Example:
 
 ```yaml
 name: My View
@@ -34,8 +34,9 @@ them easily available for overview and drill down.
 
 Top Level View is a module for Icinga Web 2, and can be installed via git or a tarball.
 
-Only other requirement is PHP YAML (which is needed for the configuration format), make
-sure to reload your web server after installing the module.
+The only other requirement is the PHP YAML extension.
+
+**Hint**: Make sure to reload your web server after installing the extension.
 
     # on RHEL and compatible
     yum install php-pecl-yaml
@@ -45,18 +46,18 @@ sure to reload your web server after installing the module.
     apt-get install php-yaml
     systemctl reload apache2.service
 
-You should download the latest released tarball from [GitHub](https://github.com/Icinga/icingaweb2-module-toplevelview/releases).
+You can download the latest released tarball from [GitHub](https://github.com/Icinga/icingaweb2-module-toplevelview/releases).
 
     tar xf icingaweb2-module-toplevelview-1.0.0.tar.gz
     mv icingaweb2-module-toplevelview-1.0.0/ /usr/share/icingaweb2/modules/toplevelview
 
-Or if you prefer use git.
+Or - if you prefer - use Git.
 
     git clone https://github.com/Icinga/icingaweb2-module-toplevelview.git \
       /usr/share/icingaweb2/modules/toplevelview
     git checkout v1.0.0
 
-Enable the module in the web interface, or via CLI:
+Then enable the module in the web interface, or via CLI:
 
     icingacli module enable toplevelview
 

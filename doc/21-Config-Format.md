@@ -1,10 +1,7 @@
 Configuration Format
 ====================
 
-The configuration format is based on YAML.
-
-    YAML is a human friendly data serialization standard for all programming languages.
-
+The configuration format is YAML.
 It is an easy way to define data in a hierarchy, and still being able to view and modify it as a human.
 
 For details on the format see [yaml.org](http://yaml.org/).

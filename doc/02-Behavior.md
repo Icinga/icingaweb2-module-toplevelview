@@ -1,7 +1,7 @@
 Behavior
 ========
 
-Top Level View uses additional status logic for its views.
+Top Level View (TLV) uses additional status logic for its views.
 
 This does not affect the overall status behavior of Icinga 2 or Icinga Web 2,
 but it is important to understand the differences.
@@ -35,13 +35,11 @@ Similar to Icinga Web 2 you can easily see unhandled problems by the strength of
 While the normal monitoring views will always show you all current states,
 the **Top Level Views will only show hard states**.
 
-Which means, as long as the object doesn't have reached a hard state, the node will be OK.
+Which means, as long as the object doesn't have reached a hard state, the TLV node will be OK.
 
 ## Handled and Unhandled
 
-Icinga Web 2 introduced an handled state to every host and service.
-
-By default handled would be true if:
+Icinga Web 2 uses a handled state for every host and service. By default handled would be true if:
 
 * Problem has been acknowledged
 * Object is in downtime
