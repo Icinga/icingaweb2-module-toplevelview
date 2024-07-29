@@ -97,6 +97,11 @@ class TLVTreeNode extends TreeNode
             Benchmark::measure('Begin loading TLVTree from array');
         }
 
+        // Check if gots an array
+        if (! is_array($array)) {
+            throw new NotImplementedError("YAML not valid. %s needs to be an array", var_export($array, true));
+        }
+
         // try to detect type
         if (! array_key_exists('type', $array)) {
             foreach (self::$typeKeyMap as $type => $keys) {
