@@ -6,7 +6,7 @@ Top Level View is a hierarchy based status view for Icinga Web 2.
 You can define a hierarchical structure containing hosts, services and host groups.
 This view presents you an overview of the overall status of the sub-hierarchies.
 
-These hierarchical structures are described in a YAML file. Example:
+These hierarchical structures are configured in a YAML file. Example:
 
 ```yaml
 name: My View
@@ -25,10 +25,7 @@ children:
   - name: Tile 3
 ```
 
-With a caching layer, this view can aggregate thousands of status objects and make
-them easily available for overview and drill down.
-
-**Hint:** Top Level View uses additional status logic for its views, see later chapters on details.
+**Hint:** Top Level View can use additional status logic for its views, see later chapters on details.
 
 ## Installation
 
@@ -39,7 +36,7 @@ The only other requirement is the PHP YAML extension.
 **Hint**: Make sure to reload your web server after installing the extension.
 
     # on RHEL and compatible
-    yum install php-pecl-yaml
+    dnf install php-pecl-yaml
     systemctl reload httpd.service
 
     # on Debian / Ubuntu

@@ -14,8 +14,6 @@ Every node is unique in the tree, but names can be repeated. An Icinga objects c
 
 ## Example
 
-Best to understand it is to start with an example.
-
 ```yaml
 name: View Name
 children:

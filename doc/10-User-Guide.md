@@ -12,7 +12,8 @@ directly in the module's configuration directory.
 
 Example: `/etc/icingaweb2/modules/toplevelview/views/example.yml`
 
-The module ships a very basic configuration editor, which allows to to edit the bare YAML configuration within the web interface.
+The module ships a very basic configuration editor,
+which allows to to edit the bare YAML configuration within the web interface.
 
 After a view is created it will show up in the TLV overview.
 
@@ -31,13 +32,12 @@ In addition counters show you how many states of what kind lay below.
 When you click on tiles in the topmost tile view, you drill down into a
 tree view of that tile.
 
-The tree view is collapsing everything that is in an OK state. So you the
-problems first.
+The tree view is collapsing everything that is in an OK state. So you see
+the problems first.
 
 ![](screenshots/tiles-tree-problems.png)
 
-In this view everything can be expanded via the arrow handle or a click
-on the title area.
+Everything can be expanded via the arrow handle or a click on the title area.
 
 Deeper branches can be opened in a new view by clicking on the title text, but
 this is only needed to filter the shown data.

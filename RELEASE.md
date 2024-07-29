@@ -3,7 +3,7 @@
 Specify the release version.
 
 ```
-VERSION=0.x.x
+VERSION=1.x.x
 ```
 
 ## Issues

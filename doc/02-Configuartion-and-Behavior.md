@@ -22,10 +22,10 @@ Worst status is defined in the following order:
 * downtime_handled
 * missing
 
-In addition counter badges will present you in-depth details over the
+In addition, counter badges will present you in-depth details over the
 status below a tile or tree element.
 
-Similar to Icinga Web 2 you can easily see unhandled problems by the strength of color.
+Similar to Icinga Web 2 you can easily see unhandled problems by the color of a tile.
 
 ![Unhandled problems](screenshots/colors-unhandled.png)
 ![Handled problems](screenshots/colors-handled.png)
@@ -35,11 +35,12 @@ Similar to Icinga Web 2 you can easily see unhandled problems by the strength of
 While the normal monitoring views will always show you all current states,
 the **Top Level Views will only show hard states**.
 
-Which means, as long as the object doesn't have reached a hard state, the TLV element will be OK.
+Which means, as long as the object doesn't have reached a hard state, the TLV tree element will be OK.
 
 ## Configuration Options
 
 These options can change the behavior of views.
+They are placed at the top of a view configuration:
 
 ```yaml
 name: My View

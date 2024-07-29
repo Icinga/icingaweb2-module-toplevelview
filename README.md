@@ -30,9 +30,6 @@ children:
 With a caching layer, this view can aggregate thousands of status objects and make
 them easily available for overview and drill down.
 
-This view extends the status logic and behavior of Icinga Web 2 a bit,
-please see the documentation on details.
-
 ## Requirements
 
 * Icinga Web 2 >= 2.5.0
