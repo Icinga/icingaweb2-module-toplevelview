@@ -131,8 +131,11 @@ class TLVServiceNode extends TLVIcingaNode
         // In TLV flapping means the state is handled
         $isHandled = $isHandled || $service->state->is_flapping;
 
-        // Set downtime if notifications are disabled for the service
-        if ($service->state->in_downtime || $service->notifications_enabled === false) {
+        // Check if the downtime is enabled if set_downtime_if_notification_disabled is true
+        $downtime_if_no_notifications = $service->notifications_enabled === false &&
+                                      $this->getRoot()->get('set_downtime_if_notification_disabled');
+
+        if ($service->state->in_downtime || $downtime_if_no_notifications) {
             $status->add('downtime_active');
             if ($state !== 0) {
                 $state = 10;

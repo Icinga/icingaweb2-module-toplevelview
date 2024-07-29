@@ -99,7 +99,11 @@ class TLVHostNode extends TLVIcingaNode
         // We only care about the hard state in TLV
         $state = $host->state->hard_state;
 
-        if ($host->state->in_downtime || $host->notifications_enabled === false) {
+        // Check if the downtime is enabled if set_downtime_if_notification_disabled is true
+        $downtime_if_no_notifications = $host->notifications_enabled === false &&
+                                      $this->getRoot()->get('set_downtime_if_notification_disabled');
+
+        if ($host->state->in_downtime || $downtime_if_no_notifications) {
             // Set downtime if notifications are disabled for the host
             $status->add('downtime_active');
             $state = 10;
