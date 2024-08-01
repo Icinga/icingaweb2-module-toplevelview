@@ -9,6 +9,7 @@ use Icinga\Module\Toplevelview\ViewConfig;
 use Icinga\Module\Toplevelview\Web\Controller;
 
 use Icinga\Web\Url;
+use Icinga\Application\Icinga;
 
 class EditController extends Controller
 {
@@ -41,7 +42,12 @@ class EditController extends Controller
     {
         $action = $this->getRequest()->getActionName();
 
-        $c = new ViewConfig();
+        $config_dir_module = Icinga::app()
+                           ->getModuleManager()
+                           ->getModule('toplevelview')
+                           ->getConfigDir();
+
+        $c = new ViewConfig($config_dir_module);
         $view = null;
 
         if ($action === 'add') {

@@ -6,7 +6,6 @@ namespace Icinga\Module\Toplevelview;
 use Icinga\Module\Toplevelview\Model\View;
 use Icinga\Module\Toplevelview\Util\Auth;
 
-use Icinga\Application\Icinga;
 use Icinga\Exception\NotWritableError;
 use Icinga\Exception\NotReadableError;
 use Icinga\Util\DirectoryIterator;
@@ -28,14 +27,12 @@ class ViewConfig
      */
     protected $config_dir;
 
-    public function __construct()
+    /**
+     * @param $config_dir_module string Path to the module's configuration
+     */
+    public function __construct($config_dir_module)
     {
         // Ensure the Views configuration directory exists
-        $config_dir_module = Icinga::app()
-                           ->getModuleManager()
-                           ->getModule('toplevelview')
-                           ->getConfigDir();
-
         $config_dir = $config_dir_module . DIRECTORY_SEPARATOR . 'views';
         $this->ensureDirExists($config_dir_module);
         $this->ensureDirExists($config_dir);
@@ -118,8 +115,13 @@ class ViewConfig
     {
         // Try to load the data from the file
         $file_path = $this->getConfigDir() . DIRECTORY_SEPARATOR . $name . '.' . $format;
+
+        if (!is_readable($file_path)) {
+            throw new NotReadableError('Could not read file %s', $file_path);
+        }
+
         $text = file_get_contents($file_path);
-        // Throw error if we cannot read it
+
         if ($text === false) {
             throw new NotReadableError('Could not read file %s', $file_path);
         }
