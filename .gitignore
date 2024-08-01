@@ -8,6 +8,9 @@
 !.git*
 
 # Artifacts from vendor parts in testing
+_icingaweb2/
+_libraries/
+.phpunit.cache/
 .phplint.cache/
 /docker-compose.yml
 /*.phar

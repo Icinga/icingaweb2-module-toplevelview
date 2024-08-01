@@ -27,7 +27,7 @@ class Json extends IcingaJson
             $encoded = json_encode($value, $options, $depth);
         }
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new JsonEncodeException('%s: %s', static::lastErrorMsg(), var_export($value, true));
+            throw new JsonEncodeException('%s: %s', json_last_error(), var_export($value, true));
         }
         return $encoded;
     }
