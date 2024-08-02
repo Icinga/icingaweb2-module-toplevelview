@@ -5,6 +5,7 @@ namespace Tests\Icinga\Module\Toplevelview;
 use Icinga\Module\Toplevelview\ViewConfig;
 
 use Icinga\Exception\NotReadableError;
+use Icinga\Exception\NotFoundError;
 use PHPUnit\Framework\TestCase;
 
 final class ViewConfigTest extends TestCase
@@ -30,5 +31,16 @@ final class ViewConfigTest extends TestCase
         $clone = clone $view;
         $this->assertSame(null, $clone->getName());
         $this->assertFalse($clone->hasBeenLoaded());
+    }
+
+    public function testViewConfigWithTree()
+    {
+        $this->expectException(NotFoundError::class);
+
+        $c = new ViewConfig('test/testdata');
+        $view = $c->loadByName('example');
+
+        $t = $view->getTree();
+        $t->getById('0-1-2');
     }
 }

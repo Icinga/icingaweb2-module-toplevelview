@@ -35,7 +35,7 @@ class Zend_View_Helper_Tiles extends Zend_View_Helper_Abstract
             $title . $badges,
             'toplevelview/show/tree',
             array(
-                'name' => $node->getRoot()->getView()->getName(),
+                'name' => $node->getRoot()->getViewName(),
                 'id'   => $node->getFullId()
             ),
             array(

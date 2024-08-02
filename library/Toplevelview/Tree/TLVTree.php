@@ -38,10 +38,9 @@ class TLVTree extends TLVTreeNode
 
     protected $cacheLifetime = 60;
 
-    /**
-     * @var View
-     */
-    protected $view;
+    protected $viewName;
+
+    protected $viewChecksum;
 
     /**
      * Return a child by its ID
@@ -70,22 +69,25 @@ class TLVTree extends TLVTreeNode
         return $currentNode;
     }
 
-    /**
-     * @return View
-     */
-    public function getView()
+    public function getViewName(): string
     {
-        return $this->view;
+        return $this->viewName;
     }
 
-    /**
-     * @param View $view
-     *
-     * @return $this
-     */
-    public function setView(View $view)
+    public function setViewName(string $name)
     {
-        $this->view = $view;
+        $this->viewName = $name;
+        return $this;
+    }
+
+    public function getViewChecksum(): string
+    {
+        return $this->viewChecksum;
+    }
+
+    public function setViewChecksum(string $checksum)
+    {
+        $this->viewChecksum = $checksum;
         return $this;
     }
 
@@ -111,12 +113,9 @@ class TLVTree extends TLVTreeNode
 
     protected function getCacheName()
     {
-        $view = $this->getView();
-        return sprintf(
-            '%s-%s.json',
-            $view->getName(),
-            $view->getTextChecksum()
-        );
+        $n = $this->getViewName();
+        $c = $this->getViewChecksum();
+        return sprintf('%s-%s.json', $n, $c);
     }
 
     protected function loadCache()
