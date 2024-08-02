@@ -82,7 +82,8 @@ class View
         if ($this->tree === null) {
             $this->ensureParsed();
             $this->tree = $tree = TLVTree::fromArray($this->raw);
-            $tree->setView($this);
+            $tree->setViewName($this->getName());
+            $tree->setViewChecksum($this->getTextChecksum());
         }
         return $this->tree;
     }

@@ -71,7 +71,7 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
             $url = Url::fromPath(
                 'toplevelview/show/tree',
                 array(
-                    'name' => $node->getRoot()->getView()->getName(),
+                    'name' => $node->getRoot()->getViewName(),
                     'id'   => $node->getFullId()
                 )
             );
