@@ -66,6 +66,7 @@ class TLVTreeNode extends TreeNode
         'host'      => 'Icinga\\Module\\Toplevelview\\Tree\\TLVHostNode',
         'service'   => 'Icinga\\Module\\Toplevelview\\Tree\\TLVServiceNode',
         'hostgroup' => 'Icinga\\Module\\Toplevelview\\Tree\\TLVHostGroupNode',
+        'servicegroup' => 'Icinga\\Module\\Toplevelview\\Tree\\TLVServiceGroupNode',
     );
 
     /**
@@ -79,6 +80,7 @@ class TLVTreeNode extends TreeNode
         'service'   => array('host', 'service'),
         'host'      => 'host',
         'hostgroup' => 'hostgroup',
+        'servicegroup' => 'servicegroup',
     );
 
     /**

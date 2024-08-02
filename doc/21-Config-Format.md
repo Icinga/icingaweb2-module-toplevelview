@@ -29,6 +29,7 @@ children:
   - name: Tile 2
     hostgroup: 'linux-servers'
   - name: Tile 3
+    servicegroup: 'http'
 - name: Section 2
   children:
   - name: Tile 1
@@ -86,8 +87,16 @@ Attributes:
 Brings in the host group summary state.
 
 Attributes:
-* `hostgroup: linux-servers` hostname in Icinga
+* `hostgroup: linux-servers` host group name in Icinga
 * `type: hostgroup` (optional - detected by key attribute)
+
+### Icinga Service group
+
+Brings in the service group summary state.
+
+Attributes:
+* `servicegroup: linux-servers` service group name in Icinga
+* `type: servicegroup` (optional - detected by key attribute)
 
 ## Options
 
