@@ -23,5 +23,12 @@ final class ViewConfigTest extends TestCase
         $view = $c->loadByName('example');
 
         $this->assertStringContainsString('linux-servers', $view->getText());
+        $this->assertSame('5fc0ad55066b871d376eee60c84300d32ac7cb1d', $view->getTextChecksum());
+        $this->assertSame('yml', $view->getFormat());
+        $this->assertSame('example', $view->getName());
+
+        $clone = clone $view;
+        $this->assertSame(null, $clone->getName());
+        $this->assertFalse($clone->hasBeenLoaded());
     }
 }

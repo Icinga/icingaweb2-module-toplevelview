@@ -12,6 +12,7 @@ _icingaweb2/
 _libraries/
 .phpunit.cache/
 .phplint.cache/
+reports/
 /docker-compose.yml
 /*.phar
 /Icinga

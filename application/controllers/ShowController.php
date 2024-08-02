@@ -71,7 +71,12 @@ class ShowController extends Controller
     {
         $this->view->name = $name = $this->params->getRequired('name');
 
-        $c = new ViewConfig();
+        $config_dir_module = Icinga::app()
+                           ->getModuleManager()
+                           ->getModule('toplevelview')
+                           ->getConfigDir();
+
+        $c = new ViewConfig($config_dir_module);
 
         // Check if the user has permissions/restrictions for this View
         $restrictions = $c->getRestrictions('toplevelview/filter/views');
@@ -95,7 +100,12 @@ class ShowController extends Controller
     {
         $this->view->name = $name = $this->params->getRequired('name');
 
-        $c = new ViewConfig();
+        $config_dir_module = Icinga::app()
+                           ->getModuleManager()
+                           ->getModule('toplevelview')
+                           ->getConfigDir();
+
+        $c = new ViewConfig($config_dir_module);
 
         // Check if the user has permissions/restrictions for this View
         $restrictions = $c->getRestrictions('toplevelview/filter/views');
