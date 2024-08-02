@@ -95,7 +95,7 @@ Attributes:
 Brings in the service group summary state.
 
 Attributes:
-* `servicegroup: linux-servers` service group name in Icinga
+* `servicegroup: disk` service group name in Icinga
 * `type: servicegroup` (optional - detected by key attribute)
 
 ## Options
