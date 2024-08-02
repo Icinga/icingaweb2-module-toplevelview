@@ -117,6 +117,11 @@ class View
         }
     }
 
+    /**
+     * getMeta returns a value from the View's metadata.
+     * Metadata are root elemts in the YAML file that are not 'children'
+     * @throws ProgrammingError if you try to edit children here
+     */
     public function getMeta($key)
     {
         $this->ensureParsed();
@@ -141,6 +146,10 @@ class View
         return $this;
     }
 
+    /**
+     * getMetaData returns all YAML root elements that are not 'childen',
+     * thus the View's metadata.
+     */
     public function getMetaData()
     {
         $this->ensureParsed();
