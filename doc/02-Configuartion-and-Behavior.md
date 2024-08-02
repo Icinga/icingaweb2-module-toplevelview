@@ -60,6 +60,8 @@ This overrides every host problem to be handled.
 This helps when alerting is mostly based on service states, and the host
 is only a container.
 
+Only applies to host and hostgroup objects.
+
 ### Option `set_downtime_if_notification_enabled` (bool)
 
 Set the host or service to "active downtime" if notifications are disabled.
@@ -69,3 +71,5 @@ Set the host or service to "active downtime" if notifications are disabled.
 
 Since downtime and notification settings are essential for alerting,
 Top Level Views tries to integrate these into its status logic.
+
+Only applies to host and service objects.
