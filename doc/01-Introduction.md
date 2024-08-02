@@ -22,7 +22,7 @@ children:
       service: ssh
   - name: Tile 2
     hostgroup: linux-servers
-  - name: Tile 3
+  - servicegroup: http
 ```
 
 **Hint:** Top Level View can use additional status logic for its views, see later chapters on details.

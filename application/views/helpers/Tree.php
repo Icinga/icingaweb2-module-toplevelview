@@ -37,6 +37,15 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
                     'host.name' => $node->get('host')
                 ]
             );
+        } elseif ($type === 'servicegroup') {
+            $icon = 'services';
+            $url = Url::fromPath(
+                'icingadb/servicegroup',
+                array(
+                    'name' => $node->get('servicegroup'),
+                    'sort' => 'service.state.severity desc'
+                )
+            );
         } elseif ($type === 'hostgroup') {
             $icon = 'cubes';
             $url = Url::fromPath(

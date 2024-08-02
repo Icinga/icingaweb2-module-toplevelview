@@ -24,7 +24,7 @@ children:
       service: ssh
   - name: Tile 2
     hostgroup: linux-servers
-  - name: Tile 3
+  - servicegroup: http
 ```
 
 With a caching layer, this view can aggregate thousands of status objects and make
