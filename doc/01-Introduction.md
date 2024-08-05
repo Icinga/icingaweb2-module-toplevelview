@@ -25,6 +25,9 @@ children:
   - servicegroup: http
 ```
 
+The files are stored in `/etc/icingaweb2/modules/toplevelview/views/`.
+Example: `/etc/icingaweb2/modules/toplevelview/views/myview.yml`.
+
 **Hint:** Top Level View can use additional status logic for its views, see later chapters on details.
 
 ## Installation
@@ -67,5 +70,15 @@ Top Level View offers the following permissions and restrictions:
 * Permission `toplevelview/edit`, allow the user to edit Top Level Views
 * Restriction `toplevelview/filter/edit`, restrict edit rights to Views that match the filter (comma-separated values)
 * Restriction `toplevelview/filter/views`, restrict access to Views that match the filter (comma-separated values)
+
+Restrictions use the filename of the YAML files. Example: `toplevelview/filter/edit: myview,anotherview`
+
+```bash
+ls -l /etc/icingaweb2/modules/toplevelview/views/
+
+myview.yml
+anotherview.yml
+someview.yml
+```
 
 **Hint:** Commas in filenames should be avoided.
