@@ -56,23 +56,25 @@ class EditForm extends Form
             $this->view->getMetaData();
             $this->view->getTree();
 
-            // Store the view to the session
-            $this->viewconfig->storeToSession($this->view);
-
             $cancel = $this->getElement('btn_submit_cancel');
             $delete = $this->getElement('btn_submit_delete');
 
             if ($this->getElement('btn_submit_save_file')->getValue() !== null) {
+                // Store the view to its YAML file
                 $this->viewconfig->storeToFile($this->view);
                 Notification::success($this->translate('Top Level View successfully saved'));
             } elseif ($cancel !== null && $cancel->getValue() !== null) {
+                // Clear the stored session data for the view
                 $this->viewconfig->clearSession($this->view);
                 Notification::success($this->translate('Top Level View restored from disk'));
             } elseif ($delete != null && $delete->getValue() !== null) {
+                // Delete the view's YAML file
                 $this->viewconfig->delete($this->view);
                 $this->setRedirectUrl('toplevelview');
                 Notification::success($this->translate('Top Level View successfully deleted'));
             } else {
+                // Store the view to the user's session by default
+                $this->viewconfig->storeToSession($this->view);
                 Notification::success($this->translate('Top Level View successfully saved for the current session'));
             }
             return true;

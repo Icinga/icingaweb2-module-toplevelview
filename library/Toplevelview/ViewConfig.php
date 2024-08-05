@@ -246,6 +246,10 @@ class ViewConfig
      */
     public function storeToSession($view): void
     {
+        // Assert the user has rights to edit this view
+        $restrictions = $this->getRestrictions('toplevelview/filter/edit');
+        $this->assertAccessToView($restrictions, $view->getName());
+
         Session::getSession()->set(self::SESSION_PREFIX . $view->getName(), $view->getText());
     }
 
@@ -266,6 +270,10 @@ class ViewConfig
      */
     public function storeToFile($view): void
     {
+        // Assert the user has rights to edit this file
+        $restrictions = $this->getRestrictions('toplevelview/filter/edit');
+        $this->assertAccessToView($restrictions, $view->getName());
+
         $file_path = $this->getConfigDir() . DIRECTORY_SEPARATOR . $view->getName() . '.' . $view->getFormat();
         // Store a backup of the existing config
         if (file_exists($file_path)) {
@@ -283,6 +291,10 @@ class ViewConfig
      */
     public function delete($view): void
     {
+        // Assert the user has rights to edit this view
+        $restrictions = $this->getRestrictions('toplevelview/filter/edit');
+        $this->assertAccessToView($restrictions, $view->getName());
+
         $file_path = $this->getConfigDir() . DIRECTORY_SEPARATOR . $view->getName() . '.' . $view->getFormat();
 
         $this->clearSession($view);
