@@ -68,7 +68,7 @@ class EditForm extends Form
                 $this->viewconfig->clearSession($this->view);
                 Notification::success($this->translate('Top Level View restored from disk'));
             } elseif ($delete != null && $delete->getValue() !== null) {
-                // Delte the view's YAML file
+                // Delete the view's YAML file
                 $this->viewconfig->delete($this->view);
                 $this->setRedirectUrl('toplevelview');
                 Notification::success($this->translate('Top Level View successfully deleted'));
