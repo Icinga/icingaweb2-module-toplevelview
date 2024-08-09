@@ -1,5 +1,15 @@
 # Changelog
 
+## [v1.0.0](https://github.com/Icinga/icingaweb2-module-toplevelview/tree/v1.0.0) (unreleased)
+
+**Implemented enhancements:**
+
+- Add restrictions `toplevelview/filter/view` and `toplevelview/filter/edit`
+- Add Service Groups as TLV elements
+- Add option to toggle `notification_enabled` behavior
+- Improve error handling for YAML editor
+- Improve CSS for dark and light mode
+
 ## [v0.4.0](https://github.com/Icinga/icingaweb2-module-toplevelview/tree/v0.4.0) (2024-07-16)
 
 **Breaking changes:**
