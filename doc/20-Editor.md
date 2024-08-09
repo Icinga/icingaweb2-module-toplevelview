@@ -35,3 +35,15 @@ ls -l /etc/icingaweb2/modules/toplevelview/views/myview
 ```
 
 **Hint:** There is no web interface to manage these files.
+However, the `icingacli` offers a subcommand to clean these up.
+
+```
+# Removes all but one backups for all views
+icingacli toplevelview
+
+# Removes all but one backups for a specific view
+icingacli toplevelview --view myview
+
+# Removes all but two backups for a specific view
+icingacli toplevelview --view myview --keep 2
+```
