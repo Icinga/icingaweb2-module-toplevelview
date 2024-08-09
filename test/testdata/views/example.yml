@@ -1,0 +1,14 @@
+name: My View
+children:
+- name: Section 1
+  children:
+  - name: Tile 1
+    children:
+    - host: localhost
+    - host: localhost
+      service: disk
+    - host: anotherhost
+      service: ssh
+  - name: Tile 2
+    hostgroup: linux-servers
+  - name: Tile 3

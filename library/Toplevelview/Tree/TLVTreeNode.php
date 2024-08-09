@@ -66,6 +66,7 @@ class TLVTreeNode extends TreeNode
         'host'      => 'Icinga\\Module\\Toplevelview\\Tree\\TLVHostNode',
         'service'   => 'Icinga\\Module\\Toplevelview\\Tree\\TLVServiceNode',
         'hostgroup' => 'Icinga\\Module\\Toplevelview\\Tree\\TLVHostGroupNode',
+        'servicegroup' => 'Icinga\\Module\\Toplevelview\\Tree\\TLVServiceGroupNode',
     );
 
     /**
@@ -79,6 +80,7 @@ class TLVTreeNode extends TreeNode
         'service'   => array('host', 'service'),
         'host'      => 'host',
         'hostgroup' => 'hostgroup',
+        'servicegroup' => 'servicegroup',
     );
 
     /**
@@ -95,6 +97,11 @@ class TLVTreeNode extends TreeNode
     {
         if ($root === null) {
             Benchmark::measure('Begin loading TLVTree from array');
+        }
+
+        // Check if gots an array
+        if (! is_array($array)) {
+            throw new NotImplementedError("YAML not valid. %s needs to be an array", var_export($array, true));
         }
 
         // try to detect type
@@ -241,6 +248,11 @@ class TLVTreeNode extends TreeNode
         }
     }
 
+    /**
+     * getKey returns the object's key
+     *
+     * @throws ProgrammingError if the key does not exist
+     */
     public function getKey()
     {
         if ($this->key === null) {
@@ -310,6 +322,8 @@ class TLVTreeNode extends TreeNode
     }
 
     /**
+     * getStatus returns the object's status
+     *
      * @return TLVStatus
      * @throws ProgrammingError
      */

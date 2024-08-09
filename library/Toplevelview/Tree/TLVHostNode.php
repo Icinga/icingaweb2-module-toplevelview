@@ -20,7 +20,7 @@ class TLVHostNode extends TLVIcingaNode
 
     protected static $titleKey = 'host';
 
-    public function getTitle()
+    public function getTitle(): string
     {
         $key = $this->getKey();
         $obj = $this->root->getFetched($this->type, $key);
@@ -34,7 +34,7 @@ class TLVHostNode extends TLVIcingaNode
         return sprintf('%s', $n);
     }
 
-    public static function fetch(TLVTree $root)
+    public static function fetch(TLVTree $root): void
     {
         Benchmark::measure('Begin fetching hosts');
 
@@ -99,7 +99,11 @@ class TLVHostNode extends TLVIcingaNode
         // We only care about the hard state in TLV
         $state = $host->state->hard_state;
 
-        if ($host->state->in_downtime || $host->notifications_enabled === false) {
+        // Check if the downtime is enabled if set_downtime_if_notification_disabled is true
+        $downtime_if_no_notifications = $host->notifications_enabled === false &&
+                                      $this->getRoot()->get('set_downtime_if_notification_disabled');
+
+        if ($host->state->in_downtime || $downtime_if_no_notifications) {
             // Set downtime if notifications are disabled for the host
             $status->add('downtime_active');
             $state = 10;

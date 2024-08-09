@@ -1,4 +1,4 @@
-Config Editor
+Configuration Editor
 =============
 
 The module ships a very basic configuration editor,
@@ -11,7 +11,7 @@ Please also see the [chapter on config format](21-Config-Format.md).
 You have two options on saving:
 
 * Save to session - so you can test and review your edit
-* Save to disk - it is stored to disk and visible for everyone
+* Save to disk - it is stored to disk and visible for everyone with access
 
 When you have saved changes to your session, but not yet disk, the interface
 reminds you of that.
@@ -20,7 +20,18 @@ Also you can cancel an edit with a button below the editor, and return to disk s
 
 ## History
 
-Configuration history is saved to disk, so it can be restored manually.
-But there is not web interface.
+When updating a view with the Editor the module creates a backup of the previous version.
 
-See `/etc/icingaweb2/modules/toplevelview/views/<name>/*.yml`.
+These previous states are saved to disk, so it can be restored.
+
+```bash
+# /etc/icingaweb2/modules/toplevelview/views/<name of the view>/*.yml
+
+ls -l /etc/icingaweb2/modules/toplevelview/views/myview
+
+1722014991.yml
+1721917992.yml
+1721915691.yml
+```
+
+**Hint:** There is no web interface to manage these files.

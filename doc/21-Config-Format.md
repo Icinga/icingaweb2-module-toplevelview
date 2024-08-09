@@ -1,10 +1,7 @@
 Configuration Format
 ====================
 
-The configuration format is based on YAML.
-
-    YAML is a human friendly data serialization standard for all programming languages.
-
+The configuration format is YAML.
 It is an easy way to define data in a hierarchy, and still being able to view and modify it as a human.
 
 For details on the format see [yaml.org](http://yaml.org/).
@@ -16,8 +13,6 @@ The configuration is structured in a hierarchical object structure like:
 Every node is unique in the tree, but names can be repeated. An Icinga objects can be inserted multiple times.
 
 ## Example
-
-Best to understand it is to start with an example.
 
 ```yaml
 name: View Name
@@ -32,12 +27,14 @@ children:
     - host: localhost
       service: ssh
   - name: Tile 2
-    - hostgroup: linux-servers
+    hostgroup: 'linux-servers'
   - name: Tile 3
+    servicegroup: 'http'
 - name: Section 2
+  children:
   - name: Tile 1
   - name: Tile 2
-  - name: 'Tile 3: The return of long names' # some values should be quoted
+  - name: 'Tile 3: The return of long names'
 ```
 
 ## Layers
@@ -82,16 +79,24 @@ Brings in the service state of an individual Icinga service.
 
 Attributes:
 * `host: localhost` hostname in Icinga
-* `service: servicename` servicename in Icinga
+* `service: servicename` service name in Icinga
 * `type: service` (optional - detected by key attribute)
 
-### Icinga Hostgroup
+### Icinga Host group
 
-Brings in the hostgroup summary state.
+Brings in the host group summary state.
 
 Attributes:
-* `hostgroup: linux-servers` hostname in Icinga
+* `hostgroup: linux-servers` host group name in Icinga
 * `type: hostgroup` (optional - detected by key attribute)
+
+### Icinga Service group
+
+Brings in the service group summary state.
+
+Attributes:
+* `servicegroup: disk` service group name in Icinga
+* `type: servicegroup` (optional - detected by key attribute)
 
 ## Options
 

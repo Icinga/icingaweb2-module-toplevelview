@@ -92,7 +92,7 @@ class TLVStatus
         return 'missing';
     }
 
-    protected function cssFriendly($key)
+    protected function cssFriendly($key): string
     {
         return str_replace('_', ' ', $key);
     }

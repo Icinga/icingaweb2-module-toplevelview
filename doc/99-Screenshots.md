@@ -17,7 +17,7 @@ Tree view with no problems (expanded by user):
 
 ![](screenshots/tiles-tree-noproblems-expanded.png)
 
-Tree view problems on a hostgroup, and the hostgroup details:
+Tree view problems on a host group, and the host group details:
 
 ![](screenshots/tree-hostgroup.png)
 

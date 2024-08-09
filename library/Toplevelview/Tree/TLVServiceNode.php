@@ -18,7 +18,7 @@ class TLVServiceNode extends TLVIcingaNode
 
     protected $key = '{host}!{service}';
 
-    public function getTitle()
+    public function getTitle(): string
     {
         $key = $this->getKey();
         $obj = $this->root->getFetched($this->type, $key);
@@ -47,12 +47,12 @@ class TLVServiceNode extends TLVIcingaNode
         return parent::register();
     }
 
-    public function getKey()
+    public function getKey(): string
     {
         return sprintf('%s!%s', $this->properties['host'], $this->properties['service']);
     }
 
-    public static function fetch(TLVTree $root)
+    public static function fetch(TLVTree $root): void
     {
         Benchmark::measure('Begin fetching services');
 
@@ -131,8 +131,11 @@ class TLVServiceNode extends TLVIcingaNode
         // In TLV flapping means the state is handled
         $isHandled = $isHandled || $service->state->is_flapping;
 
-        // Set downtime if notifications are disabled for the service
-        if ($service->state->in_downtime || $service->notifications_enabled === false) {
+        // Check if the downtime is enabled if set_downtime_if_notification_disabled is true
+        $downtime_if_no_notifications = $service->notifications_enabled === false &&
+                                      $this->getRoot()->get('set_downtime_if_notification_disabled');
+
+        if ($service->state->in_downtime || $downtime_if_no_notifications) {
             $status->add('downtime_active');
             if ($state !== 0) {
                 $state = 10;

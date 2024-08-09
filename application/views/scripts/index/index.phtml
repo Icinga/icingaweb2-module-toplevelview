@@ -1,12 +1,9 @@
 <?php
-use Icinga\Module\Toplevelview\Util\Str;
-
-/** @var array $views */
-
 if (! $this->compact): ?>
     <div class="controls separated">
         <?= $this->tabs ?>
         <div class="action-links">
+            <?php if ($this->hasPermission('toplevelview/edit')): ?>
             <?= $this->qlink(
                 $this->translate('Add'),
                 'toplevelview/edit/add',
@@ -16,6 +13,7 @@ if (! $this->compact): ?>
                     'icon'  => 'plus',
                 )
             ) ?>
+            <?php endif; ?>
         </div>
     </div>
 <?php endif ?>
@@ -23,30 +21,15 @@ if (! $this->compact): ?>
     <div class="tlv-overview-tiles">
         <?php
         foreach ($views as $name => $view):
-            /** @var \Icinga\Module\Toplevelview\ViewConfig $view */
             $url = $this->url('toplevelview/show', array('name' => $name));
             ?>
-            <div class="tlv-overview-tile">
-                <div class="tlv-title"><?= $this->qlink($view->getMeta('name'), $url) ?></div>
+            <a href="<?= $url ?>" class="tlv-overview-tile">
+                <div class="tlv-title"><?= $view->getMeta('name') ?></div>
                 <div class="tlv-name"><?= $name ?></div>
                 <?php if ($view->hasBeenLoadedFromSession()): ?>
-                    <div class="unsaved"><?= $this->translate('Unsaved changes!') ?></div>
+                    <p class="warning-note"><?= $this->translate('Unsaved changes!') ?></p>
                 <?php endif; ?>
-
-                <?php if (! $this->compact && $this->hasPermission('toplevelview/edit')): ?>
-                    <div class="action-links">
-                        <?= $this->qlink(
-                            $this->translate('Edit'),
-                            'toplevelview/edit',
-                            array('name' => $view->getName()),
-                            array(
-                                'class' => 'action-link',
-                                'icon'  => 'edit',
-                            )
-                        ) ?>
-                    </div>
-                <?php endif; ?>
-            </div>
+            </a>
         <?php endforeach; ?>
     </div>
 </div>

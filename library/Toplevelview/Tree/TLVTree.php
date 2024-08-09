@@ -3,13 +3,14 @@
 
 namespace Icinga\Module\Toplevelview\Tree;
 
+use Icinga\Module\Toplevelview\Util\Json;
+use Icinga\Module\Toplevelview\Model\View;
+
 use Icinga\Application\Logger;
 use Icinga\Exception\IcingaException;
 use Icinga\Exception\NotFoundError;
 use Icinga\Exception\ProgrammingError;
 use Icinga\Module\Icingadb\Common\Database;
-use Icinga\Module\Toplevelview\Util\Json;
-use Icinga\Module\Toplevelview\ViewConfig;
 use Icinga\Web\FileCache;
 use stdClass;
 
@@ -37,11 +38,15 @@ class TLVTree extends TLVTreeNode
 
     protected $cacheLifetime = 60;
 
-    /**
-     * @var ViewConfig
-     */
-    protected $config;
+    protected $viewName;
 
+    protected $viewChecksum;
+
+    /**
+     * Return a child by its ID
+     *
+     * @throws NotFoundError if the id cannot be found
+     */
     public function getById($id)
     {
         $ids = explode('-', $id);
@@ -64,25 +69,33 @@ class TLVTree extends TLVTreeNode
         return $currentNode;
     }
 
-    /**
-     * @return ViewConfig
-     */
-    public function getConfig()
+    public function getViewName(): string
     {
-        return $this->config;
+        return $this->viewName;
     }
 
-    /**
-     * @param ViewConfig $config
-     *
-     * @return $this
-     */
-    public function setConfig(ViewConfig $config)
+    public function setViewName(string $name)
     {
-        $this->config = $config;
+        $this->viewName = $name;
         return $this;
     }
 
+    public function getViewChecksum(): string
+    {
+        return $this->viewChecksum;
+    }
+
+    public function setViewChecksum(string $checksum)
+    {
+        $this->viewChecksum = $checksum;
+        return $this;
+    }
+
+    /**
+     * registerObject adds a new object via its type, name and class
+     *
+     * @throws ProgrammingError if the same type by multiple classes is registered
+     */
     public function registerObject($type, $name, $class)
     {
         if (array_key_exists($type, $this->registeredTypes) && $this->registeredTypes[$type] !== $class) {
@@ -100,12 +113,9 @@ class TLVTree extends TLVTreeNode
 
     protected function getCacheName()
     {
-        $config = $this->getConfig();
-        return sprintf(
-            '%s-%s.json',
-            $config->getName(),
-            $config->getTextChecksum()
-        );
+        $n = $this->getViewName();
+        $c = $this->getViewChecksum();
+        return sprintf('%s-%s.json', $n, $c);
     }
 
     protected function loadCache()
@@ -163,6 +173,11 @@ class TLVTree extends TLVTreeNode
         }
     }
 
+    /**
+     * fetchType returns a given type from the registered types
+     *
+     * @throws ProgrammingError if the type has not been registered
+     */
     protected function fetchType($type)
     {
         if (! array_key_exists($type, $this->registeredTypes)) {
