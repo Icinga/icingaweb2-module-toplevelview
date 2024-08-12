@@ -234,6 +234,22 @@ class View
     }
 
     /**
+     * validateName validates the name of the view.
+     * This can be used to ensure the YAML files have proper/expected names
+     * @return bool
+     */
+    public function validateName(): bool
+    {
+        if (empty($this->name)) {
+            return false;
+        }
+        if (preg_match('/[!@#\$%^&*\/\\\()]/', $this->name)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * getName returns the name of this View
      * @return ?string
      */

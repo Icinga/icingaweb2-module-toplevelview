@@ -242,10 +242,18 @@ class ViewConfig
     /**
      * storeToSession stores a View's text to the user's session
      *
+     * @throws NotWritableError if the data cannot be stored
+     * @throws SecurityException if the user has no access to edit
+     *
      * @param $view
      */
     public function storeToSession($view): void
     {
+        // Assert the name is valid, to avoid tricky filenames such as '../../view'
+        if (!$view->validateName()) {
+            throw new NotWritableError('Invalid filename: %s', $view->getName());
+        }
+
         // Assert the user has rights to edit this view
         $restrictions = $this->getRestrictions('toplevelview/filter/edit');
         $this->assertAccessToView($restrictions, $view->getName());
@@ -266,10 +274,18 @@ class ViewConfig
     /**
      * storeToFile stores a View to its configuration file
      *
+     * @throws NotWritableError if the data cannot be stored
+     * @throws SecurityException if the user has no access to edit
+     *
      * @param $view
      */
     public function storeToFile($view): void
     {
+        // Assert the name is valid, to avoid tricky filenames such as '../../view'
+        if (!$view->validateName()) {
+            throw new NotWritableError('Invalid filename: %s', $view->getName());
+        }
+
         // Assert the user has rights to edit this file
         $restrictions = $this->getRestrictions('toplevelview/filter/edit');
         $this->assertAccessToView($restrictions, $view->getName());
