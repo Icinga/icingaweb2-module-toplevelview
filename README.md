@@ -1,9 +1,9 @@
 Top Level View for Icinga Web 2
 ===============================
 
-![Top Level View screenshot](doc/screenshots/tiles.png)
-
 Top Level View is a hierarchy based status view for Icinga Web 2.
+
+![Top Level View Light](doc/screenshots/tlv-light.png)
 
 You can define a hierarchical structure containing hosts, services and hostgroups.
 And the view presents you an overview of the overall status of the sub-hierarchies.
