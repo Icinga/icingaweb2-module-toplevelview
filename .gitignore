@@ -18,3 +18,4 @@ reports/
 /Icinga
 /Zend
 /vendor
+test/testdata/views/deleteme*

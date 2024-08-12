@@ -327,7 +327,6 @@ class ViewConfig
      *
      * @param $view The view to store
      * @param $force Stores a backup even if the content hasn't changed
-     * @throws ProgrammingError if the file with timestamp already exists
      * @throws NotReadableError if the file cannot be read
      */
     protected function storeBackup($view, $force = false): void
@@ -337,10 +336,6 @@ class ViewConfig
 
         $ts = (string) time();
         $backup = $backup_dir . DIRECTORY_SEPARATOR . $ts . '.' . $view->getFormat();
-
-        if (file_exists($backup)) {
-            throw new ProgrammingError('History file with timestamp already present: %s', $backup);
-        }
 
         $existing_file = $this->getConfigDir() . DIRECTORY_SEPARATOR . $view->getName() . '.' . $view->getFormat();
         $oldText = file_get_contents($existing_file);
