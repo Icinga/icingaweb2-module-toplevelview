@@ -15,6 +15,10 @@ class Str
      */
     public static function limit($str, $len = 25, $end = '...'): string
     {
+        if (empty($str)) {
+            return '';
+        }
+
        // If the string is smaller or equal to the limit we simply return it
         if (mb_strwidth($str, 'UTF-8') <= $len) {
             return $str;

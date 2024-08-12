@@ -9,6 +9,7 @@ final class StrTest extends TestCase
 {
     public function testLimitWithSmallerString()
     {
+        $this->assertSame('', Str::limit(null));
         $this->assertSame('', Str::limit(''));
         $this->assertSame('noop', Str::limit('noop'));
     }
@@ -19,6 +20,10 @@ final class StrTest extends TestCase
             'Lorem ipsu...',
             Str::limit('Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 10)
         );
+        $this->assertSame(
+            '🍔🍔🍔🍔🍔...',
+            Str::limit('🍔🍔🍔🍔🍔🍔🍔🍔', 10)
+        );
     }
 
     public function testLimitWithLongerStringAndSpecificEnd()
@@ -26,6 +31,14 @@ final class StrTest extends TestCase
         $this->assertSame(
             'L (...)',
             Str::limit('Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 1, ' (...)')
+        );
+        $this->assertSame(
+            'К (...)',
+            Str::limit('Кто это читает, тот дурак', 1, ' (...)')
+        );
+        $this->assertSame(
+            'К (🦔🦔🦔)',
+            Str::limit('Кто это читает, тот дурак', 1, ' (🦔🦔🦔)')
         );
     }
 }
