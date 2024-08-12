@@ -7,6 +7,8 @@
 - Add restrictions `toplevelview/filter/view` and `toplevelview/filter/edit`
 - Add Service Groups as TLV elements
 - Add option to toggle `notification_enabled` behavior
+- Add validation for view filenames (restricted characters are: `! @ # $ % ^ & * / \ ( )`)
+- Add CLI Command to clean up backups
 - Improve error handling for YAML editor
 - Improve CSS for dark and light mode
 
