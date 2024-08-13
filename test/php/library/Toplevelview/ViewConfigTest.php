@@ -3,6 +3,7 @@
 namespace Tests\Icinga\Module\Toplevelview;
 
 use Icinga\Module\Toplevelview\ViewConfig;
+use Icinga\Module\Toplevelview\Model\View;
 
 use Icinga\Exception\NotReadableError;
 use Icinga\Exception\NotFoundError;
@@ -16,6 +17,34 @@ final class ViewConfigTest extends TestCase
 
         $c = new ViewConfig('test/testdata');
         $view = $c->loadByName('nosuchview');
+    }
+
+    public function testViewConfigDelete()
+    {
+        $c = new ViewConfig('test/testdata');
+        $v = new View('deleteme', 'yml');
+
+        // Generate the file
+        $c->storeToFile($v);
+        $this->assertFileExists('test/testdata/views/deleteme.yml');
+        // Generate the backup dir
+        $c->storeToFile($v);
+        $this->assertDirectoryExists('test/testdata/views/deleteme');
+        // Delete the file
+        $c->delete($v);
+        $this->assertFalse(file_exists('test/testdata/views/deleteme.yml'));
+
+        // Remove generated files afterwards
+        array_map('unlink', array_filter((array) glob("test/testdata/views/deleteme/*")));
+        rmdir('test/testdata/views/deleteme/');
+    }
+
+    public function testViewConfigLoadAll()
+    {
+        $c = new ViewConfig('test/testdata');
+        $views = $c->loadAll();
+
+        $this->assertArrayHasKey('example', $views);
     }
 
     public function testViewConfigWithNoError()
