@@ -55,14 +55,16 @@ final class ViewConfigTest extends TestCase
         $this->assertStringContainsString('linux-servers', $view->getText());
         $this->assertSame('5fc0ad55066b871d376eee60c84300d32ac7cb1d', $view->getTextChecksum());
         $this->assertSame('yml', $view->getFormat());
+
         $this->assertSame('example', $view->getName());
+        $this->assertSame(['name' => 'My View'], $view->getMetaData());
 
         $clone = clone $view;
         $this->assertSame(null, $clone->getName());
         $this->assertFalse($clone->hasBeenLoaded());
     }
 
-    public function testViewConfigWithTree()
+    public function testViewConfigWithTreeWithError()
     {
         $this->expectException(NotFoundError::class);
 
@@ -71,5 +73,23 @@ final class ViewConfigTest extends TestCase
 
         $t = $view->getTree();
         $t->getById('0-1-2');
+    }
+
+    public function testViewConfigWithSession()
+    {
+        $c = new ViewConfig('test/testdata');
+        $view = $c->loadByName('example');
+
+        $view->setMeta('foo', 'bar');
+        $this->assertSame('bar', $view->getMeta('foo'));
+        $this->assertSame(null, $view->getMeta('bar'));
+        $this->assertSame(['foo' => 'bar'], $view->getMetaData());
+
+        $c->storeToSession($view);
+        $view2 = $c->loadByName('example');
+
+        $this->assertSame($view->getTextChecksum(), $view2->getTextChecksum());
+        $this->assertFalse($view->hasBeenLoadedFromSession());
+        $this->assertTrue($view2->hasBeenLoadedFromSession());
     }
 }
