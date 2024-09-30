@@ -3,7 +3,6 @@
 
 namespace Icinga\Module\Toplevelview\Tree;
 
-use Icinga\Module\Toplevelview\Util\Json;
 use Icinga\Module\Toplevelview\Model\View;
 
 use Icinga\Application\Logger;
@@ -11,6 +10,7 @@ use Icinga\Exception\IcingaException;
 use Icinga\Exception\NotFoundError;
 use Icinga\Exception\ProgrammingError;
 use Icinga\Module\Icingadb\Common\Database;
+use Icinga\Util\Json;
 use Icinga\Web\FileCache;
 use stdClass;
 
