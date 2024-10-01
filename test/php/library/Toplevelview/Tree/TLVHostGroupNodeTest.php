@@ -30,4 +30,48 @@ final class TLVHostGroupNodeTest extends TestCase
 
         $this->assertSame('unit', $n->getTitle());
     }
+
+    public function testGetStatus()
+    {
+        $n = new TLVHostGroupNode();
+        $n->setProperties(['hostgroup'=>'unit']);
+
+        $mockRoot = new class {
+            public function get($thing) {
+                return false;
+            }
+            public function getFetched($type, $key) {
+                $h = new stdClass;
+                $s = new stdClass;
+                $s->hard_state = 1;
+                $s->is_handled = true;
+                $s->in_downtime = true;
+                $h->display_name = 'hostgroup';
+
+                $h->hosts_total = 1;
+                $h->hosts_up = 1;
+                $h->hosts_total = 1;
+                $h->services_total = 1;
+                $h->hosts_up = 1;
+                $h->services_ok = 1;
+                $h->hosts_down_handled = 1;
+                $h->hosts_down_unhandled = 1;
+                $h->services_warning_handled = 1;
+                $h->services_warning_unhandled = 1;
+                $h->services_critical_handled = 1;
+                $h->services_critical_unhandled = 1;
+                $h->services_unknown_handled = 1;
+                $h->services_unknown_unhandled = 1;
+
+                return $h;
+            }
+        };
+
+        $reflection = new ReflectionClass($n);
+        $reflection_root = $reflection->getProperty('root');
+        $reflection_root->setAccessible(true);
+        $reflection_root->setValue($n, $mockRoot);
+
+        $this->assertSame('critical unhandled', $n->getStatus()->getOverall());
+    }
 }

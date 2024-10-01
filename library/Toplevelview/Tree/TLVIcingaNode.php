@@ -5,6 +5,9 @@ namespace Icinga\Module\Toplevelview\Tree;
 
 use Icinga\Exception\NotImplementedError;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TLVIcingaNode extends TLVTreeNode
 {
     protected static $canHaveChildren = false;
