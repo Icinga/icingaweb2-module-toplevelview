@@ -222,7 +222,6 @@
 
   .tlv-tile-title {
     display: inline-block;
-    height: 1.8em;
     width: 100%;
     padding: 0.1em;
   }
@@ -232,7 +231,7 @@
     border-style: solid;
     border-width: 1px 1px 1px 4px;
     padding: 0.1em;
-    margin: 0.3em 0.5em;
+    margin: 0.2em 0.5em;
 
     > .tlv-tile-title {
       font-weight: bold;
@@ -248,10 +247,6 @@
       > .tlv-tile-title {
         height: 100%;
         text-align: center;
-
-        .badge {
-          margin-top: -0.3em;
-        }
 
         &:before {
           content: "";
@@ -343,13 +338,12 @@
     font-size: 1.3em;
     content: '\e81d';
   }
-
 }
 
 .tlv-collapsed {
-    .icon.tlv-collapse-handle::before {
-        content: '\e820';
-    }
+  .icon.tlv-collapse-handle::before {
+    content: '\e820';
+  }
 }
 
 /** BEGIN of breadcrumb **/
@@ -383,7 +377,6 @@
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-
 }
 
 .breadcrumb li a {
@@ -429,14 +422,6 @@
 .breadcrumb li:first-child a {
   padding-left: 1em;
   padding-right: 0.5em;
-}
-
-.breadcrumb li:last-child a {
-  cursor: default;
-}
-
-.breadcrumb li:last-child a:hover {
-
 }
 
 .breadcrumb li:not(:last-child) a:hover {
