@@ -9,7 +9,8 @@ use Icinga\Exception\ProgrammingError;
 use Icinga\Module\Toplevelview\Tree\TLVTree;
 
 /**
- * View represents a single Top Level View
+ * View represents a single Top Level View.
+ * It contains the actual Tree and metadata.
  */
 class View
 {

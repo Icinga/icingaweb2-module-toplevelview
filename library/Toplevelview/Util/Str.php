@@ -2,10 +2,14 @@
 
 namespace Icinga\Module\Toplevelview\Util;
 
+/**
+ * Str is a small helper class for working with strings
+ */
 class Str
 {
     /**
      * Str::limit method truncates the given string to the specified length.
+     * Used in cases where CSS text-overflow cannot be used.
      *
      * @param   string $str
      * @param   int    $len

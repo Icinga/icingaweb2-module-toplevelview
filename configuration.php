@@ -3,9 +3,6 @@
 
 /** @var \Icinga\Application\Modules\Module $this */
 
-use Icinga\Module\Toplevelview\ViewConfig;
-use Icinga\Web\Url;
-
 $this->providePermission('toplevelview/edit', $this->translate('Allow the user to edit Top Level Views'));
 
 $this->provideRestriction(
