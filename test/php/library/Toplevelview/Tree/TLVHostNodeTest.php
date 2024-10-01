@@ -37,9 +37,19 @@ final class TLVHostNodeTest extends TestCase
         $n->setProperties(['host'=>'unit']);
 
         $mockRoot = new class {
+            public function get($thing) {
+                return false;
+            }
             public function getFetched($type, $key) {
                 $h = new stdClass;
                 $h->display_name = 'host';
+                $s = new stdClass;
+                $s->hard_state = 2;
+                $s->is_handled = false;
+                $s->in_downtime = false;
+                $h->notifications_enabled = false;
+                $h->state = $s;
+                return $h;
             }
         };
 
@@ -48,6 +58,6 @@ final class TLVHostNodeTest extends TestCase
         $reflection_root->setAccessible(true);
         $reflection_root->setValue($n, $mockRoot);
 
-        $this->assertSame('missing', $n->getStatus()->getOverall());
+        $this->assertSame('critical unhandled', $n->getStatus()->getOverall());
     }
 }

@@ -92,4 +92,16 @@ final class ViewConfigTest extends TestCase
         $this->assertFalse($view->hasBeenLoadedFromSession());
         $this->assertTrue($view2->hasBeenLoadedFromSession());
     }
+
+    public function testViewConfigTree()
+    {
+        $c = new ViewConfig('test/testdata');
+        $view = $c->loadByName('example');
+
+        $t = $view->getTree();
+        $this->assertSame('5fc0ad55066b871d376eee60c84300d32ac7cb1d', $t->getViewChecksum());
+        $this->assertSame('example', $t->getViewName());
+        $t->setCacheLifetime(120);
+        $this->assertSame(120, $t->getCacheLifetime());
+    }
 }

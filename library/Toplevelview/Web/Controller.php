@@ -10,6 +10,7 @@ use ipl\Web\Compat\CompatController;
  * Controller wraps around the Icinga\Web\Controller to
  * check for the PHP YAML extension
  *
+ * @codeCoverageIgnore
  * @throws ConfigurationError if the PHP yaml extension is not loaded
  */
 class Controller extends CompatController
