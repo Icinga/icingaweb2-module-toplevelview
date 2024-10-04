@@ -6,6 +6,7 @@ namespace Icinga\Module\Toplevelview\Tree;
 use Icinga\Exception\NotImplementedError;
 
 /**
+ * Leaf nodes that fetch data from the database are TLVIcingaNodes.
  * @codeCoverageIgnore
  */
 class TLVIcingaNode extends TLVTreeNode

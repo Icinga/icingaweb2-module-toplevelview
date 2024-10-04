@@ -21,6 +21,9 @@ class TLVTreeNode extends TreeNode
      */
     protected $type = 'node';
 
+    /**
+     * @var string
+     */
     protected $key = null;
 
     /**
@@ -48,6 +51,11 @@ class TLVTreeNode extends TreeNode
      */
     protected $properties = array();
 
+    /**
+     * Determine if this node is a leaf
+     *
+     * @var bool
+     */
     protected static $canHaveChildren = true;
 
     /**
