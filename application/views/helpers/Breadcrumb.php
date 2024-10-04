@@ -23,10 +23,10 @@ class Zend_View_Helper_Breadcrumb extends Zend_View_Helper_Abstract
             $htm .= '<li>' . $this->view->qlink(
                 Str::limit($crumb->getTitle()),
                 'toplevelview/show/tree',
-                array(
-                        'name' => $config_name,
-                        'id'   => $crumb->getFullId()
-                    )
+                [
+                    'name' => $config_name,
+                    'id'   => $crumb->getFullId()
+                ]
             ) . '</li>';
         }
         $htm .= '</ul>';

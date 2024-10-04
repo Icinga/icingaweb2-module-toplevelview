@@ -7,49 +7,49 @@
         echo $this->qlink(
             $this->translate('Source'),
             'toplevelview/show/source',
-            array('name' => $view->getName()),
-            array(
+            ['name' => $view->getName()],
+            [
                 'class'            => 'action-link',
                 'icon'             => 'doc-text',
                 'data-base-target' => '_next'
-            )
+            ]
         );
 
         echo $this->qlink(
             $this->translate('Fullscreen'),
             'toplevelview/show',
-            array(
+            [
                 'name' => $view->getName(),
                 'view' => 'compact',
                 'showFullscreen' => true
-            ),
-            array(
-                'class'            => 'action-link',
-                'icon'             => 'resize-full',
+            ],
+            [
+                'class'  => 'action-link',
+                'icon'   => 'resize-full',
                 'target' => '_blank'
-            )
+            ]
         );
 
         if ($this->hasPermission('toplevelview/edit')) {
             echo $this->qlink(
                 $this->translate('Edit'),
                 'toplevelview/edit',
-                array('name' => $view->getName()),
-                array(
+                ['name' => $view->getName()],
+                [
                     'class'            => 'action-link',
                     'icon'             => 'edit',
                     'data-base-target' => '_next'
-                )
+                ]
             );
             echo $this->qlink(
                 $this->translate('Clone'),
                 'toplevelview/edit/clone',
-                array('name' => $view->getName()),
-                array(
+                ['name' => $view->getName()],
+                [
                     'class'            => 'action-link',
                     'icon'             => 'rewind',
                     'data-base-target' => '_next'
-                )
+                ]
             );
         }
     }

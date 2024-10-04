@@ -69,7 +69,7 @@ class TLVTree extends TLVTreeNode
         return $currentNode;
     }
 
-    public function getViewName(): string
+    public function getViewName(): ?string
     {
         return $this->viewName;
     }
@@ -80,7 +80,7 @@ class TLVTree extends TLVTreeNode
         return $this;
     }
 
-    public function getViewChecksum(): string
+    public function getViewChecksum(): ?string
     {
         return $this->viewChecksum;
     }

@@ -8,7 +8,10 @@ namespace Icinga\Module\Toplevelview\Tree;
  */
 class TLVStatus
 {
-    protected $properties = array(
+    /**
+     * Properties track each tree nodes Icinga states
+     */
+    protected $properties = [
         'critical_unhandled' => null,
         'critical_handled'   => null,
         'warning_unhandled'  => null,
@@ -20,9 +23,12 @@ class TLVStatus
         'ok'                 => null,
         'missing'            => null,
         'total'              => null,
-    );
+    ];
 
-    protected static $statusPriority = array(
+    /**
+     * statusPriority decribes the priority from worst to best
+     */
+    protected static $statusPriority = [
         'critical_unhandled',
         'warning_unhandled',
         'unknown_unhandled',
@@ -32,10 +38,16 @@ class TLVStatus
         'ok',
         'downtime_handled',
         'missing',
-    );
+    ];
 
-    protected $meta = array();
+    /**
+     * meta tracks get overall count of hosts and services if this status object
+     */
+    protected $meta = [];
 
+    /**
+     * merge merges another TLVStatus object's properties into this object
+     */
     public function merge(TLVStatus $status)
     {
         $properties = $status->getProperties();
@@ -49,22 +61,42 @@ class TLVStatus
         return $this;
     }
 
+    /**
+     * get returns the given key's value from the properties
+     *
+     * @param string $key key of the property
+     */
     public function get($key)
     {
         return $this->properties[$key];
     }
 
+    /**
+     * set sets the given key/value in the properties
+     *
+     * @param string $key key of the property
+     * @param int $value value to set to property to
+     */
     public function set($key, $value)
     {
         $this->properties[$key] = (int) $value;
         return $this;
     }
 
+    /**
+     * getProperties returns all properties
+     */
     public function getProperties()
     {
         return $this->properties;
     }
 
+    /**
+     * add adds the given value (integer) to the given property
+     *
+     * @param string $key key of the property
+     * @param int $value value to add to the property
+     */
     public function add($key, $value = 1)
     {
         if ($this->properties[$key] === null) {
@@ -74,6 +106,9 @@ class TLVStatus
         return $this;
     }
 
+    /**
+     * zero sets all properties to zero (0)
+     */
     public function zero()
     {
         foreach (array_keys($this->properties) as $key) {
@@ -82,7 +117,13 @@ class TLVStatus
         return $this;
     }
 
-    public function getOverall()
+    /**
+     * getOverall returns the worst state of this TLVStatus,
+     * given the statusPriority.
+     *
+     * @return string
+     */
+    public function getOverall(): string
     {
         foreach (static::$statusPriority as $key) {
             if ($this->properties[$key] !== null && $this->properties[$key] > 0) {
@@ -92,11 +133,18 @@ class TLVStatus
         return 'missing';
     }
 
+    /**
+     * cssFriendly transforms the given key to be CSS friendly,
+     * meaning using spaces between the state and the handled indicator
+     */
     protected function cssFriendly($key): string
     {
         return str_replace('_', ' ', $key);
     }
 
+    /**
+     * getMeta returns the given key's value from the metadata
+     */
     public function getMeta($key)
     {
         if (array_key_exists($key, $this->meta)) {
@@ -106,11 +154,9 @@ class TLVStatus
         }
     }
 
-    public function getAllMeta()
-    {
-        return $this->meta;
-    }
-
+    /**
+     * setMeta sets the given key/value in the metadata
+     */
     public function setMeta($key, $value)
     {
         $this->meta[$key] = $value;

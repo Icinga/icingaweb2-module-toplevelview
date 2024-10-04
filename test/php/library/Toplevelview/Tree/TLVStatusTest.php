@@ -27,11 +27,21 @@ final class TLVStatusTest extends TestCase
         $this->assertSame(0, $t->get('missing'));
     }
 
+    public function testGetOverallWithMissing()
+    {
+        $t = new TLVStatus();
+        $this->assertSame('missing', $t->getOverall());
+    }
+
     public function testGetterSetter()
     {
         $t = new TLVStatus();
         $t->set('missing', 123);
         $this->assertSame(123, $t->get('missing'));
+
+        $t->setMeta('hosts_total', 321);
+        $this->assertSame(321, $t->getMeta('hosts_total'));
+        $this->assertSame(null, $t->getMeta('services_total'));
     }
 
     public function testMerge()

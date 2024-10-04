@@ -41,19 +41,19 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
             $icon = 'services';
             $url = Url::fromPath(
                 'icingadb/servicegroup',
-                array(
+                [
                     'name' => $node->get('servicegroup'),
                     'sort' => 'service.state.severity desc'
-                )
+                ]
             );
         } elseif ($type === 'hostgroup') {
             $icon = 'cubes';
             $url = Url::fromPath(
                 'icingadb/services',
-                array(
+                [
                     'hostgroup.name' => $node->get('hostgroup'),
                     'sort' => 'service.state.severity desc'
-                )
+                ]
             );
 
             if (($h = $status->getMeta('hosts_unhandled')) > 0) {
@@ -68,10 +68,10 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
             $htmExtra .= ' ' . $this->view->qlink(
                 $hostTitle,
                 'icingadb/hosts',
-                array(
+                [
                     'hostgroup.name' => $node->get('hostgroup'),
                     'sort' => 'service.state.severity desc'
-                ),
+                ],
                 null,
                 false
             );
@@ -79,10 +79,10 @@ class Zend_View_Helper_Tree extends Zend_View_Helper_Abstract
             $icon = null;
             $url = Url::fromPath(
                 'toplevelview/show/tree',
-                array(
+                [
                     'name' => $node->getRoot()->getViewName(),
                     'id'   => $node->getFullId()
-                )
+                ]
             );
         }
 
