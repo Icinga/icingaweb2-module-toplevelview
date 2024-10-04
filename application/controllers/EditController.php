@@ -74,8 +74,6 @@ class EditController extends Controller
             $view = $c->loadByName($name);
         }
 
-        $view->setFormat($c::FORMAT_YAML);
-
         $this->view->form = $form = new EditForm();
         $form->setViewConfig($c);
         $form->setViews($view);

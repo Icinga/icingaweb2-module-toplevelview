@@ -201,17 +201,6 @@ class View
     }
 
     /**
-     * setFormat sets the format for this View
-     * @param string $format Format for this view (e.g. 'yml')
-     * @return $this
-     */
-    public function setFormat($format)
-    {
-        $this->format = $format;
-        return $this;
-    }
-
-    /**
      * getFormat returns the View's format
      */
     public function getFormat(): string
