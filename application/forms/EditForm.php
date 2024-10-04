@@ -99,7 +99,7 @@ class EditForm extends Form
      */
     public function onRequest()
     {
-        $values = array();
+        $values = [];
         $values['name'] = $this->view->getName();
         $values['config'] = $this->view->getText();
 
@@ -124,56 +124,56 @@ class EditForm extends Form
         $this->addElement(
             'text',
             'name',
-            array(
-                'label'    => $this->translate('File name'),
+            [
+                'label' => $this->translate('File name'),
                 'required' => true
-            )
+            ]
         );
         $this->addElement(
             'textarea',
             'config',
-            array(
-                'label'                => $this->translate('YAML Config'),
-                'class'                => 'code-editor codemirror',
-                'decorators'           => array(
-                    array('Label', array('tag'=>'div', 'separator' => '')),
-                    array('HtmlTag', array('tag' => 'div')),
+            [
+                'label' => $this->translate('YAML Config'),
+                'class' => 'code-editor codemirror',
+                'decorators' => [
+                    ['Label', ['tag' => 'div', 'separator' => '']],
+                    ['HtmlTag', ['tag' => 'div']],
                     'ViewHelper'
-                ),
+                ],
                 'data-codemirror-mode' => 'yaml'
-            )
+            ]
         );
 
         $this->addElement(
             'submit',
             'btn_submit_save_session',
-            array(
+            [
                 'ignore'     => true,
                 'label'      => $this->translate('Save for the current Session'),
-                'decorators' => array('ViewHelper')
-            )
+                'decorators' => ['ViewHelper']
+            ]
         );
 
         $this->addElement(
             'submit',
             'btn_submit_save_file',
-            array(
+            [
                 'ignore'     => true,
                 'label'      => $this->translate('Save to config file'),
-                'decorators' => array('ViewHelper')
-            )
+                'decorators' => ['ViewHelper']
+            ]
         );
 
         if ($this->view->hasBeenLoadedFromSession()) {
             $this->addElement(
                 'submit',
                 'btn_submit_cancel',
-                array(
+                [
                     'ignore'     => true,
                     'label'      => $this->translate('Cancel editing'),
                     'class'      => 'btn-cancel',
-                    'decorators' => array('ViewHelper')
-                )
+                    'decorators' => ['ViewHelper']
+                ]
             );
         }
 
@@ -181,13 +181,13 @@ class EditForm extends Form
             $this->addElement(
                 'submit',
                 'btn_submit_delete',
-                array(
+                [
                     'ignore'     => true,
                     'label'      => $this->translate('Delete config'),
                     'class'      => 'btn-remove',
                     'onclick'    => 'return confirm("' . $this->translate('Confirm deletion') . '")',
-                    'decorators' => array('ViewHelper')
-                )
+                    'decorators' => ['ViewHelper']
+                ]
             );
         }
     }

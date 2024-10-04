@@ -22,7 +22,7 @@ class Zend_View_Helper_Tiles extends Zend_View_Helper_Abstract
         } else {
             $statusClass = 'tlv-status-tile';
         }
-        $statusClasses = array($statusClass, $status->getOverall());
+        $statusClasses = [$statusClass, $status->getOverall()];
 
         $htm .= sprintf(
             '<div class="tlv-tile %s" title="%s" data-base-target="_next">' . "\n",
@@ -34,13 +34,13 @@ class Zend_View_Helper_Tiles extends Zend_View_Helper_Abstract
         $htm .= $this->view->qlink(
             $title . $badges,
             'toplevelview/show/tree',
-            array(
+            [
                 'name' => $node->getRoot()->getViewName(),
                 'id'   => $node->getFullId()
-            ),
-            array(
+            ],
+            [
                 'class' => 'tlv-tile-title'
-            ),
+            ],
             false
         );
 

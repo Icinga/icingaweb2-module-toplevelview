@@ -70,12 +70,12 @@ class TLVTreeNode extends TreeNode
      *
      * @var array
      */
-    protected static $typeMap = array(
+    protected static $typeMap = [
         'host'      => 'Icinga\\Module\\Toplevelview\\Tree\\TLVHostNode',
         'service'   => 'Icinga\\Module\\Toplevelview\\Tree\\TLVServiceNode',
         'hostgroup' => 'Icinga\\Module\\Toplevelview\\Tree\\TLVHostGroupNode',
         'servicegroup' => 'Icinga\\Module\\Toplevelview\\Tree\\TLVServiceGroupNode',
-    );
+    ];
 
     /**
      * Mapping keys to a type
@@ -84,12 +84,12 @@ class TLVTreeNode extends TreeNode
      *
      * @var array
      */
-    protected static $typeKeyMap = array(
-        'service'   => array('host', 'service'),
+    protected static $typeKeyMap = [
+        'service'   => ['host', 'service'],
         'host'      => 'host',
         'hostgroup' => 'hostgroup',
         'servicegroup' => 'servicegroup',
-    );
+    ];
 
     /**
      * @param                  $array
@@ -116,7 +116,7 @@ class TLVTreeNode extends TreeNode
         if (! array_key_exists('type', $array)) {
             foreach (self::$typeKeyMap as $type => $keys) {
                 if (! is_array($keys)) {
-                    $keys = array($keys);
+                    $keys = [$keys];
                 }
                 $matched = false;
                 foreach ($keys as $k) {

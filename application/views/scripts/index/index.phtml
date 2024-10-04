@@ -7,11 +7,11 @@ if (! $this->compact): ?>
             <?= $this->qlink(
                 $this->translate('Add'),
                 'toplevelview/edit/add',
-                array(),
-                array(
+                [],
+                [
                     'class' => 'action-link',
                     'icon'  => 'plus',
-                )
+                ]
             ) ?>
             <?php endif; ?>
         </div>
@@ -21,7 +21,7 @@ if (! $this->compact): ?>
     <div class="tlv-overview-tiles">
         <?php
         foreach ($views as $name => $view):
-            $url = $this->url('toplevelview/show', array('name' => $name));
+            $url = $this->url('toplevelview/show', ['name' => $name]);
             ?>
             <a href="<?= $url ?>" class="tlv-overview-tile">
                 <div class="tlv-title"><?= $view->getMeta('name') ?></div>
