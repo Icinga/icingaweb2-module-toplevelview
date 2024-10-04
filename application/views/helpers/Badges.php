@@ -2,20 +2,12 @@
 /* Icinga Web 2 Top Level View | (c) 2017 Icinga Development Team | GPLv2+ */
 
 use Icinga\Module\Toplevelview\Tree\TLVStatus;
+use Icinga\Module\Toplevelview\Util\Str;
 
 class Zend_View_Helper_Badges extends Zend_View_Helper_Abstract
 {
     /** @var \Icinga\Web\View */
     public $view;
-
-    protected function prettyTitle($identifier)
-    {
-        $s = '';
-        foreach (preg_split('/[\.\-_\s]+/', $identifier) as $p) {
-            $s .= ' ' . ucfirst($p);
-        }
-        return trim($s);
-    }
 
     /**
      * badges renders a TLVNode's TLVStatus into HTML.
@@ -35,7 +27,7 @@ class Zend_View_Helper_Badges extends Zend_View_Helper_Abstract
             }
             if ($value !== null && $value > 0) {
                 $values = true;
-                $title = $value . ' ' . $this->prettyTitle($key);
+                $title = $value . ' ' . Str::prettyTitle($key);
                 $class = 'tlv-status-tile ' . str_replace('_', ' ', $key);
                 $htm .= sprintf(
                     '<div class="badge status-badge %s" title="%s">%s</div>',

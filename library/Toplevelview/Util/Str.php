@@ -32,4 +32,20 @@ class Str
         // and add the given end to it.
         return mb_strimwidth($str, 0, $len, '', 'UTF-8') . $end;
     }
+
+    /**
+     * Transforms the title badge title "warning_unhandled" to "Warning Unhandled"
+     *
+     * @param   string $identifier
+     *
+     * @return  string
+     */
+    public static function prettyTitle($identifier): string
+    {
+        $s = '';
+        foreach (explode('_', $identifier) as $p) {
+            $s .= ' ' . ucfirst($p);
+        }
+        return trim($s);
+    }
 }

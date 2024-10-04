@@ -41,4 +41,14 @@ final class StrTest extends TestCase
             Str::limit('Кто это читает, тот дурак', 1, ' (🦔🦔🦔)')
         );
     }
+
+    public function testPrettyPrint()
+    {
+        $this->assertSame('Critical Unhandled', Str::prettyTitle('critical_unhandled'));
+        $this->assertSame('Warning Handled', Str::prettyTitle('warning_handled'));
+        $this->assertSame('Foo Bar', Str::prettyTitle('foo_bar'));
+        $this->assertSame('XXX YYY', Str::prettyTitle('XXX_YYY'));
+        $this->assertSame('', Str::prettyTitle(''));
+        $this->assertSame('Ok', Str::prettyTitle('ok'));
+    }
 }
