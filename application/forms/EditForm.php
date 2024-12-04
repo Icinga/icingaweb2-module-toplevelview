@@ -184,6 +184,7 @@ class EditForm extends Form
                 [
                     'ignore'     => true,
                     'label'      => $this->translate('Delete config'),
+                    'data-confirmation' => $this->translate('Confirm deletion'),
                     'class'      => 'btn-remove',
                     'decorators' => ['ViewHelper']
                 ]
