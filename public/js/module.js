@@ -15,6 +15,9 @@
             this.module.on('rendered', this.rendered);
         },
 
+        /**
+         * rendered adds the CodeMirror editor to the designated div
+         */
         rendered: function (ev) {
             this.collapseOnLoad(ev);
             var $container = $(ev.currentTarget);
@@ -37,6 +40,9 @@
             });
         },
 
+        /**
+         * processTreeNodeClick toggles the collapsed status of the tree nodes
+         */
         processTreeNodeClick: function (event) {
             event.stopPropagation();
             var $el = $(event.currentTarget);
@@ -51,14 +57,24 @@
             }
         },
 
+        /**
+         * collapseOnLoad sets all OK nodes to collapsed,
+         * because these are not as interesting.
+         */
         collapseOnLoad: function (event) {
             var $el = $(event.currentTarget);
             $el.find('.tlv-view-tree .tlv-tree-node.tlv-collapsible.ok').addClass('tlv-collapsed');
         },
 
+        /**
+         * onRemoveClick shows a Browser confirmation windows.
+         */
         onRemoveClick: function (event) {
             event.stopPropagation();
-            return confirm('Confirm deletion?')
+            let target = event.currentTarget;
+            const confirmMsg = target.getAttribute('data-confirmation');
+
+            return confirm(confirmMsg);
         },
 
         buttonClick: function (event) {
