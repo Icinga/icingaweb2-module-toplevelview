@@ -1,6 +1,6 @@
 # Changelog
 
-## [v1.0.0](https://github.com/Icinga/icingaweb2-module-toplevelview/tree/v1.0.0) (unreleased)
+## [v1.0.0](https://github.com/Icinga/icingaweb2-module-toplevelview/tree/v1.0.0) (2024-12-05)
 
 **Implemented enhancements:**
 
