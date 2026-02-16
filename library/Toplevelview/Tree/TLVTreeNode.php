@@ -94,14 +94,14 @@ class TLVTreeNode extends TreeNode
     /**
      * @param                  $array
      * @param TLVTreeNode|null $parent
-     * @param TLVTree          $root
+     * @param TLVTree|null     $root
      *
      * @return static
      *
      * @throws NotImplementedError
      * @throws ProgrammingError
      */
-    public static function fromArray($array, TLVTreeNode $parent = null, TLVTree $root = null)
+    public static function fromArray($array, ?TLVTreeNode $parent = null, ?TLVTree $root = null)
     {
         if ($root === null) {
             Benchmark::measure('Begin loading TLVTree from array');
