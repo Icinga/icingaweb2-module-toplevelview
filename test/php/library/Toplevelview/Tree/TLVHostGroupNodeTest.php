@@ -25,7 +25,6 @@ final class TLVHostGroupNodeTest extends TestCase
 
         $reflection = new ReflectionClass($n);
         $reflection_root = $reflection->getProperty('root');
-        $reflection_root->setAccessible(true);
         $reflection_root->setValue($n, $mockRoot);
 
         $this->assertSame('unit', $n->getTitle());
@@ -69,7 +68,6 @@ final class TLVHostGroupNodeTest extends TestCase
 
         $reflection = new ReflectionClass($n);
         $reflection_root = $reflection->getProperty('root');
-        $reflection_root->setAccessible(true);
         $reflection_root->setValue($n, $mockRoot);
 
         $this->assertSame('critical unhandled', $n->getStatus()->getOverall());
