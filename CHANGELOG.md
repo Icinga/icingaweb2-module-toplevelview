@@ -1,5 +1,11 @@
 # Changelog
 
+## [v1.0.1](https://github.com/Icinga/icingaweb2-module-toplevelview/tree/v1.0.1) (2026-02-20)
+
+**Implemented enhancements:**
+
+- PHP 8.5 Support
+
 ## [v1.0.0](https://github.com/Icinga/icingaweb2-module-toplevelview/tree/v1.0.0) (2024-12-05)
 
 **Implemented enhancements:**
